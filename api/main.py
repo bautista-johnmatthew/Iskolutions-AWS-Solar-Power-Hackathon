@@ -1,75 +1,67 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from typing import List
-from pydantic import BaseModel
-import boto3
+from clients import AWSClients
+from routes import router
 
-app = FastAPI(title="My Notes API", version="1.0.0",
-        description="API for taking notes")
+class App(FastAPI):
+    """Main application class for the Iskolutions Solar Power API."""
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+    def __init__(
+        self,
+        service_name: str,
+        version: str,
+        description: str
+    ) -> None:
+        super().__init__(
+            title=service_name,
+            version=version,
+            description=description,
+        )
 
-# DYNAMO_TABLE_NAME = "notes"
-# S3_BUCKET_NAME = "my-notes-bucket"
+        self._init_config()
 
-# dynamodb = boto3.resource('dynamodb')
-# s3 = boto3.client('s3')
+        # Uncomment only if you have the necessary environment variables set
+        # self._init_clients()
+        # self._init_middleware()
 
-# Models
-class Note(BaseModel):
-    id: str
-    title: str
-    content: str
-    created_at: str
-    updated_at: str
-    images: List[str] = []
-    image_urls: List[str] = []
+        self._init_routes()
 
-# Schemas
-class NoteCreate(BaseModel):
-    title: str
-    content: str
-    images: List[str] = []
-class NoteUpdate(BaseModel):
-    title: str = None
-    content: str = None
-    images: List[str] = []
+    def _init_config(self) -> None:
+        """Load environment configuration"""
+        self.config = {
+            "DYNAMO_DB_TABLE": os.getenv("DYNAMO_DB_TABLE"),
+            "S3_BUCKET_NAME": os.getenv("S3_BUCKET")
+        }
 
-# Endpoints
-@app.get("/")
-async def read_root():
-    return {"message" : "Welcome to notepad"}
+    def _init_clients(self) -> None:
+        """Initialize AWS service clients"""
+        self.state.clients = AWSClients()
 
-@app.get("/health")
-async def health():
-    return {"status" : "healthy"}
+    def _init_middleware(self) -> None:
+        """Add application middleware"""
+        self.add_middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
 
-@app.get("/notes")
-async def get_notes():
-    pass
+    def _init_routes(self) -> None:
+        """Register all API routes"""
+        self.include_router(router)
 
-@app.post("/notes")
-async def create_note(note: NoteCreate):
-    pass
+def main() -> None:
+    """Main entry point for the application"""
+    return App(
+        service_name="Iskolutions Solar Power API",
+        version="1.0.0",
+        description="API for managing solar power solutions"
+    )
 
-@app.get("/notes/{note_id}")
-async def get_note(note_id: str):
-    pass
-
-@app.put("/notes/{note_id}")
-async def update_note(note_id: str, note: NoteUpdate):
-    pass
-
-@app.delete("/notes/{note_id}")
-async def delete_note(note_id: str):
-    pass
-
+app = main()
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
