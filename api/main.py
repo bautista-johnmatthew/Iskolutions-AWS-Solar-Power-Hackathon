@@ -28,13 +28,6 @@ class App(FastAPI):
 
         self._init_routes()
 
-    def _init_config(self) -> None:
-        """Load environment configuration"""
-        self.config = {
-            "DYNAMO_DB_TABLE": os.getenv("DYNAMO_DB_TABLE"),
-            "S3_BUCKET_NAME": os.getenv("S3_BUCKET")
-        }
-
     def _init_clients(self) -> None:
         """Initialize AWS service clients"""
         self.state.clients = AWSClients()
