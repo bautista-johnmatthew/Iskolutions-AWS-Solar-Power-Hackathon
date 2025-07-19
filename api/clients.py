@@ -11,7 +11,12 @@ class AWSClients:
     AWS Clients for interacting with various AWS services.
     """
 
-    def __init__(self):
+    ERROR_MESSAGE = "Environment variable {} is not set or is empty."
+
+    def __init__(self) -> None:
+        """Initialize AWS clients and resources."""
+        load_dotenv(".env")
+
         self.dynamodb: ServiceResource = boto3.resource("dynamodb")
         self.s3: BaseClient = boto3.client("s3")
 
