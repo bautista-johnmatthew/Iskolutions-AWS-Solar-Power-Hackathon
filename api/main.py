@@ -22,7 +22,8 @@ class App(FastAPI):
 
         # Uncomment only if you have the necessary environment variables set
         # self._init_clients()
-        # self._init_middleware()
+
+        self._init_middleware()
 
         self._init_routes()
 
