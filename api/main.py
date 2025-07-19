@@ -20,8 +20,6 @@ class App(FastAPI):
             description=description,
         )
 
-        self._init_config()
-
         # Uncomment only if you have the necessary environment variables set
         # self._init_clients()
         # self._init_middleware()
