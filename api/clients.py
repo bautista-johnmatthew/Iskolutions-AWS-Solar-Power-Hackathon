@@ -10,7 +10,7 @@ class AWSClients:
     AWS Clients for interacting with various AWS services.
     """
 
-    ERROR_MESSAGE = "Environment variable {} is not set or is empty."
+    ENV_VAR_NOT_SET_ERROR = "Environment variable {} is not set or is empty."
 
     def __init__(self) -> None:
         """Initialize AWS clients and resources."""
@@ -26,7 +26,7 @@ class AWSClients:
 
         if not table_name:
             raise ValueError(
-                self.ERROR_MESSAGE.format("DYNAMO_DB_TABLE")
+                self.ENV_VAR_NOT_SET_ERROR.format("DYNAMO_DB_TABLE")
             )
 
         self.table: Table = self.dynamodb.Table(table_name)
@@ -37,7 +37,7 @@ class AWSClients:
 
         if not bucket_name:
             raise ValueError(
-                self.ERROR_MESSAGE.format("S3_BUCKET")
+                self.ENV_VAR_NOT_SET_ERROR.format("S3_BUCKET")
             )
 
         self.s3_bucket = bucket_name
