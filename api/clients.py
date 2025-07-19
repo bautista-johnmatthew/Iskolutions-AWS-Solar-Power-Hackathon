@@ -1,5 +1,4 @@
 import os
-from dotenv import load_dotenv
 
 import boto3
 from boto3.resources.base import ServiceResource
@@ -15,8 +14,6 @@ class AWSClients:
 
     def __init__(self) -> None:
         """Initialize AWS clients and resources."""
-        load_dotenv(".env")
-
         self.dynamodb: ServiceResource = boto3.resource("dynamodb")
         self.s3: BaseClient = boto3.client("s3")
 
