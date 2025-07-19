@@ -13,7 +13,15 @@ class AWSClients:
     def __init__(self):
         self.dynamodb: ServiceResource = boto3.resource("dynamodb")
         self.s3: BaseClient = boto3.client("s3")
-        self.table: Table = self.dynamodb.Table(os.getenv("DYNAMO_DB_TABLE"))
+
+        table_name = os.getenv("DYNAMO_DB_TABLE")
+
+        if not table_name:
+            raise ValueError(
+                "Environment variable 'DYNAMO_DB_TABLE' is not set or is empty."
+            )
+
+        self.table: Table = self.dynamodb.Table(table_name)
 
 # Dependency function
 def get_aws_clients() -> AWSClients:
