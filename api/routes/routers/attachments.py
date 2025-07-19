@@ -7,21 +7,19 @@ from routes.routes import ATTACHMENT_ROUTES
 router: APIRouter = APIRouter()
 
 # Attachment routes
-attachment_routes: dict = ATTACHMENT_ROUTES
-
 router.add_api_route(
-    **attachment_routes["UPLOAD_FILE"],
+    **ATTACHMENT_ROUTES["UPLOAD_FILE"],
     endpoint=handlers.upload_file
 )
 router.add_api_route(
-    **attachment_routes["GET_POST_FILES"],
+    **ATTACHMENT_ROUTES["GET_POST_FILES"],
     endpoint=handlers.get_post_files
 )
 router.add_api_route(
-    **attachment_routes["DELETE_FILE"],
+    **ATTACHMENT_ROUTES["DELETE_FILE"],
     endpoint=handlers.delete_file
 )
 router.add_api_route(
-    **attachment_routes["GET_FILE_META"],
+    **ATTACHMENT_ROUTES["GET_FILE_META"],
     endpoint=handlers.get_file_meta
 )
