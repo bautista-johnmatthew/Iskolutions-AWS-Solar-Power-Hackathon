@@ -2,7 +2,7 @@ from fastapi import Depends
 from clients import AWSClients, get_aws_clients
 
 # =========================
-# |     FILE HANDLERS     |
+# |  ATTACHMENT HANDLERS  |
 # =========================
 async def upload_file(
     post_id: int,
