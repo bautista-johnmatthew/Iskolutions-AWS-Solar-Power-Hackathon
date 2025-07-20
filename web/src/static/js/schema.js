@@ -41,7 +41,7 @@ const signUpSchema = z.object({
     studentNumber: studentNumberSchema
 }).refine(data => data.password === data.confirmPassword, {
     message: "Passwords don't match",
-    path: ["confirm_password"]
+    path: ["confirmPassword"]
 });
 
 const forumPostSchema = z.object({
