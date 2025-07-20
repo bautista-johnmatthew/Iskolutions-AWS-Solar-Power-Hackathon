@@ -1,36 +1,48 @@
 // Schemas for form validation using Zod
-import { z } from 'zod';
+const { z } = window.Zod;
 
+// Email schema with PUP domain validation
+const emailSchema = z.string()
+    .email("Invalid email address")
+    .refine(email => email.endsWith('@pup.edu.ph'), {
+        message: "Email must be a PUP email (@pup.edu.ph)"
+    });
+
+// Password schema with complexity requirements
+const passwordSchema = z.string()
+    .min(8, "Password must be at least 8 characters long")
+    .max(64, "Password must not exceed 64 characters")
+    .refine(password => /[A-Z]/.test(password), {
+        message: "Password must contain at least one uppercase letter"
+    })
+    .refine(password => /[0-9]/.test(password), {
+        message: "Password must contain at least one number"
+    })
+    .refine(password => /[^A-Za-z0-9]/.test(password), {
+        message: "Password must contain at least one special character"
+    });
+
+// Username schema
+const usernameSchema = z.string()
+    .min(3, "Username must be at least 3 characters long")
+    .max(20, "Username must not exceed 20 characters")
+    .regex(/^[a-zA-Z0-9_]+$/, "Username can only contain letters, numbers, and underscores");
+
+// Student number schema
+const studentNumberSchema = z.string()
+    .regex(/^\d{4}-\d{5}-[A-Z]{2}-\d$/, "Student number must match pattern: YYYY-XXXXX-LL-X");
+
+// Combined signup schema
 const signUpSchema = z.object({
-    email: z.string()
-             .email("Invalid email address")
-             .refine(email => email.endsWith('@pup.edu.ph'), {
-                message: "Email must be a PUP email (@pup.edu.ph)"
-             }),
-    password: z.string()
-                .min(8, "Password must be at least 8 characters long")
-                .max(64, "Password must not exceed 64 characters")
-                .refine(password => /[A-Z]/.test(password), {
-                    message: "Password must contain at least one uppercase letter"
-                })
-                .refine(password => /[0-9]/.test(password), {
-                    message: "Password must contain at least one number"
-                })
-                .refine(password => /[^A-Za-z0-9]/.test(password), {
-                    message: "Password must contain at least one special character"
-                }),
+    email: emailSchema,
+    password: passwordSchema,
     confirm_password: z.string(),
-    username: z.string()
-                .min(3, "Username must be at least 3 characters long")
-                .max(20, "Username must not exceed 20 characters")
-                .regex(/^[a-zA-Z0-9_]+$/, "Username can only contain letters, numbers, and underscores"),
-    student_number: z.string()
-                .regex(/^\d{4}-\d{5}-[A-Z]{2}-\d$/, "Student number must match pattern: YYYY-XXXXX-LL-X")
-
+    username: usernameSchema,
+    student_number: studentNumberSchema
 }).refine(data => data.password === data.confirm_password, {
     message: "Passwords don't match",
     path: ["confirm_password"]
-})
+});
 
 const forumPostSchema = z.object({
     title: z.string()
@@ -48,13 +60,52 @@ const forumPostSchema = z.object({
     created_at: z.date().default(() => new Date())
 });
 
-// Function to validate signup form data
+// Function to validate signup data
 function validateSignUp(formData) {
     try {
         const validData = signUpSchema.parse(formData);
         return { isValid: true, data: validData, error: null };
     } catch (error) {
         return { isValid: false, data: null, error: error.errors };
+    }
+}
+
+// Function to validate a single field
+function validateField(fieldName, value) {
+    try {
+        let result;
+        switch (fieldName) {
+            case 'email':
+                result = emailSchema.parse(value);
+                break;
+            case 'password':
+                result = passwordSchema.parse(value);
+                break;
+            case 'username':
+                result = usernameSchema.parse(value);
+                break;
+            case 'student_number':
+                result = studentNumberSchema.parse(value);
+                break;
+            case 'confirm_password':
+                // Special case to check if passwords match
+                if (value !== document.querySelector('input[name="password"]').value) {
+                    throw new Error("Passwords don't match");
+                }
+                result = value;
+                break;
+            case 'title':
+                result = forumPostSchema.shape.title.parse(value);
+                break;
+            case 'content':
+                result = forumPostSchema.shape.content.parse(value);
+                break;
+            default:
+                throw new Error("Unknown field");
+        }
+        return { isValid: true, value: result, error: null };
+    } catch (error) {
+        return { isValid: false, value: null, error: error.message || error.errors };
     }
 }
 
@@ -84,5 +135,5 @@ async function preloadSchemas() {
 }
 
 // Export schemas
-export { validateSignUp, validateForumPost, preloadSchemas };
+export { validateSignUp, validateForumPost, validateField, preloadSchemas };
 
