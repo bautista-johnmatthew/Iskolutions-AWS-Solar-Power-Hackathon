@@ -1,5 +1,5 @@
 from fastapi import Depends
-from clients import AWSClients, get_aws_clients
+from models.clients import get_aws_clients
 
 # This file defines the routes for the API, categorizing them into different
 # sections such as posts, comments, votes, attachments, and utility functions.

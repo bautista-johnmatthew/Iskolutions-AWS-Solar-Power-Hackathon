@@ -1,8 +1,11 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from clients import AWSClients
+from models.clients import AWSClients
 from routes import router
 
 class App(FastAPI):
@@ -20,20 +23,12 @@ class App(FastAPI):
             description=description,
         )
 
-        self._init_config()
-
         # Uncomment only if you have the necessary environment variables set
         # self._init_clients()
-        # self._init_middleware()
+
+        self._init_middleware()
 
         self._init_routes()
-
-    def _init_config(self) -> None:
-        """Load environment configuration"""
-        self.config = {
-            "DYNAMO_DB_TABLE": os.getenv("DYNAMO_DB_TABLE"),
-            "S3_BUCKET_NAME": os.getenv("S3_BUCKET")
-        }
 
     def _init_clients(self) -> None:
         """Initialize AWS service clients"""

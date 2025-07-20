@@ -1,5 +1,5 @@
 from fastapi import Depends
-from clients import AWSClients, get_aws_clients
+from models.clients import AWSClients, get_aws_clients
 
 # =========================
 # |     VOTE HANDLERS     |
