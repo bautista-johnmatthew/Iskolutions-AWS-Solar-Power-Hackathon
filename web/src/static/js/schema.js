@@ -36,10 +36,10 @@ const studentNumberSchema = z.string()
 const signUpSchema = z.object({
     email: emailSchema,
     password: passwordSchema,
-    confirm_password: z.string(),
+    confirmPassword: z.string(),
     username: usernameSchema,
-    student_number: studentNumberSchema
-}).refine(data => data.password === data.confirm_password, {
+    studentNumber: studentNumberSchema
+}).refine(data => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ["confirm_password"]
 });
@@ -84,10 +84,10 @@ function validateField(fieldName, value) {
             case 'username':
                 result = usernameSchema.parse(value);
                 break;
-            case 'student_number':
+            case 'studentNumber':
                 result = studentNumberSchema.parse(value);
                 break;
-            case 'confirm_password':
+            case 'confirmPassword':
                 // Special case to check if passwords match
                 if (value !== document.querySelector('input[name="password"]').value) {
                     throw new Error("Passwords don't match");

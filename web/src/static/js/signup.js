@@ -58,9 +58,18 @@ $(document).ready(function() {
         }
     });
 
+    // Handle student number field validation
+    $("#studentNumber").on("blur", function() {
+        const validationResult = validateField('studentNumber', $("#studentNumber").val()); 
+        if (!validationResult.isValid) {
+            console.error("Field validation errors:", validationResult.error);
+            // Optionally display field-specific errors
+        }
+    });
+
     // Handle confirm_password field validation
-    $("#confirm_password").on("blur", function() {
-        const validationResult = validateField('confirm_password', $("#confirm_password").val());
+    $("#confirmPassword").on("blur", function() {
+        const validationResult = validateField('confirmPassword', $("#confirmPassword").val());
         
         if (!validationResult.isValid) {
             console.error("Field validation errors:", validationResult.error);
