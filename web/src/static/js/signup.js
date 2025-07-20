@@ -28,54 +28,24 @@ $(document).ready(function() {
         }
     });
 
-    // Handle individual field validation
-    $("#username").on("blur", function() {
-        const validationResult = validateField('username', $("#username").val());
-        
-        if (!validationResult.isValid) {
-            console.error("Field validation errors:", validationResult.error);
-            // Optionally display field-specific errors
-        }
-    });
+    // Reusable function to attach field validation
+    function attachFieldValidation(fieldName, selector) {
+        $(selector).on("blur", function() {
+            const validationResult = validateField(fieldName, $(selector).val());
+            
+            if (!validationResult.isValid) {
+                console.error(`Validation errors for ${fieldName}:`, validationResult.error);
+                // Optionally display field-specific errors
+            }
+        });
+    }
 
-    // Handle email field validation
-    $("#email").on("blur", function() {
-        const validationResult = validateField('email', $("#email").val());
-        
-        if (!validationResult.isValid) {
-            console.error("Field validation errors:", validationResult.error);
-            // Optionally display field-specific errors
-        }
-    });
-
-    // Handle password field validation
-    $("#password").on("blur", function() {
-        const validationResult = validateField('password', $("#password").val());
-        
-        if (!validationResult.isValid) {
-            console.error("Field validation errors:", validationResult.error);
-            // Optionally display field-specific errors
-        }
-    });
-
-    // Handle student number field validation
-    $("#studentNumber").on("blur", function() {
-        const validationResult = validateField('studentNumber', $("#studentNumber").val()); 
-        if (!validationResult.isValid) {
-            console.error("Field validation errors:", validationResult.error);
-            // Optionally display field-specific errors
-        }
-    });
-
-    // Handle confirm_password field validation
-    $("#confirmPassword").on("blur", function() {
-        const validationResult = validateField('confirmPassword', $("#confirmPassword").val());
-        
-        if (!validationResult.isValid) {
-            console.error("Field validation errors:", validationResult.error);
-            // Optionally display field-specific errors
-        }
-    });
+    // Attach validation to fields
+    attachFieldValidation('username', '#username');
+    attachFieldValidation('email', '#email');
+    attachFieldValidation('password', '#password');
+    attachFieldValidation('studentNumber', '#studentNumber');
+    attachFieldValidation('confirmPassword', '#confirmPassword');
         
 });
 
