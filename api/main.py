@@ -5,7 +5,7 @@ load_dotenv()
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from clients import AWSClients
+from models.clients import AWSClients
 from routes import router
 
 class App(FastAPI):
