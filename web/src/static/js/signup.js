@@ -13,7 +13,7 @@ $(document).ready(function() {
             username: $("#username").val(),
             email: $("#email").val(),
             password: $("#password").val(),
-            confirm_password: $("#confirm_password").val()
+            confirmPassword: $("#confirmPassword").val()
         };
         
         const validationResult = validateSignUp(formData);
