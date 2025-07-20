@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from routes.handlers import attachment_handlers as handlers
-from routes.routes import ATTACHMENT_ROUTES
+from routes.attachments import handlers
+from routes.attachments.routes import ATTACHMENT_ROUTES
 
 # Create a new APIRouter instance
 router: APIRouter = APIRouter()

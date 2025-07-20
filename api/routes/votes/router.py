@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from routes.handlers import vote_handlers as handlers
-from routes.routes import VOTE_ROUTES
+from routes.votes import handlers
+from routes.votes.routes import VOTE_ROUTES
 
 # Create a new APIRouter instance
 router: APIRouter = APIRouter()

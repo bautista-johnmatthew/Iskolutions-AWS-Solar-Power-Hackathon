@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from routes.handlers import comment_handlers as handlers
-from routes.routes import COMMENT_ROUTES
+from routes.comments import handlers
+from routes.comments.routes import COMMENT_ROUTES
 
 # Create a new APIRouter instance
 router: APIRouter = APIRouter()

@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from routes.handlers import post_handlers as handlers
-from routes.routes import POST_ROUTES
+from routes.posts import handlers
+from routes.posts.routes import POST_ROUTES
 
 # Create a new APIRouter instance
 router: APIRouter = APIRouter()
