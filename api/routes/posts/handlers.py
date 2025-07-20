@@ -1,5 +1,5 @@
 from fastapi import Depends
-from models.clients import AWSClients, get_aws_clients
+from services.aws_clients import AWSClients, get_aws_clients
 
 
 # =========================

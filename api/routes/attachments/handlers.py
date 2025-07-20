@@ -1,29 +1,30 @@
 from fastapi import Depends
-from models.clients import AWSClients, get_aws_clients
+from services.aws_clients import AWSClients, get_aws_clients
 
 # =========================
-# |     VOTE HANDLERS     |
+# |  ATTACHMENT HANDLERS  |
 # =========================
-async def vote_post(
+async def upload_file(
     post_id: int,
     aws_clients: AWSClients = Depends(get_aws_clients)
 ):
     pass
 
-async def remove_post_vote(
+async def get_post_files(
     post_id: int,
     aws_clients: AWSClients = Depends(get_aws_clients)
 ):
     pass
 
-async def vote_comment(
-    comment_id: int,
+async def delete_file(
+    post_id: int,
+    file_id: int,
     aws_clients: AWSClients = Depends(get_aws_clients)
 ):
     pass
 
-async def remove_comment_vote(
-    comment_id: int,
+async def get_file_meta(
+    file_id: int,
     aws_clients: AWSClients = Depends(get_aws_clients)
 ):
     pass
