@@ -89,7 +89,7 @@ function validateField(fieldName, value) {
                 break;
             case 'confirmPassword':
                 // Special case to check if passwords match
-                if (value !== document.querySelector('input[name="password"]').value) {
+                if (value !== $('input[name="password"]').val()) {
                     throw new Error("Passwords don't match");
                 }
                 result = value;
