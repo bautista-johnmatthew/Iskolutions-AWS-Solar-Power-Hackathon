@@ -1,49 +1,77 @@
-from pydantic import BaseModel
-from typing import List, Optional, Literal
+from pydantic import BaseModel, EmailStr, Field
+from typing import List, Optional
 from datetime import datetime
+from enum import Enum
 
-# ---- ENUM-LIKE LITERALS ----
-RoleType = Literal["student", "faculty", "moderator"]
-VoteType = Literal["up", "down"]
+# Shared mixin for timestamps
+class TimestampMixin(BaseModel):
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
 
-# ---- BASE MIXINS ----
-class AnonymousMixin(BaseModel):
-    is_anonymous: bool = False
+# Enums (reused in schemas for OpenAPI)
+class UserRole(str, Enum):
+    student = "student"
+    faculty = "faculty"
+    moderator = "moderator"
 
-# ---- USER SCHEMAS ----
-class UserProfile(BaseModel):
+class VoteType(str, Enum):
+    up = "up"
+    down = "down"
+
+# USER SCHEMAS
+class UserBase(BaseModel):
     username: str
-    student_id: str
-    role: RoleType = "student"
-    verification_status: str = "pending"
+    email: EmailStr
+    role: UserRole = UserRole.student
 
-# ---- POST SCHEMAS ----
-class CreatePost(AnonymousMixin):
+class UserCreate(UserBase):
+    password: str
+    student_id: Optional[str] = None  # For verification
+    is_verified: bool = False
+
+class UserResponse(UserBase, TimestampMixin):
+    user_id: str
+
+# POST SCHEMAS
+class PostBase(BaseModel):
     title: str
     content: str
-    tags: List[str]
-    attachments: Optional[List[str]] = []
+    tags: List[str] = []
+    is_anonymous: bool = False
+    attachments: List[str] = []  # S3 URLs
 
-class PostResponse(CreatePost):
+class PostCreate(PostBase):
+    author_id: str
+
+class PostResponse(PostBase, TimestampMixin):
     post_id: str
     author_id: str
-    created_at: datetime
-    updated_at: datetime
+    upvotes: int = 0
+    downvotes: int = 0
 
-# ---- COMMENT SCHEMAS ----
-class CreateComment(AnonymousMixin):
+# COMMENT SCHEMAS
+class CommentBase(BaseModel):
     content: str
+    is_anonymous: bool = False
+
+class CommentCreate(CommentBase):
+    author_id: str
     parent_comment_id: Optional[str] = None
 
-class CommentResponse(CreateComment):
+class CommentResponse(CommentBase, TimestampMixin):
     comment_id: str
     post_id: str
     author_id: str
-    upvotes: int
-    downvotes: int
-    created_at: datetime
-    updated_at: datetime
+    upvotes: int = 0
+    downvotes: int = 0
 
-# ---- VOTE SCHEMA ----
-class VoteAction(BaseModel):
+# VOTE SCHEMAS
+class VoteBase(BaseModel):
     vote_type: VoteType
+
+class VoteCreate(VoteBase):
+    user_id: str
+
+class VoteResponse(VoteBase, TimestampMixin):
+    user_id: str
+    post_id: str
