@@ -13,6 +13,7 @@ $(document).ready(function() {
             username: $("#username").val(),
             email: $("#email").val(),
             password: $("#password").val(),
+            studentNumber: $("#studentNumber").val(),
             confirmPassword: $("#confirmPassword").val()
         };
         
