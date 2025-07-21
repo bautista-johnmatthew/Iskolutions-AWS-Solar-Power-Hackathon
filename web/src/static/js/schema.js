@@ -128,8 +128,8 @@ function validateField(fieldName, value) {
         const result = schema.parse(value);
         return { isValid: true, value: result, error: null };
     } catch (error) {
-        return { isValid: false, value: null, error: error.message || error.errors };
-    }
+        return { isValid: false, value: null, error: error.issues};
+    }x
 }
 
 // Function to validate signup data
@@ -138,7 +138,7 @@ function validateSignUp(formData) {
         const validData = signUpSchema.parse(formData);
         return { isValid: true, data: validData, error: null };
     } catch (error) {
-        return { isValid: false, data: null, error: error.errors };
+        return { isValid: false, data: null, error: error.issues };
     }
 }
 
@@ -148,7 +148,7 @@ function validateForumPost(formData) {
         const validPost = forumPostSchema.parse(formData);
         return { isValid: true, data: validPost, error: null };
     } catch (error) {
-        return { isValid: false, data: null, error: error.errors };
+        return { isValid: false, data: null, error: error.issues };
     }
 }
 
@@ -169,4 +169,5 @@ function preloadSchemas() {
 
 // Export schemas
 export { validateSignUp, validateForumPost, validateField, preloadSchemas };
+
 
