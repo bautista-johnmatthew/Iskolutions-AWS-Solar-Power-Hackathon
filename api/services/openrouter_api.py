@@ -2,7 +2,6 @@ from openai import OpenAI
 from PyPDF2 import PdfReader
 import os
 
-# Removed global variables AI_API_KEY and CLIENT
 MAX_CHARS = 20000
 API_MODEL = "microsoft/mai-ds-r1:free"
 
@@ -27,15 +26,13 @@ def summarize_pdf(pdf_path):
 
     # Setup API key and client
     try:
-        global AI_API_KEY, CLIENT, API_MODEL
-
-        AI_API_KEY = os.getenv("AI_API_KEY")
-        if not AI_API_KEY:
+        ai_api_key = os.getenv("AI_API_KEY")
+        if not ai_api_key:
             raise ValueError("AI_API_KEY environment variable is not set")
 
-        CLIENT = OpenAI(
+        client = OpenAI(
             base_url="https://openrouter.ai/api/v1",
-            api_key=AI_API_KEY,
+            api_key=ai_api_key,
         )
     except ValueError as e:
         return f"Error setting up API environment: {e}"
@@ -58,7 +55,7 @@ def summarize_pdf(pdf_path):
     ]
     
     try:
-        completion = CLIENT.chat.completions.create(
+        completion = client.chat.completions.create(
             model=API_MODEL,
             messages=message
         )
