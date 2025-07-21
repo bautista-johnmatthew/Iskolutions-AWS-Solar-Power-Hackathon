@@ -53,20 +53,77 @@ const contentSchema = z.string()
     .min(20, "Post content must be at least 20 characters long")
     .max(5000, "Post content must not exceed 5000 characters");
 
-const tagsSchema = z.array(z.string())
+
+// Define allowed tags
+const allowedTags = [
+    "freshman", 
+    "requirements", 
+    "programming", 
+    "review", 
+    "resource", 
+    "lost and found"
+];
+
+// Update tags schema with allowed values
+const tagsSchema = z.array(z.string()
+    .refine(tag => allowedTags.includes(tag), {
+        message: `Tag must be one of the following: ${allowedTags.join(', ')}`
+    }))
     .optional()
     .default([])
     .refine(tags => tags.length <= 5, {
-        message: "Maximum 5 tags allowed"
+            message: "Maximum 5 tags allowed"
     });
+
+// Anonymous schema for forum posts
+const anonymousSchema = z.boolean()
+    .default(false)
+    .optional()
+
+// Attachment schema for PDF files
+const attachmentSchema = z.instanceof(File)
+    .refine(file => file.type === 'application/pdf', {
+        message: "File must be a PDF"
+    })
+    .optional()
 
 // Combined forum post schema
 const forumPostSchema = z.object({
     title: titleSchema,
     content: contentSchema,
     tags: tagsSchema,
+    anonymous: anonymousSchema,
+    attachment: attachmentSchema,
     created_at: z.date().default(() => new Date())
 });
+
+// Schema lookup dictionary for efficient field validation
+const schemaLookup = {
+    'email': emailSchema,
+    'password': passwordSchema,
+    'username': usernameSchema,
+    'studentNumber': studentNumberSchema,
+    'title': titleSchema,
+    'content': contentSchema,
+    'tags': tagsSchema,
+    'anonymous': anonymousSchema,
+    'attachment': attachmentSchema
+};
+
+// Function to validate a single field
+function validateField(fieldName, value) {
+    try {
+        const schema = schemaLookup[fieldName];
+        if (!schema) {
+            throw new Error("Unknown field");
+        }
+        
+        const result = schema.parse(value);
+        return { isValid: true, value: result, error: null };
+    } catch (error) {
+        return { isValid: false, value: null, error: error.message || error.errors };
+    }
+}
 
 // Function to validate signup data
 function validateSignUp(formData) {
@@ -75,41 +132,6 @@ function validateSignUp(formData) {
         return { isValid: true, data: validData, error: null };
     } catch (error) {
         return { isValid: false, data: null, error: error.errors };
-    }
-}
-
-// Function to validate a single field
-function validateField(fieldName, value) {
-    try {
-        let result;
-        switch (fieldName) {
-            case 'email':
-                result = emailSchema.parse(value);
-                break;
-            case 'password':
-                result = passwordSchema.parse(value);
-                break;
-            case 'username':
-                result = usernameSchema.parse(value);
-                break;
-            case 'studentNumber':
-                result = studentNumberSchema.parse(value);
-                break;
-            case 'title':
-                result = titleSchema.parse(value);
-                break;
-            case 'content':
-                result = contentSchema.parse(value);
-                break;
-            case 'tags':
-                result = tagsSchema.parse(value);
-                break;
-            default:
-                throw new Error("Unknown field");
-        }
-        return { isValid: true, value: result, error: null };
-    } catch (error) {
-        return { isValid: false, value: null, error: error.message || error.errors };
     }
 }
 
