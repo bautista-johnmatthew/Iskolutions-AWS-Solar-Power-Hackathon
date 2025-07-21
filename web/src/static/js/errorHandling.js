@@ -29,4 +29,4 @@ function clearErrorMessage(selector) {
 }
 
 // Export error handling functions
-export { addErrorMessage, clearErrorMessage, iterateErrorMessages };
+export { addErrorMessage, clearErrorMessage };
