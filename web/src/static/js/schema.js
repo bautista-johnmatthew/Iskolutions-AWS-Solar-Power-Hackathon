@@ -113,7 +113,7 @@ function validateForumPost(formData) {
 }
 
 // Function to preload schemas
-async function preloadSchemas() {
+function preloadSchemas() {
     try {
         // Use safeParse with empty objects to preload schemas
         signUpSchema.safeParse({});
