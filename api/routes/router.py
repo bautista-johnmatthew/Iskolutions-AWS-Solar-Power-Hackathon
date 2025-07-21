@@ -1,15 +1,13 @@
 # This file aggregates all the individual routers for different functionalities
 # and includes them in a single router instance.
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 
-from routes.routers import (
-    posts_router,
-    comments_router,
-    votes_router,
-    attachments_router,
-    utility_router,
-)
+from routes.posts.router import router as posts_router
+from routes.comments.router import router as comments_router
+from routes.votes.router import router as votes_router
+from routes.attachments.router import router as attachments_router
+from routes.utility.router import router as utility_router
 
 # Create a new APIRouter instance
 router: APIRouter = APIRouter()
