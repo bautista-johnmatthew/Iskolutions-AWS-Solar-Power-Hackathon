@@ -37,15 +37,19 @@ class PostService:
 
     def get_posts(self) -> List[Dict]:
         response = self.table.scan()
-        return [item for item in response.get("Items", []) if item.get("SK") == "METADATA"]
+        return [item for item in response.get("Items", [])
+                 if item.get("SK") == "METADATA"]
 
     def get_post(self, post_id: str) -> Optional[Dict]:
-        response = self.table.get_item(Key={"PK": post_pk(post_id), "SK": "METADATA"})
+        response = self.table.get_item(Key={"PK": post_pk(post_id), 
+                                            "SK": "METADATA"})
         return response.get("Item")
 
     def update_post(self, post_id: str, title: str, content: str,
-                    tags: Optional[List[str]], attachments: Optional[List[str]]) -> Optional[Dict]:
-        update_expr = "SET title = :title, content = :content, tags = :tags, attachments = :attachments, updated_at = :updated_at"
+                    tags: Optional[List[str]], 
+                    attachments: Optional[List[str]]) -> Optional[Dict]:
+        update_expr = "SET title = :title, content = :content, tags =" \
+        " :tags, attachments = :attachments, updated_at = :updated_at"
         values = {
             ":title": title,
             ":content": content,
@@ -65,7 +69,8 @@ class PostService:
         if not fields:
             return None
 
-        update_expr = "SET " + ", ".join([f"{k} = :{k}" for k in fields.keys()])
+        update_expr = "SET " + ", ".join([f"{k} = :{k}" for k 
+                                          in fields.keys()])
         values = {f":{k}": v for k, v in fields.items()}
         values[":updated_at"] = get_timestamp()
         update_expr += ", updated_at = :updated_at"
