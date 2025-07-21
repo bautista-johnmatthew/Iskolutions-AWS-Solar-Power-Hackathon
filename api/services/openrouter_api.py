@@ -34,8 +34,7 @@ def summarize_pdf(pdf_path):
         return "Could not extract text from PDF"
     
     # Truncate text if too long
-    max_chars = 20000 
-    if len(pdf_text) > max_chars:
+    if len(pdf_text) > MAX_CHARS:
         pdf_text = pdf_text[:max_chars] + "..."
     
     # TODO: Improve prompt to summarize the document
