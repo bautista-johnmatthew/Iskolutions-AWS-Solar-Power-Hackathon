@@ -4,7 +4,7 @@ import time
 
 # Example usage
 if __name__ == "__main__":
-    pdf_file_path = "CLUSTER 2  VOLTESV PRESENTATION.pdf"
+    pdf_file_path = "Document.pdf"
     start_time = time.time()
     summary = summarize_pdf(pdf_file_path)
     end_time = time.time()
