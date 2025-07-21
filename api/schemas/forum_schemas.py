@@ -3,12 +3,7 @@ from typing import List, Optional
 from datetime import datetime
 from enum import Enum
 
-# Shared mixin for timestamps
-class TimestampMixin(BaseModel):
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
-
-# Enums (reused in schemas for OpenAPI)
+# ============ Enums ============
 class UserRole(str, Enum):
     student = "student"
     faculty = "faculty"
@@ -18,7 +13,12 @@ class VoteType(str, Enum):
     up = "up"
     down = "down"
 
-# USER SCHEMAS
+# ============ Mixins ============
+class TimestampMixin(BaseModel):
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+# ============ USER SCHEMAS ============
 class UserBase(BaseModel):
     username: str
     email: EmailStr
@@ -26,19 +26,20 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
-    student_id: Optional[str] = None  # For verification
+    student_id: Optional[str] = None
     is_verified: bool = False
 
 class UserResponse(UserBase, TimestampMixin):
     user_id: str
+    is_verified: bool
 
-# POST SCHEMAS
+# ============ POST SCHEMAS ============
 class PostBase(BaseModel):
     title: str
     content: str
     tags: List[str] = []
+    attachments: List[str] = []
     is_anonymous: bool = False
-    attachments: List[str] = []  # S3 URLs
 
 class PostCreate(PostBase):
     author_id: str
@@ -49,7 +50,7 @@ class PostResponse(PostBase, TimestampMixin):
     upvotes: int = 0
     downvotes: int = 0
 
-# COMMENT SCHEMAS
+# ============ COMMENT SCHEMAS ============
 class CommentBase(BaseModel):
     content: str
     is_anonymous: bool = False
@@ -65,7 +66,7 @@ class CommentResponse(CommentBase, TimestampMixin):
     upvotes: int = 0
     downvotes: int = 0
 
-# VOTE SCHEMAS
+# ============ VOTE SCHEMAS ============
 class VoteBase(BaseModel):
     vote_type: VoteType
 
