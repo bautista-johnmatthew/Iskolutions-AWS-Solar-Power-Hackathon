@@ -54,7 +54,6 @@ $(document).ready(function() {
     attachFieldValidation('email', '#email');
     attachFieldValidation('password', '#password');
     attachFieldValidation('studentNumber', '#studentNumber');
-        
 });
 
 
