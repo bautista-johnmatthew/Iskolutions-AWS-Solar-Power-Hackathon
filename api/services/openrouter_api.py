@@ -50,7 +50,9 @@ def summarize_pdf(pdf_path):
     message = [
         {   
             "role": "user",
-            "content": f"Please summarize the following document:\n\n{pdf_text}"
+            "content": f"Please summarize the following document" 
+                    f"in a concise and bulleted manner and "
+                    f"a brief description of what it is about:\n\n{pdf_text}"
         },
     ]
     
