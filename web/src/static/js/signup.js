@@ -24,8 +24,7 @@ $(document).ready(function() {
             // Here you can proceed with form submission, e.g., send data to the server
         } else {
             console.error("Validation errors:", validationResult.error);
-            // Display errors to the user
-            alert(validationResult.error.map(err => err.message).join("\n"));
+            // TODO: Handle error message by alerting after submission
         }
     });
 
