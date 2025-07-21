@@ -97,6 +97,12 @@ const forumPostSchema = z.object({
     created_at: z.date().default(() => new Date())
 });
 
+const commentSchema = z.object({
+    content: z.string()
+        .min(1, "Comment content must not be empty")
+        .max(1000, "Comment content must not exceed 1000 characters"),
+    });
+
 // Schema lookup dictionary for efficient field validation
 const schemaLookup = {
     'email': emailSchema,
@@ -107,7 +113,8 @@ const schemaLookup = {
     'content': contentSchema,
     'tags': tagsSchema,
     'anonymous': anonymousSchema,
-    'attachment': attachmentSchema
+    'attachment': attachmentSchema,
+    'comment': commentSchema
 };
 
 // Function to validate a single field
