@@ -1,4 +1,5 @@
 import {validateForumPost, validateField, preloadSchemas} from './schema.js';
+import { addErrorMessage, clearErrorMessage } from './errorhandling.js';
 
 const selectedTags = [];
 
@@ -22,6 +23,7 @@ function handlePostFormSubmit(event) {
         // Here you can proceed with form submission, e.g., send data to the server
     } else {
         console.error("Validation errors:", validationResult.error);
+        // Handle error messages for each field
     }
 }
 
@@ -30,6 +32,9 @@ function handleTitleBlur() {
     
     if (!validationResult.isValid) {
         console.error(`Validation errors for title:`, validationResult.error);
+        addErrorMessage("#postTitle", validationResult.error);
+    } else {
+        clearErrorMessage("#postTitle");
     }
 }
 
@@ -38,6 +43,9 @@ function handleContentBlur() {
     
     if (!validationResult.isValid) {
         console.error(`Validation errors for content:`, validationResult.error);
+        addErrorMessage("#postContent", validationResult.error);
+    } else {
+        clearErrorMessage("#postContent");
     }
 }
 
@@ -54,6 +62,9 @@ function handleTagChange() {
 
     if (!validationResult.isValid) {
         console.error(`Validation errors for tags:`, validationResult.error);
+        addErrorMessage("#tagsContainer", validationResult.error);
+    } else {
+        clearErrorMessage("#tagsContainer");
     }
 }
 
@@ -62,6 +73,9 @@ function handleAnonymousChange() {
     
     if (!validationResult.isValid) {
         console.error(`Validation errors for anonymous:`, validationResult.error);
+        addErrorMessage("#postAnonymous", validationResult.error);
+    } else {
+        clearErrorMessage("#postAnonymous");
     }
 }
 
@@ -70,6 +84,9 @@ function handleAttachmentChange() {
     
     if (!validationResult.isValid) {
         console.error(`Validation errors for attachment:`, validationResult.error);
+        addErrorMessage("#postAttachment", validationResult.error);
+    } else {
+        clearErrorMessage("#postAttachment");
     }
 }
 
