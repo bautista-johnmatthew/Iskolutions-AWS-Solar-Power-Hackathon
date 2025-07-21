@@ -129,7 +129,7 @@ function validateField(fieldName, value) {
         return { isValid: true, value: result, error: null };
     } catch (error) {
         return { isValid: false, value: null, error: error.issues};
-    }x
+    }
 }
 
 // Function to validate signup data
