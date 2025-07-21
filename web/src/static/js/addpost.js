@@ -6,13 +6,14 @@ $(document).ready(function() {
     const selectedTags = [];
 
     // Handle new post form submission
-    $("#newPostForm").on("submit", function(event) {
+    $("#postForm").on("submit", function(event) {
+        console.log("New post form submitted");
         event.preventDefault();
         
         const formData = {
             title: $("#postTitle").val(),
             content: $("#postContent").val(),
-            tags: $("#postTags").val().split(',').map(tag => tag.trim()),
+            tags: selectedTags,
             anonymous: $("#postAnonymous").is(":checked"),
             attachment: $("#postAttachment")[0].files[0] // Assuming file input for attachment
         };
