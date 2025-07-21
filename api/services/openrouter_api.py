@@ -2,11 +2,7 @@ from openai import OpenAI
 from PyPDF2 import PdfReader
 import os
 
-AI_API_KEY = None
-CLIENT = OpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key=AI_API_KEY,
-)
+# Removed global variables AI_API_KEY and CLIENT
 MAX_CHARS = 20000
 API_MODEL = "microsoft/mai-ds-r1:free"
 
