@@ -1,4 +1,5 @@
 import {validateSignUp, validateField, preloadSchemas} from './schema.js';
+import { addErrorMessage, clearErrorMessage } from './errorhandling.js';
 
 // Form validation and submission handlers
 function handleSignupFormSubmit(event) {
@@ -23,26 +24,34 @@ function handleSignupFormSubmit(event) {
     }
 }
 
+// Function to handle confirm password validation
 function handleConfirmPasswordBlur() {
     const password = $("#password").val();
     const confirmPassword = $(this).val();
     
     if (password !== confirmPassword) {
         console.error(`Validation errors for confirmPassword:`, "Passwords do not match");            
+        addErrorMessage("#confirmPassword", "Passwords do not match");
+    } else {
+        clearErrorMessage("#confirmPassword");
     }
 }
 
+// Function to create a field validation handler
 function createFieldValidationHandler(fieldName) {
     return function() {
         const validationResult = validateField(fieldName, $(this).val());
         
         if (!validationResult.isValid) {
             console.error(`Validation errors for ${fieldName}:`, validationResult.error);
-            // TODO: Handle error message by changing the error label text
+            addErrorMessage(`#${fieldName}`, validationResult.error);
+        } else {
+            clearErrorMessage(`#${fieldName}`);
         }
     };
 }
 
+// Function to attach validation to a field
 function attachFieldValidation(fieldName, selector) {
     $(selector).on("blur", createFieldValidationHandler(fieldName));
 }
