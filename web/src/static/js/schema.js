@@ -87,13 +87,6 @@ function validateField(fieldName, value) {
             case 'studentNumber':
                 result = studentNumberSchema.parse(value);
                 break;
-            case 'confirmPassword':
-                // Special case to check if passwords match
-                if (value !== $('input[name="password"]').val()) {
-                    throw new Error("Passwords don't match");
-                }
-                result = value;
-                break;
             case 'title':
                 result = forumPostSchema.shape.title.parse(value);
                 break;

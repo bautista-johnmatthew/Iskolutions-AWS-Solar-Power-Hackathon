@@ -28,6 +28,15 @@ $(document).ready(function() {
         }
     });
 
+    $("#confirmPassword").on("blur", function() {
+        const password = $("#password").val();
+        const confirmPassword = $(this).val();
+        
+        if (password !== confirmPassword) {
+            console.error(`Validation errors for confirmPassword:`, "Passwords do not match");            
+        }
+    });
+
     // Reusable function to attach field validation
     function attachFieldValidation(fieldName, selector) {
         $(selector).on("blur", function() {
@@ -35,7 +44,7 @@ $(document).ready(function() {
             
             if (!validationResult.isValid) {
                 console.error(`Validation errors for ${fieldName}:`, validationResult.error);
-                // Optionally display field-specific errors
+                // TODO: Handle error message by changing the error label text
             }
         });
     }
@@ -45,7 +54,6 @@ $(document).ready(function() {
     attachFieldValidation('email', '#email');
     attachFieldValidation('password', '#password');
     attachFieldValidation('studentNumber', '#studentNumber');
-    attachFieldValidation('confirmPassword', '#confirmPassword');
         
 });
 
