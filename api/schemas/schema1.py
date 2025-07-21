@@ -1,22 +1,24 @@
 from pydantic import BaseModel, EmailStr
 from typing import List, Optional
 
-# User Schemas
+# ---------- USER ----------
 class UserCreate(BaseModel):
     username: str
     email: EmailStr
     password: str
-    role: str = "student"
-    student_id: Optional[str]
+    role: str = "student"  # student | faculty | moderator
+    student_id: Optional[str] = None
 
 class UserResponse(BaseModel):
-    user_id: str
+    id: str
     username: str
     email: EmailStr
     role: str
     student_id: Optional[str]
+    verification_status: str
+    reputation: int
 
-# Post Schemas
+# ---------- POST ----------
 class PostCreate(BaseModel):
     title: str
     content: str
@@ -25,7 +27,7 @@ class PostCreate(BaseModel):
     is_anonymous: bool = False
 
 class PostResponse(BaseModel):
-    post_id: str
+    id: str
     title: str
     content: str
     tags: List[str]
@@ -33,12 +35,20 @@ class PostResponse(BaseModel):
     author_id: str
     is_anonymous: bool
 
-# Comment Schemas
+# ---------- COMMENT ----------
 class CommentCreate(BaseModel):
     content: str
     parent_comment_id: Optional[str] = None
     is_anonymous: bool = False
 
-# Vote Schema
+class CommentResponse(BaseModel):
+    id: str
+    content: str
+    author_id: str
+    upvotes: int
+    downvotes: int
+    parent_comment_id: Optional[str]
+
+# ---------- VOTE ----------
 class VoteCreate(BaseModel):
     vote_type: str  # "up" or "down"
