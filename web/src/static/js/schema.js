@@ -44,19 +44,27 @@ const signUpSchema = z.object({
     path: ["confirmPassword"]
 });
 
+// Individual forum schemas
+const titleSchema = z.string()
+    .min(5, "Title must be at least 5 characters long")
+    .max(100, "Title must not exceed 100 characters");
+
+const contentSchema = z.string()
+    .min(20, "Post content must be at least 20 characters long")
+    .max(5000, "Post content must not exceed 5000 characters");
+
+const tagsSchema = z.array(z.string())
+    .optional()
+    .default([])
+    .refine(tags => tags.length <= 5, {
+        message: "Maximum 5 tags allowed"
+    });
+
+// Combined forum post schema
 const forumPostSchema = z.object({
-    title: z.string()
-        .min(5, "Title must be at least 5 characters long")
-        .max(100, "Title must not exceed 100 characters"),
-    content: z.string()
-        .min(20, "Post content must be at least 20 characters long")
-        .max(5000, "Post content must not exceed 5000 characters"),
-    tags: z.array(z.string())
-        .optional()
-        .default([])
-        .refine(tags => tags.length <= 5, {
-            message: "Maximum 5 tags allowed"
-        }),
+    title: titleSchema,
+    content: contentSchema,
+    tags: tagsSchema,
     created_at: z.date().default(() => new Date())
 });
 
@@ -88,10 +96,13 @@ function validateField(fieldName, value) {
                 result = studentNumberSchema.parse(value);
                 break;
             case 'title':
-                result = forumPostSchema.shape.title.parse(value);
+                result = titleSchema.parse(value);
                 break;
             case 'content':
-                result = forumPostSchema.shape.content.parse(value);
+                result = contentSchema.parse(value);
+                break;
+            case 'tags':
+                result = tagsSchema.parse(value);
                 break;
             default:
                 throw new Error("Unknown field");
