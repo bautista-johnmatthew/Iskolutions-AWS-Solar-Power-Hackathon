@@ -1,4 +1,5 @@
 import { commentSchema } from "./schema";
+import { addErrorMessage, clearErrorMessage } from './errorhandling.js';
 
 function addComment(event) {
     event.preventDefault();
@@ -13,6 +14,7 @@ function addComment(event) {
         // Here you can proceed with form submission, e.g., send data to the server
     } else {
         console.error("Validation errors:", validationResult.error);
+        addErrorMessage("#commentContent", validationResult.error);
     }
 }
 
