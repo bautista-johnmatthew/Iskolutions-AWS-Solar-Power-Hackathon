@@ -103,10 +103,7 @@ export async function createPost(data) {
         throw new Error('User must be authenticated to create a post');
     }
     
-    // Get user ID if not provided
-    if (!data.author_id) {
-        data.author_id = sessionManager.getUserId();
-    }
+// Removed redundant author_id assignment as it is already set in addpost.js
     
     const validationErrors = validatePostData(data);
     if (validationErrors.length > 0) {
