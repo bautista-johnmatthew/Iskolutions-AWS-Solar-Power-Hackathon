@@ -1,13 +1,13 @@
 from fastapi import Depends, HTTPException
 from typing import Dict, List
 from services.aws_clients import AWSClients, get_aws_clients
-from services.posts_service import PostService
+from services.post_service import PostService
 from schemas.forum_schemas import PostCreate
 
 # =========================
 # |     POST HANDLERS     |
 # =========================
-async def create_post(data: PostCreate, aws_clients: AWSClients 
+async def create_post(data: PostCreate, aws_clients: AWSClients
                       = Depends(get_aws_clients)) -> Dict:
     service = PostService(aws_clients)
     return service.create_post(
@@ -19,12 +19,12 @@ async def create_post(data: PostCreate, aws_clients: AWSClients
         is_anonymous=data.is_anonymous
     )
 
-async def get_posts(aws_clients: AWSClients 
+async def get_posts(aws_clients: AWSClients
                     = Depends(get_aws_clients)) -> List[Dict]:
     service = PostService(aws_clients)
     return service.get_posts()
 
-async def get_post(post_id: str, aws_clients: AWSClients 
+async def get_post(post_id: str, aws_clients: AWSClients
                    = Depends(get_aws_clients)) -> Dict:
     service = PostService(aws_clients)
     item = service.get_post(post_id)
@@ -32,25 +32,25 @@ async def get_post(post_id: str, aws_clients: AWSClients
         raise HTTPException(status_code=404, detail="Post not found")
     return item
 
-async def update_post(post_id: str, data: PostCreate, aws_clients: AWSClients 
+async def update_post(post_id: str, data: PostCreate, aws_clients: AWSClients
                       = Depends(get_aws_clients)) -> Dict:
     service = PostService(aws_clients)
-    item = service.update_post(post_id, data.title, data.content, 
+    item = service.update_post(post_id, data.title, data.content,
                                data.tags, data.attachments)
     if not item:
         raise HTTPException(status_code=404, detail="Post not found")
     return item
 
-async def patch_post(post_id: str, fields: Dict, aws_clients: AWSClients 
+async def patch_post(post_id: str, fields: Dict, aws_clients: AWSClients
                      = Depends(get_aws_clients)) -> Dict:
     service = PostService(aws_clients)
     item = service.patch_post(post_id, fields)
     if not item:
-        raise HTTPException(status_code=404, 
+        raise HTTPException(status_code=404,
                             detail="Post not found or no fields provided")
     return item
 
-async def delete_post(post_id: str, aws_clients: AWSClients 
+async def delete_post(post_id: str, aws_clients: AWSClients
                       = Depends(get_aws_clients)) -> Dict:
     service = PostService(aws_clients)
     success = service.delete_post(post_id)
