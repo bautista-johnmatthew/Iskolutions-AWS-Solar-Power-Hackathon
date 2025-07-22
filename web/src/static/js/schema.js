@@ -152,12 +152,22 @@ function validateForumPost(formData) {
     }
 }
 
+function validateComment(formData) {
+    try {
+        const validComment = commentSchema.parse(formData);
+        return { isValid: true, data: validComment, error: null };
+    } catch (error) {
+        return { isValid: false, data: null, error: error.issues };
+    }
+}
+
 // Function to preload schemas
 function preloadSchemas() {
     try {
         // Use safeParse with empty objects to preload schemas
         signUpSchema.safeParse({});
         forumPostSchema.safeParse({});
+        commentSchema.safeParse({});
         
         console.log("Schemas preloaded successfully");
         return true;
@@ -168,6 +178,5 @@ function preloadSchemas() {
 }
 
 // Export schemas
-export { validateSignUp, validateForumPost, validateField, preloadSchemas };
-
-
+export { validateSignUp, validateForumPost, validateField,
+        preloadSchemas };

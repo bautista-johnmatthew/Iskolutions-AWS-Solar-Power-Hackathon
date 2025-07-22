@@ -1,13 +1,10 @@
-import { commentSchema } from "./schema";
+import { validateField, preloadSchemas } from "./schema";
 import { addErrorMessage, clearErrorMessage } from './errorhandling.js';
 
 function addComment(event) {
     event.preventDefault();
-    const formData = {
-        content: $("#commentContent").val(),
-    };
-
-    const validationResult = validateField('comment', formData);
+    
+    const validationResult = validateField('comment', $("#commentContent").val());
 
     if (validationResult.isValid) {
         console.log("Form is valid:", validationResult.value);
@@ -19,13 +16,13 @@ function addComment(event) {
 }
 
 $(document).ready(function() {
-    commentSchema.safeParse({});
+    preloadSchemas();
 
     $("#commentForm").on("submit", function(event) {
         addComment(event);
     });
 
-    $("#commentContent").on("blur", function() {
+    $("#commentContent").on("blur", function(event) {
         addComment(event);
     });
 });
