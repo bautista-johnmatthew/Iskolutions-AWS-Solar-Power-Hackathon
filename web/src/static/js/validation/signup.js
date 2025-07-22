@@ -1,5 +1,5 @@
 import { validateSignUp, validateField, preloadSchemas } from './schema.js';
-import { addErrorMessage, clearErrorMessage } from './errorhandling.js';
+import { addErrorMessage, clearErrorMessage } from '../errorhandling.js';
 
 // Form validation and submission handlers
 function handleSignupFormSubmit(event) {
