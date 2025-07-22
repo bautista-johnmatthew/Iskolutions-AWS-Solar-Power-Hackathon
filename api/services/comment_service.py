@@ -92,5 +92,10 @@ class CommentService:
             "created_at": get_timestamp(),
             "updated_at": get_timestamp(),
         }
-        self.table.put_item(Item=item)
+        try:
+            self.table.put_item(Item=item)
+        except ClientError as e:
+            # Log the error and re-raise it
+            print(f"Failed to put item in DynamoDB: {e}")
+            raise
         return item
