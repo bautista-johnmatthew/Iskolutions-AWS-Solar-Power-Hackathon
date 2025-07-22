@@ -161,6 +161,10 @@ body, html {
   margin-bottom: 20px;
 }
 
+.confirm-password-input {
+  margin-bottom: 20px;
+}
+
 .btn-primary {
   background-color: #FF00E2;
   border: none;
