@@ -122,6 +122,30 @@ export class AuthService {
             throw error;
         }
     }
+
+    /**
+     * Resend confirmation email
+     */
+    async resendConfirmation(email) {
+        try {
+            const response = await fetch(`${BASE_API_URL}/auth/resend-confirmation`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to resend confirmation');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Resend confirmation error:', error);
+            throw error;
+        }
+    }
 }
 
 // Export singleton instance

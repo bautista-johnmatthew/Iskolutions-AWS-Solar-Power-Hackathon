@@ -41,10 +41,8 @@ async def confirm_email(data: Dict[str, Any],
     service = AuthService(aws_clients)
     try:
         result = service.confirm_email(data.get("token"), data.get("email"))
-        return {
-            "success": True,
-            "data": result
-        }
+        # Return the user data directly (not wrapped in success/data)
+        return result
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
