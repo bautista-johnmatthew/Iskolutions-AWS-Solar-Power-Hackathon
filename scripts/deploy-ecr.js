@@ -4,7 +4,7 @@ import { resolve } from 'path';
 
 // Load environment variables from .env file in web directory
 try {
-  const envPath = resolve(process.cwd(), '.env'); // Should be web/.env since script runs from web/
+  const envPath = resolve(process.cwd(), 'web', '.env'); // Adjusted path: look for web/.env from project root
   const envContent = await Bun.file(envPath).text();
   const envVars = envContent.split('\n')
     .filter(line => line && !line.startsWith('#'))
@@ -20,7 +20,7 @@ try {
   console.log('📁 Environment variables loaded from', envPath);
 } catch (error) {
   console.warn('⚠️  Could not load .env file:', error.message);
-  console.log('🔍 Looking for .env in:', resolve(process.cwd(), '.env'));
+  console.log('🔍 Looking for .env in:', resolve(process.cwd(), 'web', '.env'));
 }
 
 // Simple ECR deployment script using Bun
@@ -76,17 +76,17 @@ try {
     console.log('API repo already exists or creation failed')
   }
 
-  // Build and push frontend
+  // Build and push frontend (adjusted path: build from web/ directory)
   console.log('🏗️  Building frontend image...')
-  await $`docker build -t ${FRONTEND_REPO} .`
+  await $`docker build -t ${FRONTEND_REPO} ./web`
   await $`docker tag ${FRONTEND_REPO}:latest ${ECR_REGISTRY}/${FRONTEND_REPO}:latest`
   
   console.log('📤 Pushing frontend image...')
   await $`docker push ${ECR_REGISTRY}/${FRONTEND_REPO}:latest`
 
-  // Build and push API
+  // Build and push API (adjusted path: build from api/ directory)
   console.log('🏗️  Building API image...')
-  await $`docker build -t ${API_REPO} ../api`
+  await $`docker build -t ${API_REPO} ./api`
   await $`docker tag ${API_REPO}:latest ${ECR_REGISTRY}/${API_REPO}:latest`
   
   console.log('📤 Pushing API image...')
