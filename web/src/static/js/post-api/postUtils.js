@@ -100,6 +100,7 @@ export async function createPost(data) {
     if (validationErrors.length > 0) {
         throw new Error(`Validation failed: ${validationErrors.join(', ')}`);
     }
+	
     const payload = buildPostPayload(data);
     const response = await fetch(`${BASE_API_URL}/posts`, {
         method: 'POST',
@@ -108,7 +109,9 @@ export async function createPost(data) {
         },
         body: JSON.stringify(payload),
     });
+	
     if (!response.ok) throw new Error('Failed to create post');
+	
     return await response.json();
 }
 
@@ -121,6 +124,7 @@ export async function updatePost(postId, data) {
     if (validationErrors.length > 0) {
         throw new Error(`Invalid data: ${validationErrors.join(' ')}`);
     }
+	
     const payload = buildPostPayload(data);
     const response = await fetch(`${BASE_API_URL}/posts/${postId}`, {
         method: 'PUT',
@@ -129,7 +133,9 @@ export async function updatePost(postId, data) {
         },
         body: JSON.stringify(payload),
     });
+	
     if (!response.ok) throw new Error('Failed to update post');
+	
     return await response.json();
 }
 
@@ -137,7 +143,9 @@ export async function deletePost(postId) {
     const response = await fetch(`${BASE_API_URL}/posts/${postId}`, {
         method: 'DELETE',
     });
+	
     if (!response.ok) throw new Error('Failed to delete post');
+	
     return await response.json(); // Usually returns a success message
 }
 
@@ -167,7 +175,9 @@ export async function patchPost(postId, fields) {
         },
         body: JSON.stringify(patchData),
     });
+	
     if (!response.ok) throw new Error('Failed to patch post');
+	
     return await response.json();
 }
 
