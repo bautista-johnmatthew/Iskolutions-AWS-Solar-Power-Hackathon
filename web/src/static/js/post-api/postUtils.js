@@ -1,4 +1,5 @@
 import { BASE_API_URL } from "../utils/base-api-url.js";
+import { sessionManager } from "../auth/session-manager-vanilla.js";
 /**
  * Format a raw post object from the backend into a frontend-friendly structure.
  * Useful for rendering posts in UI components.
@@ -96,17 +97,38 @@ export function buildPostPayload(data) {
 }
 
 export async function createPost(data) {
+    // Ensure user is authenticated
+    const isLoggedIn = sessionManager.isLoggedIn();
+    if (!isLoggedIn) {
+        throw new Error('User must be authenticated to create a post');
+    }
+    
+    // Get user ID if not provided
+    if (!data.author_id) {
+        data.author_id = sessionManager.getUserId();
+    }
+    
     const validationErrors = validatePostData(data);
     if (validationErrors.length > 0) {
         throw new Error(`Validation failed: ${validationErrors.join(', ')}`);
     }
 	
     const payload = buildPostPayload(data);
+    
+    // Get token for authentication if available
+    const token = sessionManager.getToken();
+    const headers = {
+        'Content-Type': 'application/json',
+    };
+    
+    // Add authorization header if token exists
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    
     const response = await fetch(`${BASE_API_URL}/posts`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: headers,
         body: JSON.stringify(payload),
     });
 	
