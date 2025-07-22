@@ -62,34 +62,6 @@ export class AuthService {
     }
 
     /**
-     * Check if current session is valid with backend
-     */
-    async validateSession() {
-        const token = sessionManager.getToken();
-        if (!token) return false;
-
-        try {
-            const response = await fetch(`${BASE_API_URL}/auth/validate`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-
-            if (!response.ok) {
-                sessionManager.clearSession();
-                return false;
-            }
-
-            return true;
-        } catch (error) {
-            console.error('Session validation error:', error);
-            sessionManager.clearSession();
-            return false;
-        }
-    }
-
-    /**
      * Register new user
      */
     async register(userData) {
