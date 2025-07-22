@@ -23,41 +23,43 @@
 </head>
 <body>
   <div class="login-background">
-    <div class="login-container">
-      <img src="/static/img/logo-wo-bg.png" alt="ISKONEK Logo" class="logo">
-      <hr class="custom-divider">
-      <h2 class="login-title">LOGIN</h2>
+    <div class="container">
+      <div class="login-container mx-auto">
+        <img src="/static/img/logo-wo-bg.png" alt="ISKONEK Logo" class="logo">
+        <hr class="custom-divider">
+        <h2 class="login-title">LOGIN</h2>
 
-      <form>
-        <div class="username-input">
-          <label class="form-label">USERNAME</label>
-          <div class="input-icon">
-            <input type="text" class="form-control" placeholder="TYPE YOUR USERNAME">
-            <i class="bi bi-person"></i>
-          </div>
-        </div>
-
-        <div class="password-input">
-          <label class="form-label">PASSWORD</label>
-            <div class="input-wrapper">
-                <i class="bi bi-lock"></i>
-                <input type="password" class="form-control password-input" placeholder="TYPE YOUR PASSWORD" id="password">
-                <button type="button" class="toggle-password-btn" onclick="togglePassword()">
-                    <i class="bi bi-eye-fill"></i>
-                </button>
+        <form>
+          <div class="username-input">
+            <label class="form-label">USERNAME</label>
+            <div class="input-icon">
+              <input type="text" class="form-control" placeholder="TYPE YOUR USERNAME">
+              <i class="bi bi-person"></i>
             </div>
-          <div class="text-end">
-            <small><a href="#">FORGOT PASSWORD?</a></small>
           </div>
-        </div>
 
-        <button type="submit" class="btn btn-primary w-100 mt-3">SIGN IN</button>
+          <div class="password-input">
+            <label class="form-label">PASSWORD</label>
+            <div class="input-wrapper">
+              <i class="bi bi-lock"></i>
+              <input type="password" class="form-control password-input" placeholder="TYPE YOUR PASSWORD" id="password">
+              <button type="button" class="toggle-password-btn" onclick="togglePassword()">
+                <i class="bi bi-eye-fill"></i>
+              </button>
+            </div>
+            <div class="text-end">
+              <small><a href="#">FORGOT PASSWORD?</a></small>
+            </div>
+          </div>
 
-        <div class="text-center mt-3 small">
-          <p>DON'T HAVE AN ACCOUNT? <a href="#">REGISTER HERE.</a><br>
-          DO YOU WANT TO CONTINUE AS <a href="#">GUEST?</a></p>
-        </div>
-      </form>
+          <button type="submit" class="btn btn-primary w-100 mt-3">SIGN IN</button>
+
+          <div class="text-center mt-3 small">
+            <p>DON'T HAVE AN ACCOUNT? <a href="#">REGISTER HERE.</a><br>
+              DO YOU WANT TO CONTINUE AS <a href="#">GUEST?</a></p>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </body>
