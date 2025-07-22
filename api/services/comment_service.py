@@ -57,8 +57,8 @@ class CommentService:
         update_parts = []
         expr_vals = {":u": get_timestamp()}
         for key, val in data.items():
-            update_parts.append(f"{key} = :{key[0]}")
-            expr_vals[f":{key[0]}"] = val
+            update_parts.append(f"{key} = :{key}")
+            expr_vals[f":{key}"] = val
         update_expr = "SET " + ", ".join(update_parts) + ", updated_at = :u"
         resp = self.table.update_item(
             Key={"PK": f"POST#{post_id}", "SK": f"COMMENT#{comment_id}"},
