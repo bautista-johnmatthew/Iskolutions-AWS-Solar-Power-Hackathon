@@ -1,0 +1,209 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+}
+
+.login-background {
+  background: url("/static/img/gradient-wallpaper.png") no-repeat center center;
+  background-size: cover;
+  height: 174.9vh;
+  width: 103vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.login-container {
+  background-color: #100D28;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  padding: 32px;
+  max-width: 500px;
+  text-align: center;
+  margin-top: 55px;
+  margin-bottom: auto;
+  margin-left: auto;
+  margin-right: 490px;
+  width: 480px;
+  height: 500px;
+  flex-shrink: 0;
+}
+
+.logo {
+  width: 200px;
+  margin-bottom: -10px;
+  margin-top: -20px;
+}
+
+.custom-divider {
+  border: none;
+  height: 2px; /* ← thickness */
+  background-color: #636363;
+  margin: 20px 0; /* optional spacing */
+}
+
+.login-title {
+  font-weight: 700;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  font-size: 32px;
+  color: white;
+}
+
+.form-label {
+  display: block;
+  font-weight: 550;
+  text-align: left;
+  margin-bottom: 5px;
+  font-size: 13px;
+  color: white;
+}
+
+.username-input {
+  margin-top: -25px;
+  margin-bottom: 20px;
+}
+
+.input-icon {
+  position: relative;
+}
+
+.input-icon i.bi {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+}
+
+.input-icon input {
+  width: 415px;
+  height: 30px;
+  flex-shrink: 0;
+  padding: 10px 10px 10px 40px;
+  border-radius: 999px;
+  border: none;
+  background-color: #FF00E2;
+  color: white;
+  font-size: 13px;
+}
+
+.input-icon input:focus {
+  background-color: #FF00E2;
+  color: white;              
+  outline: none;             
+  box-shadow: none;          
+}
+
+.input-icon input::placeholder {
+  color: white;
+  opacity: 0.8;
+}
+
+.input-icon .toggle-password {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-primary {
+  background-color: #FF00E2;
+  border: none;
+  border-radius: 999px;
+  font-weight: 550;
+  max-width: 415px;
+  text-align: center;
+  height: 30px;
+  padding: 0 16px; 
+  line-height: 30px;
+}
+
+a {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #FF00E2;
+}
+
+.input-icon i.bi {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.input-icon input:focus + i,
+.input-icon input:not(:placeholder-shown) + i {
+  opacity: 0.8;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #FF00E2;
+  border-radius: 999px;
+  padding: 0 15px;
+  width: 100%;
+  max-width: 415px;
+  height: 30px;
+}
+
+.input-wrapper input.password-input {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 13px;
+  flex: 1;
+  padding-left: 30px;
+  padding-right: 10px;
+}
+
+.input-wrapper input::placeholder {
+  color: white;
+  opacity: 0.8;
+}
+
+.input-wrapper i.bi-lock {
+  position: absolute;
+  left: 15px;
+  color: white;
+  font-size: 16px;
+}
+
+.toggle-password-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
+  font-size: 16px;
+}
+
+.input-wrapper input.password-input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.text-end {
+    font-size: 13px;
+}
+
+.text-center p {
+    font-size: 12px;
+    color: white;
+}
