@@ -1,59 +1,60 @@
-from fastapi import Depends, HTTPException
-from typing import Dict, List
+from fastapi import Depends, Body
 from services.aws_clients import AWSClients, get_aws_clients
 from services.post_service import PostService
-from schemas.forum_schemas import PostCreate
 
-# =========================
-# |     POST HANDLERS     |
-# =========================
-async def create_post(data: PostCreate, aws_clients: AWSClients
-                      = Depends(get_aws_clients)) -> Dict:
+
+async def create_post(
+    author_id: str = Body(...),
+    title: str = Body(...),
+    content: str = Body(...),
+    tags: list = Body(default=[]),
+    attachments: list = Body(default=[]),
+    is_anonymous: bool = Body(default=False),
+    aws_clients: AWSClients = Depends(get_aws_clients)
+):
     service = PostService(aws_clients)
-    return service.create_post(
-        author_id=data.author_id,
-        title=data.title,
-        content=data.content,
-        tags=data.tags,
-        attachments=data.attachments,
-        is_anonymous=data.is_anonymous
-    )
+    return service.create_post(author_id, title, content, tags, attachments, 
+                               is_anonymous)
 
-async def get_posts(aws_clients: AWSClients
-                    = Depends(get_aws_clients)) -> List[Dict]:
+
+async def get_posts(aws_clients: AWSClients = Depends(get_aws_clients)):
     service = PostService(aws_clients)
     return service.get_posts()
 
-async def get_post(post_id: str, aws_clients: AWSClients
-                   = Depends(get_aws_clients)) -> Dict:
-    service = PostService(aws_clients)
-    item = service.get_post(post_id)
-    if not item:
-        raise HTTPException(status_code=404, detail="Post not found")
-    return item
 
-async def update_post(post_id: str, data: PostCreate, aws_clients: AWSClients
-                      = Depends(get_aws_clients)) -> Dict:
+async def get_post(post_id: str, aws_clients: AWSClients 
+                   = Depends(get_aws_clients)):
     service = PostService(aws_clients)
-    item = service.update_post(post_id, data.title, data.content,
-                               data.tags, data.attachments)
-    if not item:
-        raise HTTPException(status_code=404, detail="Post not found")
-    return item
+    post = service.get_post(post_id)
+    if not post:
+        return {"error": "Post not found"}
+    return post
 
-async def patch_post(post_id: str, fields: Dict, aws_clients: AWSClients
-                     = Depends(get_aws_clients)) -> Dict:
-    service = PostService(aws_clients)
-    item = service.patch_post(post_id, fields)
-    if not item:
-        raise HTTPException(status_code=404,
-                            detail="Post not found or no fields provided")
-    return item
 
-async def delete_post(post_id: str, aws_clients: AWSClients
-                      = Depends(get_aws_clients)) -> Dict:
+async def update_post(
+    post_id: str,
+    title: str = Body(...),
+    content: str = Body(...),
+    tags: list = Body(default=[]),
+    attachments: list = Body(default=[]),
+    is_anonymous: bool = Body(default=False),
+    aws_clients: AWSClients = Depends(get_aws_clients)
+):
     service = PostService(aws_clients)
-    success = service.delete_post(post_id)
-    if not success:
-        raise HTTPException(status_code=404, detail="Post not found")
-    return {"message": "Post deleted successfully"}
+    return service.update_post(post_id, title, content, tags, attachments, 
+                               is_anonymous)
+
+
+async def patch_post(
+    post_id: str,
+    updates: dict = Body(...),
+    aws_clients: AWSClients = Depends(get_aws_clients)
+):
+    service = PostService(aws_clients)
+    return service.patch_post(post_id, updates)
+
+
+async def delete_post(post_id: str, aws_clients: AWSClients 
+                      = Depends(get_aws_clients)):
+    service = PostService(aws_clients)
+    return service.delete_post(post_id)
