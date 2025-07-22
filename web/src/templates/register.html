@@ -14,7 +14,7 @@
   <script src="https://unpkg.com/zod@3.22.4/lib/index.umd.js"></script>
 
   <!-- Custom CSS & JS -->
-  <link rel="stylesheet" href="../static/css/register-style.css" />
+  <link rel="stylesheet" href="../static/css/register-style.css"/>
   <script src="../static/js/app.js"></script>
 
   <!-- Font -->
@@ -30,5 +30,35 @@
 
         <form>
           <div class="username-input">
-            <label class="form-label
+            <label class="form-label"> USERNAME</label>
+            <div class="input-icon">
+              <input type="text" class="form-control" placeholder="TYPE YOUR USERNAME">
+              <i class="bi bi-person"></i>
+            </div>
+          </div>
+
+          <div class="password-input-box">
+            <label class="form-label">PASSWORD</label>
+            <div class="input-wrapper">
+              <i class="bi bi-lock"></i>
+              <input type="password" class="form-control password-input" placeholder="TYPE YOUR PASSWORD" id="password">
+              <button type="button" class="toggle-password-btn" onclick="togglePassword()">
+                <i class="bi bi-eye-fill"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="confirm-password-input">
+            <label class="form-label">CONFIRM PASSWORD</label>
+            <div class="input-wrapper">
+              <i class="bi bi-lock"></i>
+              <input type="password" class="form-control password-input" placeholder="CONFIRM YOUR PASSWORD" id="password">
+              <button type="button" class="toggle-password-btn" onclick="togglePassword()">
+                <i class="bi bi-eye-fill"></i>
+              </button>
+            </div>
+          </div>
+
+        </form>
+
 </html>
