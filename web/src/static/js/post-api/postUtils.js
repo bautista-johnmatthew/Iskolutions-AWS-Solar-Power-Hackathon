@@ -109,6 +109,14 @@ export async function createPost(data) {
 }
 
 export async function updatePost(postId, data) {
+    if (!postId || typeof postId !== 'string') {
+        throw new Error('Invalid postId: postId is required and must be a non-empty string.');
+    }
+
+    const validationErrors = validatePostData(data);
+    if (validationErrors.length > 0) {
+        throw new Error(`Invalid data: ${validationErrors.join(' ')}`);
+    }
     const payload = buildPostPayload(data);
     const response = await fetch(`${BASE_API_URL}/posts/${postId}`, {
         method: 'PUT',
