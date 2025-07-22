@@ -96,6 +96,10 @@ export function buildPostPayload(data) {
 }
 
 export async function createPost(data) {
+    const validationErrors = validatePostData(data);
+    if (validationErrors.length > 0) {
+        throw new Error(`Validation failed: ${validationErrors.join(', ')}`);
+    }
     const payload = buildPostPayload(data);
     const response = await fetch(`${BASE_API_URL}/posts`, {
         method: 'POST',
