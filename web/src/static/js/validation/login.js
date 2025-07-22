@@ -1,6 +1,6 @@
-import { sessionManager } from './session-manager-vanilla.js';
-import { authService } from './auth-service.js';
-import { validateField } from '../validation/schema.js';
+import { sessionManager } from '../auth/session-manager-vanilla.js';
+import { authService } from '../auth/auth-service.js';
+import { validateField, validateLogin } from './schema.js';
 import { addErrorMessage, clearErrorMessage } from '../errorhandling.js';
 
 /**
@@ -14,7 +14,15 @@ async function handleLogin(email, password) {
         // Clear any existing error messages
         clearErrorMessage('#email');
         clearErrorMessage('#password');
-        
+
+        // Validate login fields
+        const validationResult = validateLogin({ email, password });
+        if (!validationResult.isValid) {
+            console.error('Validation errors:', validationResult.error);
+            addErrorMessage('#email', validationResult.error);
+            return;
+        }
+
         const user = await authService.login(email, password);
         console.log('Login successful:', user);
         updateUserInfo();

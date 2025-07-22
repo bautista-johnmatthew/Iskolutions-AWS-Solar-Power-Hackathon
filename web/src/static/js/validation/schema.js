@@ -152,10 +152,13 @@ function validateForumPost(formData) {
     }
 }
 
-function validateComment(formData) {
+function validateLogin(formData) {
     try {
-        const validComment = commentSchema.parse(formData);
-        return { isValid: true, data: validComment, error: null };
+        const validLogin = z.object({
+            email: emailSchema,
+            password: passwordSchema
+        }).parse(formData);
+        return { isValid: true, data: validLogin, error: null };
     } catch (error) {
         return { isValid: false, data: null, error: error.issues };
     }
@@ -178,5 +181,5 @@ function preloadSchemas() {
 }
 
 // Export schemas
-export { validateSignUp, validateForumPost, validateField,
+export { validateSignUp, validateForumPost, validateField, validateLogin,
         preloadSchemas };
