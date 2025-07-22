@@ -1,5 +1,5 @@
 import {validateForumPost, validateField, preloadSchemas} from './schema.js';
-import { addErrorMessage, clearErrorMessage } from './errorhandling.js';
+import { addErrorMessage, clearErrorMessage } from '../errorhandling.js';
 
 const selectedTags = [];
 

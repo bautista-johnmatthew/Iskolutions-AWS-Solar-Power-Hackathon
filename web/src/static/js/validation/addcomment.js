@@ -1,5 +1,5 @@
-import { validateField, preloadSchemas } from "./schema";
-import { addErrorMessage, clearErrorMessage } from './errorhandling.js';
+import { validateField, preloadSchemas } from "./schema.js";
+import { addErrorMessage, clearErrorMessage } from '../errorhandling.js';
 
 function addComment(event) {
     event.preventDefault();
