@@ -8,10 +8,12 @@ from routes.comments.router import router as comments_router
 from routes.votes.router import router as votes_router
 from routes.attachments.router import router as attachments_router
 from routes.utility.router import router as utility_router
+from routes.auth.router import router as auth_router
 
 # Create a new APIRouter instance
 router: APIRouter = APIRouter()
 
+router.include_router(auth_router)
 router.include_router(posts_router)
 router.include_router(comments_router)
 router.include_router(votes_router)

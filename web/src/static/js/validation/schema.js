@@ -49,6 +49,7 @@ const titleSchema = z.string()
     .min(5, "Title must be at least 5 characters long")
     .max(100, "Title must not exceed 100 characters");
 
+
 const contentSchema = z.string()
     .min(20, "Post content must be at least 20 characters long")
     .max(5000, "Post content must not exceed 5000 characters");
@@ -152,10 +153,13 @@ function validateForumPost(formData) {
     }
 }
 
-function validateComment(formData) {
+function validateLogin(formData) {
     try {
-        const validComment = commentSchema.parse(formData);
-        return { isValid: true, data: validComment, error: null };
+        const validLogin = z.object({
+            email: emailSchema,
+            password: passwordSchema
+        }).parse(formData);
+        return { isValid: true, data: validLogin, error: null };
     } catch (error) {
         return { isValid: false, data: null, error: error.issues };
     }
@@ -178,5 +182,5 @@ function preloadSchemas() {
 }
 
 // Export schemas
-export { validateSignUp, validateForumPost, validateField,
+export { validateSignUp, validateForumPost, validateField, validateLogin,
         preloadSchemas };

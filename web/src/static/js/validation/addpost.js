@@ -7,7 +7,7 @@ const selectedTags = [];
 
 // Form validation and submission handlers
 function handlePostFormSubmit(event) {
-    console.log("New post form submitted");
+    clearErrorMessage('#postAttachment');
     event.preventDefault();
     
     // Get author ID from session
@@ -40,7 +40,7 @@ function handlePostFormSubmit(event) {
             });
     } else {
         console.error("Validation errors:", validationResult.error);
-        // Handle error messages for each field
+        addErrorMessage('#postAttachment', 'Please fix the errors before submitting');
     }
 }
 
