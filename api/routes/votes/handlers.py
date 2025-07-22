@@ -1,7 +1,9 @@
+from fastapi import Depends, HTTPException, Body
 from typing import Literal
-from fastapi import Body, Depends
 from services.aws_clients import AWSClients, get_aws_clients
 from services.vote_service import VoteService
+from services.post_service import PostService
+from services.comment_service import CommentService
 
 # =========================
 # |     VOTE HANDLERS     |
@@ -9,41 +11,67 @@ from services.vote_service import VoteService
 
 async def vote_post(
     post_id: str,
-    user_id: str = Body(..., embed=True),
-    vote_type: Literal["up", "down"] = Body(..., embed=True),
-    aws_clients: AWSClients = Depends(get_aws_clients),
+    vote_type: Literal['up', 'down'] = Body(..., embed=True),
+    aws_clients: AWSClients = Depends(get_aws_clients)
 ):
-    service = VoteService(aws_clients)
-    return service.vote_post(post_id, user_id, vote_type)
+    vote_service = VoteService(aws_clients)
+    post_service = PostService(aws_clients)
+
+    if not post_service.get_post(post_id):
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    try:
+        return vote_service.vote_post(post_id, vote_type)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 async def remove_post_vote(
     post_id: str,
-    user_id: str = Body(..., embed=True),
-    vote_type: Literal["up", "down"] = Body(..., embed=True),
-    aws_clients: AWSClients = Depends(get_aws_clients),
+    vote_type: Literal['up', 'down'] = Body(..., embed=True),
+    aws_clients: AWSClients = Depends(get_aws_clients)
 ):
-    service = VoteService(aws_clients)
-    return service.remove_post_vote(post_id, user_id, vote_type)
+    vote_service = VoteService(aws_clients)
+    post_service = PostService(aws_clients)
+
+    if not post_service.get_post(post_id):
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    try:
+        return vote_service.remove_post_vote(post_id, vote_type)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 async def vote_comment(
     comment_id: str,
-    post_id: str = Body(..., embed=True),
-    user_id: str = Body(..., embed=True),
-    vote_type: Literal["up", "down"] = Body(..., embed=True),
-    aws_clients: AWSClients = Depends(get_aws_clients),
+    vote_type: Literal['up', 'down'] = Body(..., embed=True),
+    aws_clients: AWSClients = Depends(get_aws_clients)
 ):
-    service = VoteService(aws_clients)
-    return service.vote_comment(comment_id, post_id, user_id, vote_type)
+    vote_service = VoteService(aws_clients)
+    comment_service = CommentService(aws_clients)
+
+    if not comment_service.get_comment(comment_id):
+        raise HTTPException(status_code=404, detail="Comment not found")
+
+    try:
+        return vote_service.vote_comment(comment_id, vote_type)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 async def remove_comment_vote(
     comment_id: str,
-    post_id: str = Body(..., embed=True),
-    user_id: str = Body(..., embed=True),
-    vote_type: Literal["up", "down"] = Body(..., embed=True),
-    aws_clients: AWSClients = Depends(get_aws_clients),
+    vote_type: Literal['up', 'down'] = Body(..., embed=True),
+    aws_clients: AWSClients = Depends(get_aws_clients)
 ):
-    service = VoteService(aws_clients)
-    return service.remove_comment_vote(comment_id, post_id, user_id, vote_type)
+    vote_service = VoteService(aws_clients)
+    comment_service = CommentService(aws_clients)
+
+    if not comment_service.get_comment(comment_id):
+        raise HTTPException(status_code=404, detail="Comment not found")
+
+    try:
+        return vote_service.remove_comment_vote(comment_id, vote_type)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
