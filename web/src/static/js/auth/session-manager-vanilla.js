@@ -47,7 +47,6 @@ class SessionManager {
     //     "email": "user@pup.edu.ph",
     //     "name": "John Doe",
     //     "token": "jwt-token-here",
-    //     "expires_at": "2024-01-01T00:00:00Z"
     // }
 
     /**
@@ -114,17 +113,6 @@ class SessionManager {
             this.user = { ...this.user, ...userData };
             this.setSession(this.user);
         }
-    }
-
-    /**
-     * Check if session is expired (if your backend provides expiry)
-     */
-    isSessionExpired() {
-        const user = this.getUser();
-        if (!user || !user.expires_at) return false;
-        
-        const expiryTime = new Date(user.expires_at);
-        return Date.now() > expiryTime.getTime();
     }
 }
 
