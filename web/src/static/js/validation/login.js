@@ -15,12 +15,20 @@ async function handleLogin(email, password) {
         clearErrorMessage('#email');
         clearErrorMessage('#password');
 
-        // Validate login fields
-        const validationResult = validateLogin({ email, password });
-        if (!validationResult.isValid) {
-            console.error('Validation errors:', validationResult.error);
-            addErrorMessage('#email', validationResult.error);
-            return;
+        // Validate email field
+        const emailValidation = validateField('email', email);
+        if (!emailValidation.isValid) {
+            addErrorMessage('#email', emailValidation.error);
+        } else {
+            clearErrorMessage('#email');
+        }
+
+        // Validate password field
+        const passwordValidation = validateField('password', password);
+        if (!passwordValidation.isValid) {
+            addErrorMessage('#password', passwordValidation.error);
+        } else {
+            clearErrorMessage('#password');
         }
 
         const user = await authService.login(email, password);
