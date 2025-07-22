@@ -1,5 +1,4 @@
 from fastapi import Depends
-
 from routes.votes import handlers
 from services.aws_clients import get_aws_clients
 
@@ -7,7 +6,7 @@ from services.aws_clients import get_aws_clients
 # |        VOTE ROUTES        |
 # =============================
 VOTE_ROUTES: dict = {
-    "VOTE_ON_POST": {
+    "VOTE_POST": {
         "methods": ["POST"],
         "path": "/posts/{post_id}/vote",
         "dependencies": [Depends(get_aws_clients)],
@@ -19,7 +18,7 @@ VOTE_ROUTES: dict = {
         "dependencies": [Depends(get_aws_clients)],
         "endpoint": handlers.remove_post_vote
     },
-    "VOTE_ON_COMMENT": {
+    "VOTE_COMMENT": {
         "methods": ["POST"],
         "path": "/comments/{comment_id}/vote",
         "dependencies": [Depends(get_aws_clients)],
