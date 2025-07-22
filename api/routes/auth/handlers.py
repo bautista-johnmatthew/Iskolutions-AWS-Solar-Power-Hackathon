@@ -1,7 +1,7 @@
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, Header
 from services.aws_clients import AWSClients, get_aws_clients
 from services.auth_service import AuthService
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 # =========================
 # |     AUTH HANDLERS     |
@@ -17,10 +17,8 @@ async def register(data: Dict[str, Any],
             role=data.get("role", "STUDENT"),
             student_id=data.get("student_id")
         )
-        return {
-            "success": True,
-            "data": result
-        }
+        # Return the user data directly (not wrapped in success/data)
+        return result
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
@@ -31,10 +29,8 @@ async def login(data: Dict[str, Any],
     service = AuthService(aws_clients)
     try:
         result = service.login(data.get("email"), data.get("password"))
-        return {
-            "success": True,
-            "data": result
-        }
+        # Return the user data directly (not wrapped in success/data)
+        return result
     except ValueError as e:
         raise HTTPException(status_code=401, detail=str(e))
     except Exception as e:
@@ -82,11 +78,18 @@ async def reset_password(data: Dict[str, Any],
     except Exception as e:
         raise HTTPException(status_code=500, detail="Failed to send password reset email")
 
-async def logout(token: str,
+async def logout(authorization: Optional[str] = Header(None),
                 aws_clients: AWSClients = Depends(get_aws_clients)):
     service = AuthService(aws_clients)
     try:
-        result = service.logout(token)
+        # Extract token from Authorization header
+        token = None
+        if authorization and authorization.startswith("Bearer "):
+            token = authorization[7:]  # Remove "Bearer " prefix
+        
+        if token:
+            result = service.logout(token)
+        
         return {
             "success": True,
             "message": "Logged out successfully"
@@ -97,16 +100,21 @@ async def logout(token: str,
             "message": "Logged out successfully"
         }  # Always return success for logout
 
-async def verify_token(token: str,
+async def verify_token(authorization: Optional[str] = Header(None),
                       aws_clients: AWSClients = Depends(get_aws_clients)):
     service = AuthService(aws_clients)
     try:
+        # Extract token from Authorization header
+        token = None
+        if authorization and authorization.startswith("Bearer "):
+            token = authorization[7:]  # Remove "Bearer " prefix
+        
+        if not token:
+            raise HTTPException(status_code=401, detail="No token provided")
+            
         result = service.verify_token_and_get_user(token)
         if result:
-            return {
-                "success": True,
-                "data": result
-            }
+            return result
         else:
             raise HTTPException(status_code=401, detail="Invalid token")
     except Exception as e:

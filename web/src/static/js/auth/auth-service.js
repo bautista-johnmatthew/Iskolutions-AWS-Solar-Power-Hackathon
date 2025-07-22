@@ -2,7 +2,7 @@ import { BASE_API_URL } from '../utils/base-api-url.js';
 import { sessionManager } from './session-manager-vanilla.js';
 
 /**
- * Authentication service for handling login/logout with backend
+ * Simplified authentication service for core login/logout/register functionality
  */
 export class AuthService {
     
@@ -80,12 +80,45 @@ export class AuthService {
 
             const newUser = await response.json();
             
-            // Automatically log in after registration
-            sessionManager.setSession(newUser);
+            // Store session if registration successful and user is logged in
+            if (newUser.token) {
+                sessionManager.setSession(newUser);
+            }
             
             return newUser;
         } catch (error) {
             console.error('Registration error:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Confirm email with token
+     */
+    async confirmEmail(email, token) {
+        try {
+            const response = await fetch(`${BASE_API_URL}/auth/confirm-email`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, token }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Email confirmation failed');
+            }
+
+            const result = await response.json();
+            
+            // Store session if confirmation creates a session
+            if (result.token) {
+                sessionManager.setSession(result);
+            }
+            
+            return result;
+        } catch (error) {
+            console.error('Email confirmation error:', error);
             throw error;
         }
     }
