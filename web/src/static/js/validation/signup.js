@@ -4,6 +4,7 @@ import { authService } from '../auth/auth-service.js';
 
 // Form validation and submission handlers
 async function handleSignupFormSubmit(event) {
+    clearErrorMessage('#confirmPassword');
     event.preventDefault();
     
     const formData = {
@@ -13,9 +14,6 @@ async function handleSignupFormSubmit(event) {
         studentNumber: $("#studentNumber").val(),
         confirmPassword: $("#confirmPassword").val()
     };
-    
-    // Clear any existing error messages
-    clearAllErrorMessages();
     
     const validationResult = validateSignUp(formData);
     
@@ -59,13 +57,7 @@ async function handleSignupFormSubmit(event) {
         }
     } else {
         console.error("Validation errors:", validationResult.error);
-        // Handle validation errors
-        if (validationResult.error.issues) {
-            validationResult.error.issues.forEach(issue => {
-                const fieldName = issue.path[0];
-                addErrorMessage(`#${fieldName}`, issue.message);
-            });
-        }
+        addErrorMessage('#confirmPassword', 'Please fix the errors before submitting');
     }
 }
 
@@ -220,19 +212,9 @@ function showEmailConfirmationSuccess() {
     `);
 }
 
-// Function to clear all error messages
-function clearAllErrorMessages() {
-    clearErrorMessage('#username');
-    clearErrorMessage('#email');
-    clearErrorMessage('#password');
-    clearErrorMessage('#studentNumber');
-    clearErrorMessage('#confirmPassword');
-}
-
 // Function to clear signup form
 function clearSignupForm() {
     $("#signupForm")[0].reset();
-    clearAllErrorMessages();
 }
 
 // Function to handle confirm password validation

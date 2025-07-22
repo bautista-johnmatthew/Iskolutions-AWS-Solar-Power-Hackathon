@@ -2,6 +2,7 @@ import { validateField, preloadSchemas } from "./schema.js";
 import { addErrorMessage, clearErrorMessage } from '../errorhandling.js';
 
 function addComment(event) {
+    clearErrorMessage('#commentContent');
     event.preventDefault();
     
     const validationResult = validateField('comment', $("#commentContent").val());
