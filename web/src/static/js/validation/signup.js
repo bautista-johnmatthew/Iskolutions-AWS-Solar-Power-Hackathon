@@ -33,10 +33,12 @@ async function handleSignupFormSubmit(event) {
             
             // Prepare data for registration (exclude confirmPassword)
             const registrationData = {
-                name: formData.username,
-                email: formData.email,
-                password: formData.password,
-                student_id: formData.studentNumber
+                username: $("#username").val(),
+                email: $("#email").val(),
+                password: $("#password").val(),
+                student_id: $("#studentNumber").val(),
+                role: "student",
+                is_verified: false
             };
             
             // Call registration service
@@ -88,6 +90,7 @@ function showEmailConfirmationPrompt(email) {
                         <label for="confirmationToken" class="form-label">Confirmation Code</label>
                         <input type="text" class="form-control" id="confirmationToken" 
                                placeholder="Enter 6-digit code" required maxlength="6">
+                        <div id="confirmationToken-error" class="invalid-feedback d-none"></div>
                         <small class="form-text text-muted">Check your email for the confirmation code</small>
                     </div>
                     <div class="d-grid gap-2">
@@ -140,6 +143,7 @@ function attachEmailConfirmationHandlers(email) {
             
             // Call email confirmation service
             const result = await authService.confirmEmail(email, token);
+            
             console.log('Email confirmation successful:', result);
             
             // Show success message and redirect

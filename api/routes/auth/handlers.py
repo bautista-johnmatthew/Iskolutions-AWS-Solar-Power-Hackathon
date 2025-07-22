@@ -1,21 +1,22 @@
 from fastapi import Depends, HTTPException, Header
 from services.aws_clients import AWSClients, get_aws_clients
 from services.auth_service import AuthService
+from schemas.forum_schemas import UserCreate
 from typing import Dict, Any, Optional
 
 # =========================
 # |     AUTH HANDLERS     |
 # =========================
-async def register(data: Dict[str, Any], 
+async def register(user_data: UserCreate, 
                   aws_clients: AWSClients = Depends(get_aws_clients)):
     service = AuthService(aws_clients)
     try:
         result = service.register(
-            username=data.get("username"),
-            email=data.get("email"),
-            password=data.get("password"),
-            role=data.get("role", "STUDENT"),
-            student_id=data.get("student_id")
+            username=user_data.username,
+            email=user_data.email,
+            password=user_data.password,
+            role=user_data.role,
+            student_id=user_data.student_id
         )
         # Return the user data directly (not wrapped in success/data)
         return result

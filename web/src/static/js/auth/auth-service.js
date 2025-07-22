@@ -66,6 +66,8 @@ export class AuthService {
      */
     async register(userData) {
         try {
+            console.log('Sending registration data:', userData);
+            
             const response = await fetch(`${BASE_API_URL}/auth/register`, {
                 method: 'POST',
                 headers: {
@@ -75,10 +77,19 @@ export class AuthService {
             });
 
             if (!response.ok) {
-                throw new Error('Registration failed');
+                let errorMessage = 'Registration failed';
+                try {
+                    const errorData = await response.json();
+                    console.error('Registration error response:', errorData);
+                    errorMessage = errorData.detail || errorData.message || errorMessage;
+                } catch (e) {
+                    console.error('Error parsing error response:', e);
+                }
+                throw new Error(errorMessage);
             }
 
             const newUser = await response.json();
+            console.log('Registration response:', newUser);
             
             // Store session if registration successful and user is logged in
             if (newUser.token) {
