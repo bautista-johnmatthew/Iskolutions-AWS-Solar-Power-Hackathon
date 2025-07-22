@@ -1,7 +1,7 @@
 from fastapi import Depends, HTTPException
 from typing import Dict, List
 from services.aws_clients import AWSClients, get_aws_clients
-from services.posts_service import PostService
+from services.post_service import PostService
 from schemas.forum_schemas import PostCreate
 
 # =========================
