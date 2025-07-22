@@ -1,5 +1,6 @@
 import { sessionManager } from './session-manager-vanilla.js';
 import { authService } from './auth-service.js';
+import { validateField } from '../validation/schema.js';
 import { addErrorMessage, clearErrorMessage } from '../errorhandling.js';
 
 /**
@@ -94,6 +95,26 @@ $(document).ready(function() {
         const password = $('#password').val();
         
         await handleLogin(email, password);
+    });
+
+    // Validate email field
+    $('#email').on('blur', function() {
+        const validationResult = validateField('email', $(this).val());
+        if (!validationResult.isValid) {
+            addErrorMessage('#email', validationResult.error);
+        } else {
+            clearErrorMessage('#email');
+        }
+    });
+
+    // Validate password field
+    $('#password').on('blur', function() {
+        const validationResult = validateField('password', $(this).val());
+        if (!validationResult.isValid) {
+            addErrorMessage('#password', validationResult.error);
+        } else {
+            clearErrorMessage('#password');
+        }
     });
 
     // Logout button
