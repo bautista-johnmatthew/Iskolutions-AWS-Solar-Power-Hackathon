@@ -1,88 +1,97 @@
-# api/services/posts_service.py
-import uuid
-from typing import List, Dict, Optional
-from models.forum_models import post_pk
+from botocore.exceptions import ClientError
 from services.aws_clients import AWSClients
-from datetime import datetime, timezone
+from models.forum_models import PostModel, post_pk, get_timestamp
 
-def get_timestamp() -> str:
-    return datetime.now(timezone.utc).isoformat()
 
 class PostService:
     def __init__(self, aws_clients: AWSClients):
         self.table = aws_clients.table
 
     def create_post(self, author_id: str, title: str, content: str,
-                    tags: Optional[List[str]] = None,
-                    attachments: Optional[List[str]] = None,
-                    is_anonymous: bool = False) -> Dict:
-        post_id = str(uuid.uuid4())
-        item = {
-            "PK": post_pk(post_id),
-            "SK": "METADATA",
-            "post_id": post_id,
-            "author_id": author_id,
-            "title": title,
-            "content": content,
-            "tags": tags or [],
-            "attachments": attachments or [],
-            "is_anonymous": is_anonymous,
-            "upvotes": 0,
-            "downvotes": 0,
-            "created_at": get_timestamp(),
-            "updated_at": get_timestamp()
-        }
-        self.table.put_item(Item=item)
-        return item
+                    tags=None, attachments=None, is_anonymous=False):
+        post = PostModel(author_id, title, content, tags, attachments, 
+                         is_anonymous)
+        try:
+            self.table.put_item(Item=post.to_item())
+            return {"message": "Post created successfully", "post_id": 
+                    post.post_id}
+        except ClientError as e:
+            raise RuntimeError(f"Error creating post: {e}")
 
-    def get_posts(self) -> List[Dict]:
-        response = self.table.scan()
-        return [item for item in response.get("Items", [])
-                 if item.get("SK") == "METADATA"]
+    def get_posts(self):
+        try:
+            response = self.table.scan(
+                FilterExpression="begins_with(PK, :pk)",
+                ExpressionAttributeValues={":pk": "POST#"}
+            )
+            return response.get("Items", [])
+        except ClientError as e:
+            raise RuntimeError(f"Error fetching posts: {e}")
 
-    def get_post(self, post_id: str) -> Optional[Dict]:
-        response = self.table.get_item(Key={"PK": post_pk(post_id), 
-                                            "SK": "METADATA"})
-        return response.get("Item")
+    def get_post(self, post_id: str):
+        try:
+            response = self.table.get_item(Key={"PK": post_pk(post_id), 
+                                                "SK": "METADATA"})
+            return response.get("Item")
+        except ClientError as e:
+            raise RuntimeError(f"Error fetching post: {e}")
 
     def update_post(self, post_id: str, title: str, content: str,
-                    tags: Optional[List[str]], 
-                    attachments: Optional[List[str]]) -> Optional[Dict]:
-        update_expr = "SET title = :title, content = :content, tags =" \
-        " :tags, attachments = :attachments, updated_at = :updated_at"
-        values = {
-            ":title": title,
-            ":content": content,
-            ":tags": tags or [],
-            ":attachments": attachments or [],
-            ":updated_at": get_timestamp()
-        }
-        response = self.table.update_item(
-            Key={"PK": post_pk(post_id), "SK": "METADATA"},
-            UpdateExpression=update_expr,
-            ExpressionAttributeValues=values,
-            ReturnValues="ALL_NEW"
-        )
-        return response.get("Attributes")
+                    tags=None, attachments=None, is_anonymous=False):
+        existing = self.get_post(post_id)
+        if not existing:
+            return {"error": "Post not found"}
 
-    def patch_post(self, post_id: str, fields: Dict) -> Optional[Dict]:
-        if not fields:
-            return None
+        try:
+            self.table.update_item(
+                Key={"PK": post_pk(post_id), "SK": "METADATA"},
+                UpdateExpression=("SET title = :title, content = :content, "
+                                  "tags = :tags, attachments = :attachments, "
+                                  "is_anonymous = :anon, updated_at = :ts"),
+                ExpressionAttributeValues={
+                    ":title": title,
+                    ":content": content,
+                    ":tags": tags or [],
+                    ":attachments": attachments or [],
+                    ":anon": is_anonymous,
+                    ":ts": get_timestamp()
+                }
+            )
+            return {"message": "Post updated successfully"}
+        except ClientError as e:
+            raise RuntimeError(f"Error updating post: {e}")
 
-        update_expr = "SET " + ", ".join([f"{k} = :{k}" for k 
-                                          in fields.keys()])
-        values = {f":{k}": v for k, v in fields.items()}
-        values[":updated_at"] = get_timestamp()
-        update_expr += ", updated_at = :updated_at"
+    def patch_post(self, post_id: str, updates: dict):
+        existing = self.get_post(post_id)
+        if not existing:
+            return {"error": "Post not found"}
 
-        response = self.table.update_item(
-            Key={"PK": post_pk(post_id), "SK": "METADATA"},
-            UpdateExpression=update_expr,
-            ExpressionAttributeValues=values,
-            ReturnValues="ALL_NEW"
-        )
-        return response.get("Attributes")
+        update_parts = []
+        expr_vals = {":ts": get_timestamp()}
+        for key, val in updates.items():
+            placeholder = f":{key}"
+            update_parts.append(f"{key} = {placeholder}")
+            expr_vals[placeholder] = val
 
-    def delete_post(self, post_id: str) -> bool:
-        self.table.delete_item(Key={"PK": post_pk(post_id), "SK": "METADATA"})
-        return True
+        update_expr = "SET " + ", ".join(update_parts) + ", updated_at = :ts"
+
+        try:
+            self.table.update_item(
+                Key={"PK": post_pk(post_id), "SK": "METADATA"},
+                UpdateExpression=update_expr,
+                ExpressionAttributeValues=expr_vals
+            )
+            return {"message": "Post patched successfully"}
+        except ClientError as e:
+            raise RuntimeError(f"Error patching post: {e}")
+
+    def delete_post(self, post_id: str):
+        existing = self.get_post(post_id)
+        if not existing:
+            return {"error": "Post not found"}
+
+        try:
+            self.table.delete_item(Key={"PK": post_pk(post_id), "SK": "METADATA"})
+            return {"message": "Post deleted successfully"}
+        except ClientError as e:
+            raise RuntimeError(f"Error deleting post: {e}")
