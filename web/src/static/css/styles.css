@@ -72,14 +72,6 @@ body, html {
   position: relative;
 }
 
-.input-icon i.bi {
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: white;
-}
-
 .input-icon input {
   width: 415px;
   height: 30px;
@@ -136,13 +128,13 @@ a:hover {
 }
 
 .input-icon i.bi {
+  pointer-events: none;
+  transition: opacity 0.2s;
   position: absolute;
   left: 15px;
   top: 50%;
   transform: translateY(-50%);
   color: white;
-  pointer-events: none;
-  transition: opacity 0.2s;
 }
 
 .input-icon input:focus + i,
