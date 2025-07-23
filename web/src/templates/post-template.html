@@ -3,7 +3,9 @@
     <div class="post-header">
       <i class="bi bi-person user-icon"></i>
       <span class="post-user">{{username}}</span>
-      <div class="tag-container">{{tags}}</div>
+      <div class="tag-container">
+        <div class="tag">{{tags}}</div>
+      </div>
       <div class="post-actions">
         <i class="bi bi-pencil-square"></i>
         <i class="bi bi-trash"></i>
@@ -16,6 +18,13 @@
     <div class="post-footer">
       <span class="post-time">{{timeAgo}}</span>
     </div>
-    <div class="comments-container"></div>
+  </div>
+
+  <div class="post-right">
+    <div class="comments-title">Comments</div>
+    <div class="comments-scrollable comments-container">
+      <!-- dynamic comment bubbles here -->
+    </div>
+    <button class="add-comment-btn">Add Comment</button>
   </div>
 </div>

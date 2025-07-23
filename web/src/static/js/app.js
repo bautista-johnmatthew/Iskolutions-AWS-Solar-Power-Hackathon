@@ -40,7 +40,7 @@ function loadCommentTemplate(commentData, targetContainer) {
     const filled = template
       .replace("{{commenter}}", commentData.username)
       .replace("{{commentText}}", commentData.text)
-      .replace("{{commentTime}}", commentData.timeAgo);
+      .replace("{{timeAgo}}", commentData.timeAgo);
 
     targetContainer.append(filled);
   });
