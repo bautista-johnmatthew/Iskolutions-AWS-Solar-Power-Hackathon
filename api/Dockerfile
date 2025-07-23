@@ -30,7 +30,7 @@ COPY --from=deps /usr/local/bin /usr/local/bin
 COPY . .
 
 # Create non-root user
-RUN useradd --create-home --shell /bin/bash api
+RUN useradd --no-create-home --shell /bin/false api
 USER api
 
 EXPOSE 8000
