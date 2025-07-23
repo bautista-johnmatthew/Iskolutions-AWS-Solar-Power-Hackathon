@@ -42,11 +42,5 @@ COMMENT_ROUTES: dict = {
         "path": "/posts/{post_id}/comments/{comment_id}",
         "dependencies": [Depends(get_aws_clients)],
         "endpoint": handlers.delete_comment
-    },
-    "REPLY_TO_COMMENT": {
-        "methods": ["POST"],
-        "path": "/posts/{post_id}/comments/{comment_id}/replies",
-        "dependencies": [Depends(get_aws_clients)],
-        "endpoint": handlers.reply_to_comment
-    },
+    }
 }
