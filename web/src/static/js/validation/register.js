@@ -3,7 +3,7 @@ import { addErrorMessage, clearErrorMessage } from '../utils/error-handling.js';
 import { authService } from '../auth/auth-service.js';
 
 // Form validation and submission handlers
-async function handleSignupFormSubmit(event) {
+async function handleRegisterFormSubmit(event) {
     clearErrorMessage('#confirmPassword');
     event.preventDefault();
     
@@ -22,7 +22,7 @@ async function handleSignupFormSubmit(event) {
         
         try {
             // Show loading state
-            const submitBtn = $("#signupForm button[type='submit']");
+            const submitBtn = $("#registerForm button[type='submit']");
             submitBtn.prop('disabled', true);
             
             // Add loading message
@@ -48,10 +48,10 @@ async function handleSignupFormSubmit(event) {
             
         } catch (error) {
             console.error('Registration failed:', error);
-            addErrorMessage('#email', error.message || 'Registration failed');
+            addErrorMessage('#confirmPassword', error.message || 'Registration failed');
         } finally {
             // Reset button state
-            const submitBtn = $("#signupForm button[type='submit']");
+            const submitBtn = $("#registerForm button[type='submit']");
             submitBtn.prop('disabled', false);
             $("#loadingMsg").remove();
         }
@@ -63,8 +63,8 @@ async function handleSignupFormSubmit(event) {
 
 // Function to show email confirmation prompt
 function showEmailConfirmationPrompt(email) {
-    // Hide the signup form
-    $("#signupForm").hide();
+    // Hide the register form
+    $("#registerForm").hide();
     
     // Show email confirmation section
     const confirmationHtml = `
@@ -100,9 +100,9 @@ function showEmailConfirmationPrompt(email) {
             </div>
         </div>
     `;
-    
-    // Insert confirmation form after signup form
-    $("#signupForm").after(confirmationHtml);
+
+    // Insert confirmation form after register form
+    $("#registerForm").after(confirmationHtml);
     
     // Attach event handlers for confirmation form
     attachEmailConfirmationHandlers(email);
@@ -189,8 +189,8 @@ function attachEmailConfirmationHandlers(email) {
     $("#backToSignupBtn").on("click", function(event) {
         event.preventDefault();
         $("#emailConfirmationSection").remove();
-        $("#signupForm").show();
-        clearSignupForm();
+        $("#registerForm").show();
+        clearRegisterForm();
     });
 }
 
@@ -212,9 +212,9 @@ function showEmailConfirmationSuccess() {
     `);
 }
 
-// Function to clear signup form
-function clearSignupForm() {
-    $("#signupForm")[0].reset();
+// Function to clear register form
+function clearRegisterForm() {
+    $("#registerForm")[0].reset();
 }
 
 // Function to handle confirm password validation
@@ -255,7 +255,7 @@ $(document).ready(function() {
     preloadSchemas();
     
     // Attach event listeners
-    $("#signupForm").on("submit", handleSignupFormSubmit);
+    $("#registerForm").on("submit", handleRegisterFormSubmit);
     $("#confirmPassword").on("blur", handleConfirmPasswordBlur);
 
     // Attach validation to fields
