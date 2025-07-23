@@ -28,3 +28,14 @@ function loadPostTemplate(data) {
 $(document).ready(function() {
   postData.forEach(post => loadPostTemplate(post));
 });
+
+function loadCommentTemplate(commentData, targetContainer) {
+  $.get("comment-template.html", function(template) {
+    const filled = template
+      .replace("{{commenter}}", commentData.username)
+      .replace("{{commentText}}", commentData.text)
+      .replace("{{commentTime}}", commentData.timeAgo);
+
+    targetContainer.append(filled);
+  });
+}
