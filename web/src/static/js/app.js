@@ -11,17 +11,22 @@ function togglePassword() {
   toggleBtn.className = isPassword ? 'bi bi-eye-slash-fill' : 'bi bi-eye-fill';
 }
 
-function loadPostTemplate(data) {
+function loadPostTemplate(postData) {
   $.get("post-template.html", function(template) {
-    const tagHTML = data.tags.map(tag => `<span class="tag">${tag}</span>`).join("");
-    template = template
-      .replace("{{username}}", data.username)
-      .replace("{{postTitle}}", data.title)
-      .replace("{{postContent}}", data.content)
-      .replace("{{timeAgo}}", data.timeAgo)
-      .replace("{{tags}}", tagHTML);
+    const filledPost = template
+      .replace("{{username}}", postData.username)
+      .replace("{{title}}", postData.title)
+      .replace("{{content}}", postData.content)
+      .replace("{{timeAgo}}", postData.timeAgo);
 
-    $(".feed-container").append(template);
+    const postElement = $(filledPost);
+    $(".feed-container").append(postElement);
+
+    // Now load the comments
+    const commentContainer = postElement.find(".comments-container");
+    postData.comments.forEach(comment => {
+      loadCommentTemplate(comment, commentContainer);
+    });
   });
 }
 
