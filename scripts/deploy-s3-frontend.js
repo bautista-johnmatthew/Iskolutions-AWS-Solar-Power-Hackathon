@@ -23,8 +23,11 @@ try {
 const AWS_ACCOUNT_ID = process.env.AWS_ACCOUNT_ID || '876497563387';
 const AWS_REGION = process.env.AWS_REGION || 'ap-northeast-1';
 const FRONTEND_IMAGE = `${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/iskolutions-forum-frontend:latest`;
-const BUCKET_NAME = process.env.S3_BUCKET_NAME || `iskolutions-forum-frontend-${Date.now()}`;
+const BUCKET_NAME = process.env.S3_BUCKET_NAME || 'iskolutions-forum-frontend-default';
 
+if (!process.env.S3_BUCKET_NAME) {
+  console.warn('⚠️  Using default bucket name. Consider setting S3_BUCKET_NAME in the environment for better control.');
+}
 console.log('🚀 Deploying Frontend to S3 from ECR image...');
 console.log(`📦 Image: ${FRONTEND_IMAGE}`);
 console.log(`🪣 Bucket: ${BUCKET_NAME}`);
