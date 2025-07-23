@@ -20,7 +20,6 @@ class CommentService:
             "content": data["content"],
             "author_id": data["author_id"],
             "is_anonymous": data.get("is_anonymous", False),
-            "parent_comment_id": None,
             "created_at": get_timestamp(),
             "updated_at": get_timestamp(),
         }
