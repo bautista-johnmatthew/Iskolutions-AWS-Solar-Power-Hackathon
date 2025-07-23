@@ -14,7 +14,7 @@ function addErrorMessage(selector, message) {
         errorLabel.css('display', 'inline-block');
     } else {
         // Create a new error label if it doesn't exist
-        $(selector).after(`<div class="invalid-feedback" id="${selector}-error">${messageText}</div>`);
+        $(selector).after(`<div class="invalid-feedback" id="${selector}Error">${messageText}</div>`);
     }
 }
 
