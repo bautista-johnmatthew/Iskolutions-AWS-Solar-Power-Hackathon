@@ -110,17 +110,24 @@ class AuthService:
                 raise ValueError("User with this email already exists")
             raise ValueError(f"Registration failed: {str(e)}")
 
-    def login(self, email: str, password: str) -> Dict:
-        """Login user with email and password using Supabase Auth"""
+    def login(self, username: str, password: str) -> Dict:
+        """Login user with username and password using Supabase Auth"""
         try:
-            # Sign in with Supabase
+            # First, get the user by username to find their email
+            user_profile = self.get_user_by_username(username)
+            if not user_profile:
+                raise ValueError("Invalid username or password")
+            
+            email = user_profile["email"]
+            
+            # Sign in with Supabase using email (since Supabase uses email for auth)
             auth_response = self.supabase.auth.sign_in_with_password({
                 "email": email,
                 "password": password
             })
             
             if auth_response.user is None:
-                raise ValueError("Invalid email or password")
+                raise ValueError("Invalid username or password")
             
             # Check if session exists
             if auth_response.session is None or auth_response.session.access_token is None:
@@ -148,7 +155,7 @@ class AuthService:
             return self._format_user_session(user_data, auth_response.session.access_token)
             
         except Exception as e:
-            raise ValueError(f"Invalid email or password: {str(e)}")
+            raise ValueError(f"Invalid username or password: {str(e)}")
 
     def logout(self, token: str) -> bool:
         """Logout user using Supabase Auth"""
