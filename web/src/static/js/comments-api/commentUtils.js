@@ -148,7 +148,7 @@ export async function updateComment(postId, commentId, data) {
         `${BASE_API_URL}/posts/${postId}/comments/${commentId}`,
         {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json', },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
         }
     );
@@ -164,7 +164,7 @@ export async function updateComment(postId, commentId, data) {
 export async function deleteComment(postId, commentId) {
     const response = await fetch(
         `${BASE_API_URL}/posts/${postId}/comments/${commentId}`,
-        { method: 'DELETE', }
+        { method: 'DELETE' }
     );
 
     if (!response.ok) throw new Error('Failed to delete comment');
@@ -193,6 +193,12 @@ export function extractCommentPatchFields(data) {
  * Partially update a comment
  */
 export async function patchComment(postId, commentId, fields) {
+    if (typeof postId !== 'string' || postId.trim() === '') {
+        throw new Error('Invalid postId: must be a non-empty string');
+    }
+    if (typeof commentId !== 'string' || commentId.trim() === '') {
+        throw new Error('Invalid commentId: must be a non-empty string');
+    }
     const patchData = extractCommentPatchFields(fields);
     const response = await fetch(
         `${BASE_API_URL}/posts/${postId}/comments/${commentId}`,
