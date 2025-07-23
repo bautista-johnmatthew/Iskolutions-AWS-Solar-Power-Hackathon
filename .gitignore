@@ -1,5 +1,7 @@
 # Additional files
 setup.py
+node_modules/
+bun.lock
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
