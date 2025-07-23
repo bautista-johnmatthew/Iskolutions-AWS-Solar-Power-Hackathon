@@ -1,13 +1,16 @@
 import uuid
 from typing import Dict, Any, List
+
+from botocore.exceptions import ClientError
+
 from services.aws_clients import AWSClients
-from models.forum_models import comment_sk, get_timestamp
+from models.forum_models import get_timestamp
 
 class CommentService:
     def __init__(self, aws_clients: AWSClients):
         self.table = aws_clients.table
 
-    async def create_comment(self, post_id: str, 
+    async def create_comment(self, post_id: str,
                              data: Dict[str, Any]) -> Dict[str, Any]:
         comment_id = str(uuid.uuid4())
         item = {
@@ -17,9 +20,6 @@ class CommentService:
             "content": data["content"],
             "author_id": data["author_id"],
             "is_anonymous": data.get("is_anonymous", False),
-            "parent_comment_id": None,
-            "upvotes": 0,
-            "downvotes": 0,
             "created_at": get_timestamp(),
             "updated_at": get_timestamp(),
         }
@@ -29,18 +29,18 @@ class CommentService:
     async def get_comments(self, post_id: str) -> List[Dict[str, Any]]:
         resp = self.table.query(
             KeyConditionExpression="PK = :pk AND begins_with(SK, :sk)",
-            ExpressionAttributeValues={":pk": f"POST#{post_id}", 
+            ExpressionAttributeValues={":pk": f"POST#{post_id}",
                                        ":sk": "COMMENT#"}
         )
         return resp.get("Items", [])
 
-    async def get_comment(self, post_id: str, 
+    async def get_comment(self, post_id: str,
                           comment_id: str) -> Dict[str, Any]:
-        resp = self.table.get_item(Key={"PK": f"POST#{post_id}", "SK": 
+        resp = self.table.get_item(Key={"PK": f"POST#{post_id}", "SK":
                                         f"COMMENT#{comment_id}"})
         return resp.get("Item")
 
-    async def update_comment(self, post_id: str, comment_id: str, 
+    async def update_comment(self, post_id: str, comment_id: str,
                              data: Dict[str, Any]) -> Dict[str, Any]:
         update_expr = "SET content = :c, updated_at = :u"
         expr_vals = {":c": data["content"], ":u": get_timestamp()}
@@ -52,7 +52,7 @@ class CommentService:
         )
         return resp["Attributes"]
 
-    async def patch_comment(self, post_id: str, comment_id: str, 
+    async def patch_comment(self, post_id: str, comment_id: str,
                             data: Dict[str, Any]) -> Dict[str, Any]:
         update_parts = []
         expr_vals = {":u": get_timestamp()}
@@ -68,34 +68,10 @@ class CommentService:
         )
         return resp["Attributes"]
 
-    async def delete_comment(self, post_id: str, 
+    async def delete_comment(self, post_id: str,
                              comment_id: str) -> Dict[str, Any]:
         resp = self.table.delete_item(
             Key={"PK": f"POST#{post_id}", "SK": f"COMMENT#{comment_id}"},
             ReturnValues="ALL_OLD"
         )
         return resp.get("Attributes")
-
-    async def reply_to_comment(self, post_id: str, parent_comment_id: str, 
-                               data: Dict[str, Any]) -> Dict[str, Any]:
-        reply_id = str(uuid.uuid4())
-        item = {
-            "PK": f"POST#{post_id}",
-            "SK": f"COMMENT#{parent_comment_id}#REPLY#{reply_id}",
-            "id": reply_id,
-            "parent_comment_id": parent_comment_id,
-            "content": data["content"],
-            "author_id": data["author_id"],
-            "is_anonymous": data.get("is_anonymous", False),
-            "upvotes": 0,
-            "downvotes": 0,
-            "created_at": get_timestamp(),
-            "updated_at": get_timestamp(),
-        }
-        try:
-            self.table.put_item(Item=item)
-        except ClientError as e:
-            # Log the error and re-raise it
-            print(f"Failed to put item in DynamoDB: {e}")
-            raise
-        return item

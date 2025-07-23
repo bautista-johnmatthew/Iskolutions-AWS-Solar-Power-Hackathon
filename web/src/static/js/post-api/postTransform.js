@@ -1,5 +1,9 @@
 export {
   getPosts,
+  createPost,
+  updatePost,
+  patchPost,
+  deletePost,
   fuzzySearchPosts
 } from './postUtils.js';
 
