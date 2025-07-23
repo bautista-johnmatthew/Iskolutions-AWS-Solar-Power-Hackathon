@@ -21,7 +21,7 @@ COMMENT_ROUTES: dict = {
     },
     "GET_COMMENT_BY_ID": {
         "methods": ["GET"],
-        "path": "/comments/{comment_id}",
+        "path": "/posts/{post_id}/comments/{comment_id}",
         "dependencies": [Depends(get_aws_clients)],
         "endpoint": handlers.get_comment
     },
@@ -39,13 +39,13 @@ COMMENT_ROUTES: dict = {
     },
     "DELETE_COMMENT": {
         "methods": ["DELETE"],
-        "path": "/comments/{comment_id}",
+        "path": "/posts/{post_id}/comments/{comment_id}",
         "dependencies": [Depends(get_aws_clients)],
         "endpoint": handlers.delete_comment
     },
     "REPLY_TO_COMMENT": {
         "methods": ["POST"],
-        "path": "/comments/{comment_id}/replies",
+        "path": "/posts/{post_id}/comments/{comment_id}/replies",
         "dependencies": [Depends(get_aws_clients)],
         "endpoint": handlers.reply_to_comment
     },
