@@ -312,3 +312,22 @@ body, html {
 .add-comment-btn:hover {
   background-color: #105cd4;
 }
+
+.comments-scrollable {
+  max-height: 160px; /* Adjust height based on your design */
+  overflow-y: auto;
+  padding-right: 5px;
+  margin-bottom: 10px;
+}
+
+/* Optional scrollbar styling (for better visuals) */
+.comments-scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+.comments-scrollable::-webkit-scrollbar-thumb {
+  background-color: #FF00E2;
+  border-radius: 6px;
+}
+.comments-scrollable::-webkit-scrollbar-track {
+  background-color: transparent;
+}
