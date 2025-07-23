@@ -29,38 +29,60 @@
         <h2 class="register-title">REGISTER</h2>
 
         <form>
-          <div class="username-input">
-            <label class="form-label"> USERNAME</label>
-            <div class="input-icon">
-              <input type="text" class="form-control" placeholder="TYPE YOUR USERNAME">
-              <i class="bi bi-person"></i>
-            </div>
-          </div>
+  <!-- Username and Email Side-by-Side -->
+  <div class="row-inputs">
+    <div class="input-group-box">
+      <label class="form-label">USERNAME</label>
+      <div class="input-icon">
+        <input type="text" class="form-control" placeholder="TYPE YOUR USERNAME">
+        <i class="bi bi-person"></i>
+      </div>
+    </div>
 
-          <div class="password-input-box">
-            <label class="form-label">PASSWORD</label>
-            <div class="input-wrapper">
-              <i class="bi bi-lock"></i>
-              <input type="password" class="form-control password-input" placeholder="TYPE YOUR PASSWORD" id="password">
-              <button type="button" class="toggle-password-btn" onclick="togglePassword()">
-                <i class="bi bi-eye-fill"></i>
-              </button>
-            </div>
-          </div>
+    <div class="input-group-box">
+      <label class="form-label">EMAIL</label>
+      <div class="input-icon">
+        <input type="email" class="form-control" placeholder="TYPE YOUR EMAIL">
+        <i class="bi bi-envelope"></i>
+      </div>
+    </div>
+  </div>
 
-          <div class="confirm-password-input">
-            <label class="form-label">CONFIRM PASSWORD</label>
-            <div class="input-wrapper">
-              <i class="bi bi-lock"></i>
-              <input type="password" class="form-control password-input" placeholder="CONFIRM YOUR PASSWORD" id="password">
-              <button type="button" class="toggle-password-btn" onclick="togglePassword()">
-                <i class="bi bi-eye-fill"></i>
-              </button>
-            </div>
-          </div>
+  <!-- Password and Student Number Side-by-Side -->
+  <div class="row-inputs">
+    <div class="input-group-box">
+      <label class="form-label">PASSWORD</label>
+      <div class="input-wrapper">
+        <i class="bi bi-lock"></i>
+        <input type="password" class="form-control password-input" placeholder="TYPE YOUR PASSWORD" id="password">
+        <button type="button" class="toggle-password-btn" onclick="togglePassword()">
+          <i class="bi bi-eye-fill"></i>
+        </button>
+      </div>
+    </div>
 
-          <button type="submit" class="btn btn-primary w-100 mt-3">CREATE ACCOUNT</button>
+    <div class="input-group-box">
+      <label class="form-label">STUDENT NUMBER</label>
+      <div class="input-icon">
+        <input type="text" class="form-control" placeholder="TYPE YOUR STUDENT NUMBER">
+        <i class="bi bi-123"></i>
+      </div>
+    </div>
+  </div>
 
-        </form>
+  <!-- Confirm Password (Full Width) -->
+  <div class="confirm-password-input">
+    <label class="form-label">CONFIRM PASSWORD</label>
+    <div class="input-wrapper">
+      <i class="bi bi-lock"></i>
+      <input type="password" class="form-control password-input" placeholder="CONFIRM YOUR PASSWORD" id="confirm-password">
+      <button type="button" class="toggle-password-btn" onclick="togglePassword()">
+        <i class="bi bi-eye-fill"></i>
+      </button>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary w-100 mt-3">CREATE ACCOUNT</button>
+</form>
 
 </html>

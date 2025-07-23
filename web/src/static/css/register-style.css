@@ -115,7 +115,7 @@ body, html {
   background-color: #FF00E2;
   border-radius: 999px;
   padding: 0 15px;
-  width: 45%;
+  width: 47.2%;
   height: 30px;
   max-width: 100%;
 }
@@ -212,4 +212,20 @@ a:hover {
   .login-title {
     font-size: 28px;
   }
+}
+
+.row-inputs {
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+  margin-bottom: 20px;
+}
+
+.input-group-box {
+  flex: 1;
+}
+
+.input-group-box .input-icon input,
+.input-group-box .input-wrapper {
+  width: 100%;
 }
