@@ -1,7 +1,7 @@
 import { sessionManager } from '../auth/session-manager-vanilla.js';
 import { authService } from '../auth/auth-service.js';
 import { validateField, validateLogin } from './schema.js';
-import { addErrorMessage, clearErrorMessage } from '../utils/errorhandling.js';
+import { addErrorMessage, clearErrorMessage } from '../utils/error-handling.js';
 
 /**
  * Login page functionality

@@ -1,5 +1,5 @@
 import {validateForumPost, validateField, preloadSchemas} from './schema.js';
-import { addErrorMessage, clearErrorMessage } from '../errorhandling.js';
+import { addErrorMessage, clearErrorMessage } from '../utils/error-handling.js';
 import { createPost } from '../post-api/postUtils.js';
 import { sessionManager } from '../auth/session-manager-vanilla.js';
 

@@ -1,7 +1,7 @@
 // Function to add error message to the error label
 // This assumes the error label is a sibling of the input field with class 'invalid-feedback'
 function addErrorMessage(selector, message) {
-    const errorLabel = $(`${selector}-error`);
+    const errorLabel = $(`${selector}Error`);
     
     // If message is an array, join messages with line breaks
     const messageText = Array.isArray(message) 
@@ -21,7 +21,7 @@ function addErrorMessage(selector, message) {
 // Reverses the effect of addErrorMessage
 function clearErrorMessage(selector) {
     // Hide and clear the error message
-    const errorLabel = $(`${selector}-error`);
+    const errorLabel = $(`${selector}Error`);
     if (errorLabel.length) {
         errorLabel.hide();
         errorLabel.text('');
