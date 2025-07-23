@@ -101,4 +101,5 @@ class CommentService:
             # Log the error and re-raise it
             print(f"Failed to put item in DynamoDB: {e}")
             raise
+
         return item
