@@ -1,5 +1,8 @@
 import uuid
 from typing import Dict, Any, List
+
+from botocore.exceptions import ClientError
+
 from services.aws_clients import AWSClients
 from models.forum_models import comment_sk, get_timestamp
 
