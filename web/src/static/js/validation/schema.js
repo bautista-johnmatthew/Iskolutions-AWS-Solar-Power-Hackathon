@@ -4,8 +4,8 @@ const { z } = window.Zod;
 // Email schema with PUP domain validation
 const emailSchema = z.string()
     .email("Invalid email address")
-    .refine(email => email.endsWith('@pup.edu.ph'), {
-        message: "Email must be a PUP email (@pup.edu.ph)"
+    .refine(email => email.endsWith('@iskolarngbayan.pup.edu.ph'), {
+        message: "Email must be a PUP email (@iskolarngbayan.pup.edu.ph)"
     });
 
 // Password schema with complexity requirements
