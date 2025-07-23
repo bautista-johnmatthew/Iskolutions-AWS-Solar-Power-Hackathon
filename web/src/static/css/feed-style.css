@@ -1,0 +1,318 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  overflow: auto;
+}
+
+.feed-background {
+  background: url("../img/gradient-wallpaper.png") no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  padding-top: 80px;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 30px;
+  background-color: #1a172e;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-logo {
+  height: 55px;
+  margin-left: -10px;
+}
+
+.nav-title-img {
+  height: 50px;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-link {
+  color: #fff;
+  font-size: 30px;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  color: #FF00E2;
+}
+
+.logout-btn {
+  background-color: #FF00E2;
+  border: none;
+  color: white;
+  padding: 0 16px; 
+  border-radius: 20px;
+  font-weight: 550;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  height: 30px;
+  line-height: 30px;
+}
+
+.logout-btn:hover {
+  background-color: #105cd4;
+}
+
+.nav-link-active {
+  color: #FF00E2;
+  font-size: 30px;
+  text-decoration: none;
+}
+
+.feed-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1300px;
+  margin: 10px auto 40px;
+  padding: 0 20px;
+}
+
+/* Post Styles */
+.post-wrapper {
+  display: flex;
+  background-color: #1C1833;
+  border-radius: 20px;
+  padding: 20px;
+  color: white;
+  width: 850px;
+  margin: 0 0 20px 0; /* NO left margin */
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+  gap: 20px;
+}
+
+.post-left {
+  flex: 2;
+}
+
+.post-right {
+  flex: 1;
+  border-left: 2px solid #2C2A45;
+  padding-left: 20px;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.user-icon {
+  font-size: 28px;
+  color: #FF00E2;
+}
+
+.post-user {
+  font-weight: 600;
+}
+
+.tag-container {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.tag {
+  background-color: #FF00E2;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.post-actions {
+  display: flex;
+  gap: 10px;
+  margin-left: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #ddd;
+}
+
+.post-actions .bi-pencil-square:hover
+{
+  color: #FF00E2;
+}
+
+.post-actions .bi-trash:hover {
+  color: #FF00E2;
+}
+
+.post-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 12px 0 8px;
+}
+
+.post-text {
+  color: #e5e5e5;
+  font-size: 0.95rem;
+}
+
+.post-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  font-size: 0.9rem;
+}
+
+.post-time {
+  color: #aaa;
+}
+
+/* Right side comments */
+.comments-title {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.comment {
+  margin-bottom: 15px;
+}
+
+.comment-user-icon {
+  font-size: 24px;
+  color: #aaa;
+  margin-right: 6px;
+}
+
+.comment-username {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-right: 5px;
+}
+
+.comment-bubble {
+  background-color: #FF00E2;
+  color: white;
+  border-radius: 20px;
+  padding: 10px 20px;
+  margin-top: 8px;
+  position: relative;
+  font-size: 0.9rem;
+}
+
+.comment-warning {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 1.1rem;
+}
+
+.add-comment-btn {
+  background-color: #FF00E2;
+  border: none;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 550;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  margin-top: 10px;
+  height: 30px;
+  line-height: 16px;
+}
+
+.add-comment-btn:hover {
+  background-color: #105cd4;
+}
+
+.comments-scrollable {
+  max-height: 160px; /* Adjust height based on your design */
+  overflow-y: auto;
+  padding-right: 5px;
+  margin-bottom: 10px;
+}
+
+/* Optional scrollbar styling (for better visuals) */
+.comments-scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+.comments-scrollable::-webkit-scrollbar-thumb {
+  background-color: #FF00E2;
+  border-radius: 6px;
+}
+.comments-scrollable::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.search-bar-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+/* You already have this, but here’s a reminder */
+.input-icon {
+  position: relative;
+  width: 250px;
+}
+
+.input-icon input {
+  width: 100%;
+  height: 30px;
+  padding: 10px 45px 10px 15px;
+  border-radius: 999px;
+  border: none;
+  background-color: #FF00E2;
+  color: white;
+  font-size: 13px;
+}
+
+.input-icon input::placeholder {
+  color: white;
+  opacity: 0.8;
+}
+
+.input-icon input:focus {
+  background-color: #FF00E2;
+  color: white;
+  outline: none;
+  box-shadow: none;
+}
+
+.search-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.search-btn:focus {
+  outline: none;
+}
