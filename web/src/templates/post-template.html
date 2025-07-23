@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- jQuery and Zod -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://unpkg.com/zod@3.22.4/lib/index.umd.js"></script>
+
+  <!-- Custom CSS & JS -->
+  <link rel="stylesheet" href="../static/css/feed-style.css" />
+  <script src="../static/js/app.js"></script>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="post-wrapper">
+    <div class="post-left">
+        <div class="post-header">
+        <i class="bi bi-person user-icon"></i>
+        <span class="post-user">{{username}}</span>
+        <div class="tag-container">
+            {{tags}}
+        </div>
+        <div class="post-actions">
+            <i class="bi bi-pencil-square"></i>
+            <i class="bi bi-trash"></i>
+        </div>
+        </div>
+
+        <div class="post-body">
+        <div class="post-title">TITLE: “{{postTitle}}”</div>
+        <p class="post-text">
+            {{postContent}}
+        </p>
+        </div>
+
+        <div class="post-footer">
+        <span class="post-time">{{timeAgo}}</span>
+        </div>
+    </div>
+  </div>
+
+</body>
+</html>
