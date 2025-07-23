@@ -9,18 +9,18 @@ import { addErrorMessage, clearErrorMessage } from '../utils/errorhandling.js';
  */
 
 // Handle login form submission
-async function handleLogin(email, password) {
+async function handleLogin(username, password) {
     try {
         // Clear any existing error messages
-        clearErrorMessage('#email');
+        clearErrorMessage('#username');
         clearErrorMessage('#password');
 
-        // Validate email field
-        const emailValidation = validateField('email', email);
-        if (!emailValidation.isValid) {
-            addErrorMessage('#email', emailValidation.error);
+        // Validate username field
+        const usernameValidation = validateField('username', username);
+        if (!usernameValidation.isValid) {
+            addErrorMessage('#username', usernameValidation.error);
         } else {
-            clearErrorMessage('#email');
+            clearErrorMessage('#username');
         }
 
         // Validate password field
@@ -31,14 +31,14 @@ async function handleLogin(email, password) {
             clearErrorMessage('#password');
         }
 
-        const user = await authService.login(email, password);
+        const user = await authService.login(username, password);
         console.log('Login successful:', user);
         updateUserInfo();
         clearLoginForm();
         return user;
     } catch (error) {
         console.error('Login failed:', error);
-        addErrorMessage('#email', error.message || 'Login failed');
+        addErrorMessage('#username', error.message || 'Login failed');
         throw error;
     }
 }
@@ -51,7 +51,7 @@ async function handleLogout() {
         updateUserInfo();
     } catch (error) {
         console.error('Logout error:', error);
-        addErrorMessage('#email', 'Logout failed');
+        addErrorMessage('#username', 'Logout failed');
     }
 }
 
@@ -69,7 +69,7 @@ function setTestSession() {
 
 // Clear login form fields
 function clearLoginForm() {
-    $('#email').val('');
+    $('#username').val('');
     $('#password').val('');
 }
 
@@ -100,6 +100,7 @@ function updateUserInfo() {
 // Initialize when document is ready
 $(document).ready(function() {
     // Initialize session
+    console.log('Initializing session manager...');
     sessionManager.initialize();
     updateUserInfo();
 
@@ -107,19 +108,19 @@ $(document).ready(function() {
     $('#loginForm').on('submit', async function(e) {
         e.preventDefault();
         
-        const email = $('#email').val();
+        const username = $('#username').val();
         const password = $('#password').val();
-        
-        await handleLogin(email, password);
+
+        await handleLogin(username, password);
     });
 
-    // Validate email field
-    $('#email').on('blur', function() {
-        const validationResult = validateField('email', $(this).val());
+    // Validate username field
+    $('#username').on('blur', function() {
+        const validationResult = validateField('username', $(this).val());
         if (!validationResult.isValid) {
-            addErrorMessage('#email', validationResult.error);
+            addErrorMessage('#username', validationResult.error);
         } else {
-            clearErrorMessage('#email');
+            clearErrorMessage('#username');
         }
     });
 
