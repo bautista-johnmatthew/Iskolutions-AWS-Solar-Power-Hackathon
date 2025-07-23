@@ -17,4 +17,13 @@ Project repository of Team Iskolutions for the AWS Solar Hackathon 2025
         - static 
             - css
             - js
-        - templates - HTML files 
+        - templates - HTML files
+- scripts - Deployment and utility scripts
+
+## Features
+- User authentication with email confirmation
+- Responsive vanilla JavaScript frontend
+- RESTful API with FastAPI
+- Docker containerization
+- AWS ECR integration
+- Simple Bun-based deployment 
