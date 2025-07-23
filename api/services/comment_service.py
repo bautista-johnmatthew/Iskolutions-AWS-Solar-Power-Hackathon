@@ -78,28 +78,3 @@ class CommentService:
             ReturnValues="ALL_OLD"
         )
         return resp.get("Attributes")
-
-    async def reply_to_comment(self, post_id: str, parent_comment_id: str,
-                               data: Dict[str, Any]) -> Dict[str, Any]:
-        reply_id = str(uuid.uuid4())
-        item = {
-            "PK": f"POST#{post_id}",
-            "SK": f"COMMENT#{parent_comment_id}#REPLY#{reply_id}",
-            "id": reply_id,
-            "parent_comment_id": parent_comment_id,
-            "content": data["content"],
-            "author_id": data["author_id"],
-            "is_anonymous": data.get("is_anonymous", False),
-            "upvotes": 0,
-            "downvotes": 0,
-            "created_at": get_timestamp(),
-            "updated_at": get_timestamp(),
-        }
-        try:
-            self.table.put_item(Item=item)
-        except ClientError as e:
-            # Log the error and re-raise it
-            print(f"Failed to put item in DynamoDB: {e}")
-            raise
-
-        return item
