@@ -151,7 +151,7 @@ export async function updateComment(postId, commentId, data) {
         `${BASE_API_URL}/posts/${postId}/comments/${commentId}`,
         {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json', },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
         }
     );
