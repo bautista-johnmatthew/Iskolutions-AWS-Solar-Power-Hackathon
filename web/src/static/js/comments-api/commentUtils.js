@@ -13,12 +13,7 @@ export function formatComment(rawComment) {
         parentCommentId: rawComment.parent_comment_id || null,
         author: rawComment.author_id,
         content: rawComment.content,
-        isAnonymous: rawComment.is_anonymous || false,
-        upvotes: rawComment.upvotes || 0,
-        downvotes: rawComment.downvotes || 0,
-        createdAt: rawComment.created_at || null,
-        updatedAt: rawComment.updated_at || null,
-        isReply: !!rawComment.parent_comment_id
+        isAnonymous: rawComment.is_anonymous || false
     };
 }
 
