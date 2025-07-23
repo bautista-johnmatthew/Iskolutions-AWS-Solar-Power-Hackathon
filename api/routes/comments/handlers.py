@@ -104,20 +104,3 @@ async def delete_comment(
         return {"message": f"Comment {comment_id} deleted"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-
-async def reply_to_comment(
-    comment_id: str,
-    reply_data: CommentCreate,
-    aws_clients: AWSClients = Depends(get_aws_clients)
-):
-    comment_service = CommentService(aws_clients)
-
-    if not comment_service.get_comment(comment_id):
-        raise HTTPException(status_code=404, detail="Comment not found")
-
-    try:
-        reply = comment_service.reply_to_comment(comment_id, reply_data.dict())
-        return {"message": "Reply added", "reply": reply}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
