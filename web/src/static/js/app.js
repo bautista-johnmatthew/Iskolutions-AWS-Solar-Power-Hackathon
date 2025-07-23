@@ -14,6 +14,7 @@ function togglePassword() {
 function loadPostTemplate(postData) {
   $.get("post-template.html", function(template) {
     const filledPost = template
+      .replace("{{tags}}", postData.tags.join(", "))
       .replace("{{username}}", postData.username)
       .replace("{{title}}", postData.title)
       .replace("{{content}}", postData.content)
@@ -31,7 +32,7 @@ function loadPostTemplate(postData) {
 }
 
 $(document).ready(function() {
-  postData.forEach(post => loadPostTemplate(post));
+  postDataArray.forEach(post => loadPostTemplate(post));
 });
 
 function loadCommentTemplate(commentData, targetContainer) {
@@ -44,3 +45,27 @@ function loadCommentTemplate(commentData, targetContainer) {
     targetContainer.append(filled);
   });
 }
+
+const postDataArray = [
+  {
+    username: "perlita",
+    tags: ["#math", "#reviewer"],
+    title: "Introduction to Accounting Reviewer",
+    content: "Hello po. I am a freshman...",
+    timeAgo: "1d ago",
+    comments: [
+      {
+        username: "seniorJuan",
+        text: "Check this YouTube playlist!",
+        timeAgo: "2h ago"
+      },
+      {
+        username: "ateMia",
+        text: "I can share my reviewer. PM me!",
+        timeAgo: "1h ago"
+      }
+    ]
+  }
+];
+
+postDataArray.forEach(post => loadPostTemplate(post));
