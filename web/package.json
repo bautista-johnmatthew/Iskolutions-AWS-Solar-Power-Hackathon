@@ -4,9 +4,7 @@
   "description": "Frontend for Iskolutions AWS Solar Hackathon",
   "type": "module",
   "scripts": {
-    "dev": "bun --watch src/server.js",
     "build": "bun run build.js",
-    "start": "bun src/server.js",
     "docker:build": "docker build -t iskolutions-frontend .",
     "docker:run": "docker run -p 3000:3000 iskolutions-frontend",
     "ecr:deploy": "bun deploy-ecr.js"
