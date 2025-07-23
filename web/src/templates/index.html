@@ -17,6 +17,7 @@
   <!-- Custom styles -->
   <link rel="stylesheet" href="../static/css/styles.css" />
   <script src="../static/js/app.js"></script>
+  <script src="../static/js/validation/login.js" type="module"></script>
 
   <!-- Poppins Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -29,24 +30,26 @@
         <hr class="custom-divider">
         <h2 class="login-title">LOGIN</h2>
 
-        <form>
+        <form id="loginForm">
           <div class="username-input">
             <label class="form-label">USERNAME</label>
             <div class="input-icon">
-              <input type="text" class="form-control" placeholder="TYPE YOUR USERNAME">
+              <input type="text" class="form-control" placeholder="TYPE YOUR USERNAME" id="username" required>
               <i class="bi bi-person"></i>
             </div>
+            <div class="invalid-feedback" id="usernameError"></div>
           </div>
 
           <div class="password-input">
             <label class="form-label">PASSWORD</label>
             <div class="input-wrapper">
               <i class="bi bi-lock"></i>
-              <input type="password" class="form-control password-input" placeholder="TYPE YOUR PASSWORD" id="password">
+              <input type="password" class="form-control password-input" placeholder="TYPE YOUR PASSWORD" id="password" required>
               <button type="button" class="toggle-password-btn" onclick="togglePassword()">
                 <i class="bi bi-eye-fill"></i>
               </button>
             </div>
+            <div class="invalid-feedback" id="passwordError"></div>
             <div class="text-end">
               <small><a href="#">FORGOT PASSWORD?</a></small>
             </div>
@@ -55,7 +58,7 @@
           <button type="submit" class="btn btn-primary w-100 mt-3">SIGN IN</button>
 
           <div class="text-center mt-3 small">
-            <p>DON'T HAVE AN ACCOUNT? <a href="#">REGISTER HERE.</a><br>
+            <p>DON'T HAVE AN ACCOUNT? <a href="register.html">REGISTER HERE.</a><br>
               DO YOU WANT TO CONTINUE AS <a href="#">GUEST?</a></p>
           </div>
         </form>

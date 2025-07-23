@@ -7,18 +7,18 @@ import { sessionManager } from './session-manager-vanilla.js';
 export class AuthService {
     
     /**
-     * Login user with email and password
-     * @param {string} email 
+     * Login user with username and password
+     * @param {string} username 
      * @param {string} password 
      */
-    async login(email, password) {
+    async login(username, password) {
         try {
             const response = await fetch(`${BASE_API_URL}/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ username, password }),
             });
 
             if (!response.ok) {

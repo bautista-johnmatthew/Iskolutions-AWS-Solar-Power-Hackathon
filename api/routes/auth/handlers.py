@@ -29,7 +29,7 @@ async def login(data: Dict[str, Any],
                aws_clients: AWSClients = Depends(get_aws_clients)):
     service = AuthService(aws_clients)
     try:
-        result = service.login(data.get("email"), data.get("password"))
+        result = service.login(data.get("username"), data.get("password"))
         # Return the user data directly (not wrapped in success/data)
         return result
     except ValueError as e:

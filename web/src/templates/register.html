@@ -16,6 +16,7 @@
   <!-- Custom CSS & JS -->
   <link rel="stylesheet" href="../static/css/register-style.css" />
   <script src="../static/js/app.js"></script>
+  <script src="../static/js/validation/register.js" type="module"></script>
 
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
@@ -24,7 +25,7 @@
   <div class="register-background">
     <div class="container">
       <div class="register-container mx-auto">
-        <img src="/static/img/logo-wo-bg.png" alt="ISKONEK Logo" class="logo" />
+        <img src="../static/img/logo-wo-bg.png" alt="ISKONEK Logo" class="logo" />
         <hr class="custom-divider" />
         <h2 class="register-title">REGISTER</h2>
 
@@ -34,17 +35,19 @@
             <div class="input-group-box">
               <label class="form-label">USERNAME</label>
               <div class="input-icon">
-                <input type="text" class="form-control" placeholder="TYPE YOUR USERNAME" />
+                <input type="text" class="form-control" placeholder="TYPE YOUR USERNAME" id="username" required/>
                 <i class="bi bi-person"></i>
               </div>
+              <div class="invalid-feedback" id="usernameError"></div>
             </div>
 
             <div class="input-group-box">
               <label class="form-label">EMAIL</label>
               <div class="input-icon">
-                <input type="email" class="form-control" placeholder="TYPE YOUR EMAIL" />
+                <input type="email" class="form-control" placeholder="TYPE YOUR EMAIL" id="email" required/>
                 <i class="bi bi-envelope"></i>
               </div>
+              <div class="invalid-feedback" id="emailError"></div>
             </div>
           </div>
 
@@ -54,19 +57,21 @@
               <label class="form-label">PASSWORD</label>
               <div class="input-wrapper">
                 <i class="bi bi-lock"></i>
-                <input type="password" class="form-control password-input" placeholder="TYPE YOUR PASSWORD" id="password" />
+                <input type="password" class="form-control password-input" placeholder="TYPE YOUR PASSWORD" id="password" required/>
                 <button type="button" class="toggle-password-btn" onclick="togglePassword()">
                   <i class="bi bi-eye-fill"></i>
                 </button>
               </div>
+              <div class="invalid-feedback" id="passwordError"></div>
             </div>
 
             <div class="input-group-box">
               <label class="form-label">STUDENT NUMBER</label>
               <div class="input-icon">
-                <input type="text" class="form-control" placeholder="TYPE YOUR STUDENT NUMBER" />
+                <input type="text" class="form-control" placeholder="TYPE YOUR STUDENT NUMBER" id="studentNumber" required/>
                 <i class="bi bi-123"></i>
               </div>
+              <div class="invalid-feedback" id="studentNumberError"></div>
             </div>
           </div>
 
@@ -75,11 +80,12 @@
             <label class="form-label">CONFIRM PASSWORD</label>
             <div class="input-wrapper">
               <i class="bi bi-lock"></i>
-              <input type="password" class="form-control password-input" placeholder="CONFIRM YOUR PASSWORD" id="confirm-password" />
+              <input type="password" class="form-control password-input" placeholder="CONFIRM YOUR PASSWORD" id="confirmPassword" required/>
               <button type="button" class="toggle-password-btn" onclick="togglePassword()">
                 <i class="bi bi-eye-fill"></i>
               </button>
             </div>
+            <div class="invalid-feedback" id="confirmPasswordError"></div>
           </div>
 
           <button type="submit" class="btn btn-primary w-100 mt-3">CREATE ACCOUNT</button>

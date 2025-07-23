@@ -2,7 +2,7 @@ from fastapi import Depends
 from typing import Dict, List
 from routes.utility import handlers
 from services.aws_clients import get_aws_clients
-from schemas.forum_schemas import PostSchema
+from schemas.forum_schemas import PostBase
 
 UTILITY_ROUTES: dict = {
     "GET_HEALTH_CHECK": {
@@ -22,7 +22,7 @@ UTILITY_ROUTES: dict = {
         "tags": ["Utility"],
         "summary": "Search posts",
         "description": "Search posts by title or content with query `q`.",
-        "response_model": List[PostSchema]
+        "response_model": List[PostBase]
     },
     "GET_TRENDING": {
         "methods": ["GET"],
@@ -32,7 +32,7 @@ UTILITY_ROUTES: dict = {
         "tags": ["Utility"],
         "summary": "Get trending posts",
         "description": "Returns trending posts sorted by engagement.",
-        "response_model": List[PostSchema]
+        "response_model": List[PostBase]
     },
     "GET_RECENT_POSTS": {
         "methods": ["GET"],
@@ -42,6 +42,6 @@ UTILITY_ROUTES: dict = {
         "tags": ["Utility"],
         "summary": "Get recent posts",
         "description": "Returns the most recent posts.",
-        "response_model": List[PostSchema]
+        "response_model": List[PostBase]
     },
 }
