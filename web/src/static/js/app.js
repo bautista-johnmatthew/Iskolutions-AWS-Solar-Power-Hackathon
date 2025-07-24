@@ -1,4 +1,4 @@
-import { sessionManager } from "./auth/session-manager-vanilla";
+import { sessionManager } from "./auth/session-manager-vanilla.js";
 
 $(document).ready(function() {
     console.log("User session:", sessionManager.getUser());
