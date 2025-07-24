@@ -246,7 +246,7 @@ body, html {
 }
 
 .comments-scrollable {
-  max-height: 350px; /* Adjust height based on your design */
+  max-height: 350px;
   overflow-y: auto;
   padding-right: 5px;
   margin-bottom: 10px;
@@ -271,7 +271,7 @@ body, html {
   width: 100%;
 }
 
-/* You already have this, but here’s a reminder */
+/* Search bar styles */
 .input-icon {
   position: relative;
   width: 250px;
@@ -317,6 +317,7 @@ body, html {
   outline: none;
 }
 
+/* AI Summary Section */
 .ai-summary-btn {
   background-color: #FF00E2;
   border: none;
@@ -346,6 +347,7 @@ body, html {
   gap: 6px;
 }
 
+/* Attachment List */
 .attachment-list {
   margin-top: 10px;
 }
