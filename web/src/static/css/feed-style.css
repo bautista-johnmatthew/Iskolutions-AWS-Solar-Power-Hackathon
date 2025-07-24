@@ -316,3 +316,32 @@ body, html {
 .search-btn:focus {
   outline: none;
 }
+
+.ai-summary-btn {
+  background-color: #FF00E2;
+  border: none;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 550;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  margin-top: 10px;
+  height: 30px;
+  width: 150px;
+  line-height: 16px;
+  text-align: center;
+}
+
+.ai-summary-btn:hover {
+  background-color: #105cd4;
+}
+
+.summary-content {
+  margin-top: 80px;
+  color: #e5e5e5;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
