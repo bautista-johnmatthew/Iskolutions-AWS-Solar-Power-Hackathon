@@ -37,18 +37,6 @@ async def login(data: Dict[str, Any],
     except Exception as e:
         raise HTTPException(status_code=500, detail="Login failed")
 
-async def confirm_email(data: Dict[str, Any],
-                       aws_clients: AWSClients = Depends(get_aws_clients)):
-    service = AuthService(aws_clients)
-    try:
-        result = service.confirm_email(data.get("token"), data.get("email"))
-        # Return the user data directly (not wrapped in success/data)
-        return result
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Email confirmation failed")
-
 async def resend_confirmation(data: Dict[str, Any],
                              aws_clients: AWSClients = Depends(get_aws_clients)):
     service = AuthService(aws_clients)

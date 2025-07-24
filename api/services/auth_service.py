@@ -108,6 +108,7 @@ class AuthService:
         except Exception as e:
             if "already registered" in str(e).lower() or "User already registered" in str(e):
                 raise ValueError("User with this email already exists")
+            
             raise ValueError(f"Registration failed: {str(e)}")
 
     def login(self, username: str, password: str) -> Dict:
@@ -280,47 +281,6 @@ class AuthService:
             return False
         except Exception as e:
             raise ValueError(f"Password change failed: {str(e)}")
-
-    def confirm_email(self, token: str, email: str) -> Dict:
-        """Confirm email using Supabase OTP"""
-        try:
-            response = self.supabase.auth.verify_otp({
-                "email": email,
-                "token": token,
-                "type": "signup"
-            })
-            
-            if response.user is None:
-                raise ValueError("Invalid confirmation token")
-            
-            # Update verification status in DynamoDB
-            user_id = response.user.id
-            self.table.update_item(
-                Key={"PK": user_pk(user_id), "SK": "PROFILE"},
-                UpdateExpression="SET is_verified = :verified, updated_at = :updated_at",
-                ExpressionAttributeValues={
-                    ":verified": True,
-                    ":updated_at": get_timestamp()
-                }
-            )
-            
-            # Extract user data and return session
-            user_data = self._extract_user_data_from_supabase(response)
-            
-            if response.session and response.session.access_token:
-                return self._format_user_session(user_data, response.session.access_token)
-            else:
-                return {
-                    "id": user_data["user_id"],
-                    "email": user_data["email"],
-                    "name": user_data["username"],
-                    "token": None,
-                    "message": "Email confirmed successfully. Please log in.",
-                    "confirmed": True
-                }
-                
-        except Exception as e:
-            raise ValueError(f"Email confirmation failed: {str(e)}")
 
     def resend_confirmation(self, email: str) -> bool:
         """Resend email confirmation"""

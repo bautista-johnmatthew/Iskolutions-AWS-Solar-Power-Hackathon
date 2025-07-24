@@ -19,12 +19,6 @@ AUTH_ROUTES: dict = {
         "dependencies": [Depends(get_aws_clients)],
         "endpoint": handlers.login
     },
-    "CONFIRM_EMAIL": {
-        "methods": ["POST"],
-        "path": "/auth/confirm-email",
-        "dependencies": [Depends(get_aws_clients)],
-        "endpoint": handlers.confirm_email
-    },
     "RESEND_CONFIRMATION": {
         "methods": ["POST"],
         "path": "/auth/resend-confirmation",
