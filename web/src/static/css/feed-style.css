@@ -246,7 +246,7 @@ body, html {
 }
 
 .comments-scrollable {
-  max-height: 160px; /* Adjust height based on your design */
+  max-height: 350px; /* Adjust height based on your design */
   overflow-y: auto;
   padding-right: 5px;
   margin-bottom: 10px;
@@ -338,7 +338,7 @@ body, html {
 }
 
 .summary-content {
-  margin-top: 80px;
+  margin-top: 50px;
   color: #e5e5e5;
   font-size: 0.9rem;
   display: flex;
@@ -359,10 +359,12 @@ body, html {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #1a1a2e;
+  background: #FF00E2;
   padding: 6px 10px;
   margin-bottom: 6px;
+  margin-top: 5px;
   border-radius: 8px;
+  height: 30px;
 }
 
 .filename {
@@ -372,11 +374,11 @@ body, html {
 }
 
 .download-btn {
-  color: #7eb4ff;
+  color: #ffffff;
   text-decoration: none;
   font-size: 1.2rem;
 }
 
 .download-btn:hover {
-  color: #ffffff;
+  color: #105cd4;
 }
