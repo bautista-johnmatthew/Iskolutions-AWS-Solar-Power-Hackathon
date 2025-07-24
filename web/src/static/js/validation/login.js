@@ -34,10 +34,10 @@ async function handleLogin(username, password) {
         const user = await authService.login(username, password);
         console.log('Login successful:', user);
         clearLoginForm();
-        
+
         // Redirect to feed page after successful login
         console.log(window.location.href);
-        // window.location.href = '../../../templates/feed.html';
+        window.location.href += 'feed.html';
 
         return user;
     } catch (error) {

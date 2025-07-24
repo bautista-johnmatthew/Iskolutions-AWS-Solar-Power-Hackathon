@@ -151,6 +151,7 @@ export class AuthService {
                 
                 // Clean URL by removing hash
                 history.replaceState(null, document.title, window.location.pathname);
+                window.location.href = '/';
 
                 return authData;
             }

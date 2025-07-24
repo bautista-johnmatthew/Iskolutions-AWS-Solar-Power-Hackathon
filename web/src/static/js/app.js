@@ -1,4 +1,7 @@
+import { sessionManager } from "./auth/session-manager-vanilla";
+
 $(document).ready(function() {
+    console.log("User session:", sessionManager.getUser());
     console.log("App loaded successfully");
 });
 
