@@ -35,13 +35,11 @@ class VoteHandler {
         const postId = postElement.dataset.postId;
         const isCurrentlyVoted = button.classList.contains('voted');
 
-        // Update UI immediately for better UX
-        this.updateVoteButtonUI(button, !isCurrentlyVoted);
-
         try {
             const result = await togglePostVote(postId, voteType, isCurrentlyVoted);
 
-            // Update vote count if successful
+            // Update UI and vote count if successful
+            this.updateVoteButtonUI(button, !isCurrentlyVoted);
             this.updateVoteCount(button, !isCurrentlyVoted);
 
             // Track user's vote state
