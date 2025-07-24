@@ -13,7 +13,7 @@ class PostService:
                          is_anonymous)
         try:
             self.table.put_item(Item=post.to_item())
-            return {"message": "Post created successfully", "post_id": 
+            return {"message": "Post created successfully", "post_id":
                     post.post_id}
         except ClientError as e:
             raise RuntimeError(f"Error creating post: {e}")
@@ -30,7 +30,7 @@ class PostService:
 
     def get_post(self, post_id: str):
         try:
-            response = self.table.get_item(Key={"PK": post_pk(post_id), 
+            response = self.table.get_item(Key={"PK": post_pk(post_id),
                                                 "SK": "METADATA"})
             return response.get("Item")
         except ClientError as e:
