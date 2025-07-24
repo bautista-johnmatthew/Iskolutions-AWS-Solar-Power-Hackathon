@@ -20,6 +20,14 @@
     </div>
     <div class="post-footer">
       <span class="post-time">{{timeAgo}}</span>
+      <div class="post-meta-actions">
+        <button class="btn btn-sm btn-outline-primary vote-btn" data-vote-type="up">
+          <i class="bi bi-arrow-up"></i> <span class="vote-count">{{upvotes}}</span>
+        </button>
+        <button class="btn btn-sm btn-outline-danger vote-btn" data-vote-type="down">
+          <i class="bi bi-arrow-down"></i> <span class="vote-count">{{downvotes}}</span>
+        </button>
+      </div>
       <div class="ai-summary-container">
         <!-- Summary content will be injected here -->
       </div>
