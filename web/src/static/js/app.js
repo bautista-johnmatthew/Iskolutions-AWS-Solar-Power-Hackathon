@@ -2,9 +2,13 @@ import { sessionManager } from "./auth/session-manager-vanilla.js";
 import { feedManager } from './managers/feed-manager.js';
 
 $(document).ready(function () {
-  console.log("User session:", sessionManager.getUser());
-  console.log("App loaded successfully");
-  postDataArray.forEach(post => loadPostTemplate(post));
+    console.log("User session:", sessionManager.getUser());
+    console.log("App loaded successfully");
+    postDataArray.forEach(post => loadPostTemplate(post));
+
+    if (feedManager) {
+          feedManager.initialize();
+      }
 });
 
 // Toggle password visibility
