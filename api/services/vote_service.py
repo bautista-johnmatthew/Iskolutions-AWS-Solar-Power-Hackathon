@@ -71,7 +71,7 @@ class VoteService:
             self.table.delete_item(
                 Key={"PK": post_pk(post_id), "SK": vote_sk(user_id)}
             )
-            return {"message": 
+            return {"message":
                     f"{vote_type.capitalize()}vote removed from post"}
         except ClientError as e:
             logger.error(f"DynamoDB Error (remove_post_vote): {e}")
