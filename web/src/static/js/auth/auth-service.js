@@ -103,34 +103,63 @@ export class AuthService {
         }
     }
 
-    /**
-     * Confirm email with token
-     */
-    async confirmEmail(email, token) {
+    async verifyToken(token) {
         try {
-            const response = await fetch(`${BASE_API_URL}/auth/confirm-email`, {
+            const response = await fetch(`${BASE_API_URL}/auth/verify-token`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, token }),
+                    'Authorization': `Bearer ${token}`
+                }
             });
 
             if (!response.ok) {
-                throw new Error('Email confirmation failed');
+                throw new Error('Token verification failed');
             }
 
-            const result = await response.json();
+            return await response.json();
+        } catch (error) {
+            console.error('Token verification error:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Process URL parameters from Supabase authentication callback
+     * @returns {Object|null} Auth data if found, null otherwise
+     */
+    processAuthCallback() {
+        try {
+            // Check if URL contains hash with access_token
+            const hash = window.location.hash;
+            if (!hash || !hash.includes('access_token=')) return null;
             
-            // Store session if confirmation creates a session
-            if (result.token) {
-                sessionManager.setSession(result);
+            // Extract parameters from URL hash
+            const params = new URLSearchParams(hash.substring(1));
+            
+            const authData = {
+                token: params.get('access_token'),
+                refreshToken: params.get('refresh_token'),
+                expiresAt: params.get('expires_at'),
+                expiresIn: params.get('expires_in'),
+                tokenType: params.get('token_type'),
+                type: params.get('type')
+            };
+            
+            if (authData.token) {
+                await this.verifyToken(authData.token);
+                
+                // Clean URL by removing hash
+                history.replaceState(null, document.title, window.location.pathname);
+                window.location.href = '/';
+
+                return authData;
             }
             
-            return result;
+            return null;
         } catch (error) {
-            console.error('Email confirmation error:', error);
-            throw error;
+            console.error('Auth callback processing error:', error);
+            return null;
         }
     }
 

@@ -1,5 +1,7 @@
-// Log confirmation
+import { sessionManager } from "./auth/session-manager-vanilla.js";
+
 $(document).ready(function () {
+  console.log("User session:", sessionManager.getUser());
   console.log("App loaded successfully");
   postDataArray.forEach(post => loadPostTemplate(post));
 });
