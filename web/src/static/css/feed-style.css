@@ -246,7 +246,7 @@ body, html {
 }
 
 .comments-scrollable {
-  max-height: 160px; /* Adjust height based on your design */
+  max-height: 350px;
   overflow-y: auto;
   padding-right: 5px;
   margin-bottom: 10px;
@@ -271,7 +271,7 @@ body, html {
   width: 100%;
 }
 
-/* You already have this, but here’s a reminder */
+/* Search bar styles */
 .input-icon {
   position: relative;
   width: 250px;
@@ -315,4 +315,72 @@ body, html {
 
 .search-btn:focus {
   outline: none;
+}
+
+/* AI Summary Section */
+.ai-summary-btn {
+  background-color: #FF00E2;
+  border: none;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 550;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  margin-top: 10px;
+  height: 30px;
+  width: 150px;
+  line-height: 16px;
+  text-align: center;
+}
+
+.ai-summary-btn:hover {
+  background-color: #105cd4;
+}
+
+.summary-content {
+  margin-top: 50px;
+  color: #e5e5e5;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Attachment List */
+.attachment-list {
+  margin-top: 10px;
+}
+
+.attachment-list ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.attachment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #FF00E2;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+  margin-top: 5px;
+  border-radius: 8px;
+  height: 30px;
+}
+
+.filename {
+  color: #ffffff;
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+.download-btn {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.download-btn:hover {
+  color: #105cd4;
 }
