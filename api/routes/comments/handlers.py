@@ -38,7 +38,7 @@ async def get_comments(
         raise HTTPException(status_code=404, detail="Post not found")
 
     try:
-        return comment_service.get_comments_for_post(post_id)
+        return await comment_service.get_comments(post_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
