@@ -17,6 +17,8 @@ export function formatPost(rawPost) {
 		isAnonymous: rawPost.is_anonymous || false,
 		createdAt: rawPost.created_at || null,
 		updatedAt: rawPost.updated_at || null,
+		upvotes: rawPost.upvotes || 0,
+		downvotes: rawPost.downvotes || 0,
 	};
 }
 
