@@ -18,8 +18,12 @@ class VoteService:
     # =========================
     # |      POST VOTES       |
     # =========================
-    def vote_post(self, post_id: str, user_id: str,
-                  vote_type: Literal["up", "down"]):
+    def vote_post(
+        self,
+        post_id: str,
+        vote_type: Literal["up", "down"],
+        user_id: str = "Guest",
+    ):
         try:
             self.table.update_item(
                 Key={"PK": post_pk(post_id), "SK": "METADATA"},
