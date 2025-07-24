@@ -38,7 +38,7 @@ AUTH_ROUTES: dict = {
         "endpoint": handlers.logout
     },
     "VERIFY_TOKEN": {
-        "methods": ["GET"],
+        "methods": ["POST"],
         "path": "/auth/verify-token",
         "dependencies": [Depends(get_aws_clients)],
         "endpoint": handlers.verify_token

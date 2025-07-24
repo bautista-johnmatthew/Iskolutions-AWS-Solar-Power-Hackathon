@@ -1,6 +1,6 @@
 import { sessionManager } from '../auth/session-manager-vanilla.js';
 import { authService } from '../auth/auth-service.js';
-import { validateField, validateLogin } from './schema.js';
+import { validateField } from './schema.js';
 import { addErrorMessage, clearErrorMessage } from '../utils/error-handling.js';
 
 /**
@@ -33,8 +33,12 @@ async function handleLogin(username, password) {
 
         const user = await authService.login(username, password);
         console.log('Login successful:', user);
-        updateUserInfo();
         clearLoginForm();
+        
+        // Redirect to feed page after successful login
+        console.log(window.location.href);
+        // window.location.href = '../../../templates/feed.html';
+
         return user;
     } catch (error) {
         console.error('Login failed:', error);
@@ -48,23 +52,10 @@ async function handleLogout() {
     try {
         await authService.logout();
         console.log('Logout successful');
-        updateUserInfo();
     } catch (error) {
         console.error('Logout error:', error);
         addErrorMessage('#username', 'Logout failed');
     }
-}
-
-// Set test session for development/testing
-function setTestSession() {
-    const testUser = {
-        id: 'test-user-123',
-        email: 'test@pup.edu.ph',
-        name: 'Test User',
-        token: 'fake-jwt-token'
-    };
-    sessionManager.setSession(testUser);
-    updateUserInfo();
 }
 
 // Clear login form fields
@@ -85,14 +76,12 @@ function updateUserInfo() {
                 <strong>User ID:</strong> ${sessionManager.getUserId()}<br>
                 <strong>Token:</strong> ${sessionManager.getToken() ? 'Present' : 'None'}
             </div>
-            <button class="btn btn-info btn-sm" id="setTestSession">Set Test Session</button>
         `);
     } else {
         userInfo.html(`
             <div class="alert alert-warning">
                 Not logged in
             </div>
-            <button class="btn btn-info btn-sm" id="setTestSession">Set Test Session</button>
         `);
     }
 }
@@ -102,7 +91,6 @@ $(document).ready(function() {
     // Initialize session
     console.log('Initializing session manager...');
     sessionManager.initialize();
-    updateUserInfo();
 
     // Login form submission
     $('#loginForm').on('submit', async function(e) {
@@ -137,10 +125,5 @@ $(document).ready(function() {
     // Logout button
     $('#logoutBtn').on('click', async function() {
         await handleLogout();
-    });
-
-    // Set test session button (for development/testing)
-    $(document).on('click', '#setTestSession', function() {
-        setTestSession();
     });
 });
