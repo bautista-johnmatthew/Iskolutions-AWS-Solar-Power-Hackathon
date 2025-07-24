@@ -21,8 +21,8 @@ class PostService:
     def get_posts(self):
         try:
             response = self.table.scan(
-                FilterExpression="begins_with(PK, :pk)",
-                ExpressionAttributeValues={":pk": "POST#"}
+                FilterExpression="begins_with(PK, :pk) AND SK = :sk",
+                ExpressionAttributeValues={":pk": "POST#", ":sk": "METADATA"}
             )
             return response.get("Items", [])
         except ClientError as e:
