@@ -1,4 +1,5 @@
 import { sessionManager } from "./auth/session-manager-vanilla.js";
+import { feedManager } from './managers/feed-manager.js';
 
 $(document).ready(function () {
   console.log("User session:", sessionManager.getUser());
