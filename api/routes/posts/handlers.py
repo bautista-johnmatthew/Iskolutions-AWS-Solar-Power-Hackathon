@@ -28,7 +28,7 @@ async def get_posts(
     """Retrieve all posts"""
     service = PostService(aws_clients)
     try:
-        return service.get_all_posts()
+        return service.get_posts()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
