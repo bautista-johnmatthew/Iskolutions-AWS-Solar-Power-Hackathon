@@ -9,7 +9,7 @@ class PostService:
 
     def create_post(self, author_id: str, title: str, content: str,
                     tags=None, attachments=None, is_anonymous=False):
-        post = PostModel(author_id, title, content, tags, attachments, 
+        post = PostModel(author_id, title, content, tags, attachments,
                          is_anonymous)
         try:
             self.table.put_item(Item=post.to_item())
