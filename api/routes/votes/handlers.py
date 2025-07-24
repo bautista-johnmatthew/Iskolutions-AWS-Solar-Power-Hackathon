@@ -25,7 +25,6 @@ async def vote_post(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
 async def remove_post_vote(
     post_id: str,
     vote_type: Literal['up', 'down'] = Body(..., embed=True),
