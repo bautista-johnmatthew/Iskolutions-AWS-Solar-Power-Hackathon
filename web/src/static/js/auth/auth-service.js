@@ -147,7 +147,7 @@ export class AuthService {
             };
             
             if (authData.token) {
-                this.verifyToken(authData.token);
+                await this.verifyToken(authData.token);
                 
                 // Clean URL by removing hash
                 history.replaceState(null, document.title, window.location.pathname);
