@@ -32,7 +32,8 @@ function loadPostTemplate(postData) {
       .replace("{{title}}", postData.title)
       .replace("{{content}}", postData.content)
       .replace("{{timeAgo}}", postData.timeAgo)
-      .replace("{{summary}}", postData.summary || "");
+      .replace("{{summary}}", postData.summary || "")
+      .replace("{{attachments}}", generateAttachmentHTML(postData.attachments || []));
 
     const postElement = $(filledPost);
     $(".feed-container").append(postElement);
@@ -77,6 +78,9 @@ const postDataArray = [
     content: "Hello po. I am a freshman...",
     timeAgo: "1d ago",
     summary: "This is a summarized version of the post.",
+    attachments: [
+      { name: "Accounting Reviewer.pdf", url: "../img/tester.pdf" }
+    ],
     comments: [
       {
         username: "seniorJuan",
@@ -91,3 +95,21 @@ const postDataArray = [
     ]
   }
 ];
+
+function generateAttachmentHTML(attachments) {
+  if (!attachments.length) return '';
+
+  let html = `<div class="attachment-list"><strong>📎 Attachments:</strong><ul>`;
+  attachments.forEach(file => {
+    html += `
+      <li class="attachment-item">
+        <span class="filename">${file.name}</span>
+        <a class="download-btn" href="${file.url}" download>
+          <i class="bi bi-download"></i>
+        </a>
+      </li>`;
+  });
+  html += `</ul></div>`;
+
+  return html;
+}

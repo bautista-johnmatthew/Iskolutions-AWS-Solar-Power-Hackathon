@@ -345,3 +345,38 @@ body, html {
   align-items: center;
   gap: 6px;
 }
+
+.attachment-list {
+  margin-top: 10px;
+}
+
+.attachment-list ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.attachment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1a1a2e;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+  border-radius: 8px;
+}
+
+.filename {
+  color: #ffffff;
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+.download-btn {
+  color: #7eb4ff;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.download-btn:hover {
+  color: #ffffff;
+}
