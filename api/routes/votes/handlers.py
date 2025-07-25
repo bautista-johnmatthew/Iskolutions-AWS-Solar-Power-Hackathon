@@ -22,8 +22,6 @@ async def vote_post(
         raise HTTPException(status_code=404, detail="Post not found")
 
     try:
-        print("Attempting to add vote to DB for post:", post_id,
-              "Vote type:", vote_type, "User ID:", user_id)
         return vote_service.vote_post(post_id, vote_type, user_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -43,7 +41,6 @@ async def remove_post_vote(
     try:
         return vote_service.remove_post_vote(post_id, user_id, vote_type)
     except Exception as e:
-        print("Error removing vote:", e)
         raise HTTPException(status_code=500, detail=str(e))
     
 async def get_post_votes(
@@ -61,7 +58,7 @@ async def get_post_votes(
         user_votes = []
         for vote in votes:
             sk = vote.get('sk', '')
-            if f'VOTE#USER#{user_id}' in sk:
+            if sk == f'VOTE#USER#{user_id}':
                 user_votes.append(vote)
         
         return {
