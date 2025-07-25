@@ -57,14 +57,10 @@ class CommentBase(BaseModel):
 
 class CommentCreate(CommentBase):
     author_id: str
-    parent_comment_id: Optional[str] = None
 
 class CommentResponse(CommentBase, TimestampMixin):
     comment_id: str
-    post_id: str
     author_id: str
-    upvotes: int = 0
-    downvotes: int = 0
 
 # ============ VOTE SCHEMAS ============
 class VoteBase(BaseModel):

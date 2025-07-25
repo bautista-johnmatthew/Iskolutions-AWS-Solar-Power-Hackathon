@@ -88,16 +88,18 @@ class PostModel:
         }
 
 class CommentModel:
-    def __init__(self, post_id: str, author_id: str, content: str,
-                 parent_comment_id: Optional[str] = None, is_anonymous: bool = False):
+    def __init__(
+        self,
+        post_id: str,
+        author_id: str,
+        content: str,
+        is_anonymous: bool = False
+    ):
         self.comment_id = str(uuid.uuid4())
         self.post_id = post_id
         self.author_id = author_id
         self.content = content
-        self.parent_comment_id = parent_comment_id
         self.is_anonymous = is_anonymous
-        self.upvotes = 0
-        self.downvotes = 0
 
     def to_item(self):
         return {
@@ -107,9 +109,6 @@ class CommentModel:
             "content": self.content,
             "author_id": self.author_id,
             "is_anonymous": self.is_anonymous,
-            "parent_comment_id": self.parent_comment_id,
-            "upvotes": self.upvotes,
-            "downvotes": self.downvotes,
             "created_at": get_timestamp(),
             "updated_at": get_timestamp(),
         }

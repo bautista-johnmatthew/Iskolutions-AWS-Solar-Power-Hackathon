@@ -17,17 +17,5 @@ VOTE_ROUTES: dict = {
         "path": "/posts/{post_id}/vote",
         "dependencies": [Depends(get_aws_clients)],
         "endpoint": handlers.remove_post_vote
-    },
-    "VOTE_COMMENT": {
-        "methods": ["POST"],
-        "path": "/comments/{comment_id}/vote",
-        "dependencies": [Depends(get_aws_clients)],
-        "endpoint": handlers.vote_comment
-    },
-    "REMOVE_COMMENT_VOTE": {
-        "methods": ["DELETE"],
-        "path": "/comments/{comment_id}/vote",
-        "dependencies": [Depends(get_aws_clients)],
-        "endpoint": handlers.remove_comment_vote
-    },
+    }
 }

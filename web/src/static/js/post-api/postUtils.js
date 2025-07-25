@@ -17,6 +17,8 @@ export function formatPost(rawPost) {
 		isAnonymous: rawPost.is_anonymous || false,
 		createdAt: rawPost.created_at || null,
 		updatedAt: rawPost.updated_at || null,
+		upvotes: rawPost.upvotes || 0,
+		downvotes: rawPost.downvotes || 0,
 	};
 }
 
@@ -102,27 +104,27 @@ export async function createPost(data) {
     if (!isLoggedIn) {
         throw new Error('User must be authenticated to create a post');
     }
-    
+
 // Removed redundant author_id assignment as it is already set in addpost.js
-    
+
     const validationErrors = validatePostData(data);
     if (validationErrors.length > 0) {
         throw new Error(`Validation failed: ${validationErrors.join(', ')}`);
     }
 
     const payload = buildPostPayload(data);
-    
+
     // Get token for authentication if available
     const token = sessionManager.getToken();
     const headers = {
         'Content-Type': 'application/json',
     };
-    
+
     // Add authorization header if token exists
     if (token) {
         headers['Authorization'] = `Bearer ${token}`;
     }
-    
+
     const response = await fetch(`${BASE_API_URL}/posts`, {
         method: 'POST',
         headers: headers,
