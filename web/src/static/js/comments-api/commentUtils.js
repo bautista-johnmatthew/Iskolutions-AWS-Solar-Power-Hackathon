@@ -72,24 +72,25 @@ export async function getComments(postId) {
         );
     }
 
-    let response;
     try {
-        response = await fetch(`${BASE_API_URL}/posts/${postId}/comments`);
+        const response = await fetch(`${BASE_API_URL}/posts/${postId}/comments`);
+
         if (!response.ok) throw new Error('Failed to fetch comments');
+
+        const rawComments = await response.json();
+
+        // Ensure we return an array
+        if (!Array.isArray(rawComments)) {
+            console.warn('getComments expected an array, got:', typeof rawComments);
+            return [];
+        }
+
+        return rawComments.map(formatComment);
     } catch (err) {
         console.error('Error fetching comments:', err);
         return []; // Return empty array to avoid frontend crashes
     }
 
-    const rawComments = await response.json();
-
-    // Ensure we return an array
-    if (!Array.isArray(rawComments)) {
-        console.warn('getComments expected an array, got:', typeof rawComments);
-        return [];
-    }
-
-    return rawComments.map(formatComment);
 }
 
 /**
