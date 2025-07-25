@@ -17,5 +17,11 @@ VOTE_ROUTES: dict = {
         "path": "/posts/{post_id}/vote",
         "dependencies": [Depends(get_aws_clients)],
         "endpoint": handlers.remove_post_vote
-    }
+    },
+    "GET_USER_VOTES": {
+        "methods": ["GET"],
+        "path": "/posts/{post_id}/votes/{user_id}",
+        "dependencies": [Depends(get_aws_clients)],
+        "endpoint": handlers.get_post_votes
+    },
 }

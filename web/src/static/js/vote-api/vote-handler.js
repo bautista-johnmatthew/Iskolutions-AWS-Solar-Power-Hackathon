@@ -140,7 +140,6 @@ class VoteHandler {
      */
     async initializeVoteStates(posts) {
         try {
-
             console.log('Initializing vote states for posts:', posts);
             // Extract post IDs
             const postIds = posts.map(post => post.id);

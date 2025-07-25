@@ -84,14 +84,23 @@ export async function getUserPostVotes(postIds) {
     try {
         // For now, we'll simulate this since there might not be a dedicated endpoint
         // In a real implementation, you'd call an API endpoint like:
-        // const response = await fetch(`${API_BASE_URL}/users/me/votes/posts`, {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ post_ids: postIds })
-        // });
+        const userId = sessionManager.getUserId();
+        const postId = postIds.join(',');
 
-        // Temporary mock - replace with actual API call when available
-        return {};
+        const response = await fetch(`${API_BASE_URL}/posts/${postId}/votes/${userId}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        });
+        console.log("Fetching user votes for posts:", postIds);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+
+        console.log("User votes data:", data);
+        return data;
     } catch (error) {
         console.error('Error getting user votes:', error);
         return {};

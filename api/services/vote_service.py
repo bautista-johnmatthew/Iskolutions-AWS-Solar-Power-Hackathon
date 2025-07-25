@@ -76,3 +76,19 @@ class VoteService:
         except ClientError as e:
             logger.error(f"DynamoDB Error (remove_post_vote): {e}")
             raise
+    
+    def get_post_votes(self, post_id: str):
+        try:
+            response = self.table.query(
+                KeyConditionExpression=(
+                    "PK = :pk AND begins_with(SK, :sk_prefix)"
+                ),
+                ExpressionAttributeValues={
+                    ":pk": post_pk(post_id),
+                    ":sk_prefix": "VOTE#USER#"
+                }
+            )
+            return response.get("Items", [])
+        except ClientError as e:
+            logger.error(f"DynamoDB Error (get_post_votes): {e}")
+            raise
