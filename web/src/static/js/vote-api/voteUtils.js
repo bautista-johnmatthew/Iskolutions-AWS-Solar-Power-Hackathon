@@ -2,6 +2,8 @@
  * Vote API utilities for handling upvotes and downvotes
  */
 
+import { sessionManager } from "../auth/session-manager-vanilla.js";
+
 const API_BASE_URL = 'http://localhost:8000'; // Adjust this to your API URL
 
 /**
@@ -10,14 +12,14 @@ const API_BASE_URL = 'http://localhost:8000'; // Adjust this to your API URL
  * @param {string} voteType - Either 'up' or 'down'
  * @returns {Promise<Object>} Response from the API
  */
-export async function votePost(postId, voteType) {
+export async function votePost(postId, voteType, userId) {
     try {
         const response = await fetch(`${API_BASE_URL}/posts/${postId}/vote`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ vote_type: voteType })
+            body: JSON.stringify({ vote_type: voteType, user_id: userId })
         });
 
         if (!response.ok) {
@@ -69,7 +71,7 @@ export async function togglePostVote(postId, voteType, isCurrentlyVoted = false)
     if (isCurrentlyVoted) {
         return await removePostVote(postId, voteType);
     } else {
-        return await votePost(postId, voteType);
+        return await votePost(postId, voteType, sessionManager.getUserId());
     }
 }
 

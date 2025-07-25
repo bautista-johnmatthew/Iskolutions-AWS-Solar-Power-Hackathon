@@ -68,6 +68,15 @@ export class PostActionsHandler {
         }
     }
 
+    async handleVote(postId, voteType, button) {
+        try {
+            voteHandler.handlePostVote(postId, button, voteType);
+        } catch (error) {   
+            console.error('Failed to handle post vote:', error);
+            this.showErrorMessage('Failed to update vote. Please try again.');
+        }
+    }
+
     /**
      * Handle post deletion
      */
