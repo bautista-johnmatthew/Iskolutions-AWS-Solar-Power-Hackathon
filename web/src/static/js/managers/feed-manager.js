@@ -54,7 +54,7 @@ class FeedManager {
     async renderPost(postData) {
         try {
             // Load the template
-            const response = await fetch('/templates/post-template.html');
+            const response = await fetch('./post-template.html');
             const template = await response.text();
 
             // Replace template variables
@@ -148,8 +148,3 @@ class FeedManager {
 
 // Global feed manager instance
 export const feedManager = new FeedManager();
-
-// Auto-initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    feedManager.initialize();
-});

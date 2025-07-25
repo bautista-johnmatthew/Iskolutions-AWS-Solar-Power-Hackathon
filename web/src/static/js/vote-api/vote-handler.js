@@ -1,3 +1,4 @@
+import { sessionManager } from '../auth/session-manager-vanilla.js';
 import { togglePostVote, getUserPostVotes } from './voteUtils.js';
 
 /**
@@ -18,8 +19,14 @@ class VoteHandler {
         });
     }
 
+
     async handleVoteClick(event) {
         event.preventDefault();
+        if (!sessionManager.isLoggedIn()) {
+            this.showErrorMessage('You must be logged in to vote.');
+            return;
+        }
+
         const button = event.target.closest('.vote-btn');
         const voteType = button.dataset.voteType; // 'up' or 'down'
 
@@ -38,7 +45,7 @@ class VoteHandler {
         try {
             const result = await togglePostVote(postId, voteType, isCurrentlyVoted);
 
-            // Update UI and vote count if successful
+            // Update UI based on vote result
             this.updateVoteButtonUI(button, !isCurrentlyVoted);
             this.updateVoteCount(button, !isCurrentlyVoted);
 
@@ -128,7 +135,6 @@ class VoteHandler {
      */
     async initializeVoteStates(posts) {
         try {
-
             console.log('Initializing vote states for posts:', posts);
             // Extract post IDs
             const postIds = posts.map(post => post.id);
