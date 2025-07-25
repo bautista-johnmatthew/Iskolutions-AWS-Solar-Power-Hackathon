@@ -31,6 +31,7 @@ async def vote_post(
 async def remove_post_vote(
     post_id: str,
     vote_type: Literal['up', 'down'] = Body(..., embed=True),
+    user_id: str = Body(..., embed=True),
     aws_clients: AWSClients = Depends(get_aws_clients)
 ):
     vote_service = VoteService(aws_clients)
@@ -40,8 +41,6 @@ async def remove_post_vote(
         raise HTTPException(status_code=404, detail="Post not found")
 
     try:
-        print("Attempting to remove vote from DB for post:", post_id,
-              "Vote type:", vote_type)
         return vote_service.remove_post_vote(post_id, user_id,vote_type)
     except Exception as e:
         print("Error removing vote:", e)

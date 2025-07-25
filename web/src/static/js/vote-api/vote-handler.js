@@ -50,9 +50,9 @@ class VoteHandler {
         try {
             const result = await togglePostVote(postId, voteType, isCurrentlyVoted);
 
-            // Update UI and vote count if successful
+            // Update UI based on vote result
             this.updateVoteButtonUI(button, !isCurrentlyVoted);
-            this.updateVoteCount(button, !isCurrentlyVoted && voteType === 'up');
+            this.updateVoteCount(button, !isCurrentlyVoted);
 
             // Track user's vote state
             const voteKey = `post_${postId}`;
