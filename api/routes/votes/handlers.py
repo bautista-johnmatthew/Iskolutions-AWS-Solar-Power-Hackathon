@@ -41,7 +41,7 @@ async def remove_post_vote(
         raise HTTPException(status_code=404, detail="Post not found")
 
     try:
-        return vote_service.remove_post_vote(post_id, user_id,vote_type)
+        return vote_service.remove_post_vote(post_id, user_id, vote_type)
     except Exception as e:
         print("Error removing vote:", e)
         raise HTTPException(status_code=500, detail=str(e))

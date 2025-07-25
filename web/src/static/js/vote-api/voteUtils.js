@@ -46,7 +46,7 @@ export async function removePostVote(postId, voteType, userId) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ vote_type: voteType, user_id: userId})
+            body: JSON.stringify({ vote_type: voteType, user_id: userId })
         });
 
         if (!response.ok) {

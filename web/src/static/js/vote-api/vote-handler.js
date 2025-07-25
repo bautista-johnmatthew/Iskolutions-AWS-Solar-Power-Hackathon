@@ -19,18 +19,13 @@ class VoteHandler {
         });
     }
 
-    checkUserLoggedIn() {
-        if (sessionManager.isLoggedIn()) {
-            return Promise.resolve(true);
-        } else {
-            this.showErrorMessage('You must be logged in to vote.');
-            return Promise.reject(new Error('User not logged in'));
-        }
-    }
 
     async handleVoteClick(event) {
         event.preventDefault();
-        if (!await this.checkUserLoggedIn()) return;
+        if (!sessionManager.isLoggedIn()) {
+            this.showErrorMessage('You must be logged in to vote.');
+            return;
+        }
 
         const button = event.target.closest('.vote-btn');
         const voteType = button.dataset.voteType; // 'up' or 'down'
