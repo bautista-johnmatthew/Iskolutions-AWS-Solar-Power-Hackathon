@@ -40,7 +40,7 @@ class VoteHandler {
 
             // Update UI and vote count if successful
             this.updateVoteButtonUI(button, !isCurrentlyVoted);
-            this.updateVoteCount(button, !isCurrentlyVoted);
+            this.updateVoteCount(button, !isCurrentlyVoted && voteType === 'up');
 
             // Track user's vote state
             const voteKey = `post_${postId}`;

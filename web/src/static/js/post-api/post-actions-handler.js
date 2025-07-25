@@ -116,29 +116,6 @@ export class PostActionsHandler {
     }
 
     /**
-     * Handle voting on posts
-     */
-    async handleVote(postId, voteType, voteBtn) {
-        try {
-            // Here you would call your voting API
-            // This depends on how your voting system is implemented
-            console.log(`Voting ${voteType} on post ${postId}`);
-
-            // Example: Update vote count in UI
-            const voteCountSpan = voteBtn.querySelector('.vote-count');
-            const currentCount = parseInt(voteCountSpan.textContent) || 0;
-            voteCountSpan.textContent = currentCount + 1;
-
-            // Add visual feedback
-            voteBtn.classList.add('voted');
-
-        } catch (error) {
-            console.error('Failed to vote:', error);
-            this.showErrorMessage('Failed to record vote. Please try again.');
-        }
-    }
-
-    /**
      * Show edit modal - This should be replaced with actual modal implementation
      */
     async showEditModal(postData) {
