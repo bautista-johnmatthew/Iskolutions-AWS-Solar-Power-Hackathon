@@ -1,10 +1,10 @@
 import uuid
 from typing import Dict, Any, List
-
 from botocore.exceptions import ClientError
-
 from services.aws_clients import AWSClients
 from models.forum_models import get_timestamp
+from services.profanity_checker.checker import check_text
+
 
 class CommentService:
     def __init__(self, aws_clients: AWSClients):
@@ -12,6 +12,15 @@ class CommentService:
 
     async def create_comment(self, post_id: str,
                              data: Dict[str, Any]) -> Dict[str, Any]:
+        # ✅ Profanity Check
+        content_check = check_text(data["content"])
+        if content_check["has_profanity"]:
+            raise ValueError({
+                "error": "Profanity detected in comment",
+                "hits": content_check.get("english_hits", []) 
+                + content_check.get("tagalog_hits", [])
+            })
+
         comment_id = str(uuid.uuid4())
         item = {
             "PK": f"POST#{post_id}",
@@ -42,6 +51,15 @@ class CommentService:
 
     async def update_comment(self, post_id: str, comment_id: str,
                              data: Dict[str, Any]) -> Dict[str, Any]:
+        # ✅ Profanity Check
+        content_check = check_text(data["content"])
+        if content_check["has_profanity"]:
+            raise ValueError({
+                "error": "Profanity in updated comment",
+                "hits": content_check.get("english_hits", []) 
+                + content_check.get("tagalog_hits", [])
+            })
+
         update_expr = "SET content = :c, updated_at = :u"
         expr_vals = {":c": data["content"], ":u": get_timestamp()}
         resp = self.table.update_item(
@@ -54,6 +72,15 @@ class CommentService:
 
     async def patch_comment(self, post_id: str, comment_id: str,
                             data: Dict[str, Any]) -> Dict[str, Any]:
+        if "content" in data:
+            content_check = check_text(data["content"])
+            if content_check["has_profanity"]:
+                raise ValueError({
+                    "error": "Profanity in patched comment",
+                    "hits": content_check.get("english_hits", []) 
+                    + content_check.get("tagalog_hits", [])
+                })
+
         update_parts = []
         expr_vals = {":u": get_timestamp()}
         for key, val in data.items():
