@@ -128,7 +128,7 @@ export class AuthService {
      * Process URL parameters from Supabase authentication callback
      * @returns {Object|null} Auth data if found, null otherwise
      */
-    processAuthCallback() {
+    async processAuthCallback() {
         try {
             // Check if URL contains hash with access_token
             const hash = window.location.hash;
