@@ -194,8 +194,7 @@ a:hover {
 }
 
 @media (max-width: 576px) {
-  .confirm
--container {
+  .confirm-container {
     padding: 24px;
   }
 
