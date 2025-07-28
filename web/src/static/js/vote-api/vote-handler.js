@@ -1,5 +1,5 @@
 import { sessionManager } from '../auth/session-manager-vanilla.js';
-import { togglePostVote, getUserPostVotes } from './voteUtils.js';
+import { togglePostVote, getUserPostVotes, formatUserVotes } from './voteUtils.js';
 
 /**
  * Vote Handler - Manages vote button interactions and UI updates
@@ -141,14 +141,16 @@ class VoteHandler {
 
             // Get user's current votes for these posts
             const userVotes = await getUserPostVotes(postIds);
+            const userVoteMap = formatUserVotes(userVotes['user_votes']);
 
             // Update UI for each post based on user's votes
             posts.forEach(post => {
                 const postElement = document.querySelector(`[data-post-id="${post.id}"]`);
                 if (!postElement) return;
-
+                
                 // Check if user has voted on this post
-                const userVote = userVotes[post.id];
+                const userVote = userVoteMap[post.id];
+
                 if (userVote) {
                     // Find the corresponding vote button and mark it as voted
                     const voteButton = postElement.querySelector(`[data-vote-type="${userVote}"]`);

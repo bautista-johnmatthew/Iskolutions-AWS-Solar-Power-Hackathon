@@ -82,8 +82,7 @@ export async function togglePostVote(postId, voteType, isCurrentlyVoted = false)
  */
 export async function getUserPostVotes(postIds) {
     try {
-        // For now, we'll simulate this since there might not be a dedicated endpoint
-        // In a real implementation, you'd call an API endpoint like:
+        // Find the posts by the ID that the user has voted on
         const userId = sessionManager.getUserId();
         const postId = postIds.join(',');
 
@@ -91,7 +90,6 @@ export async function getUserPostVotes(postIds) {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         });
-        console.log("Fetching user votes for posts:", postIds);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -99,7 +97,6 @@ export async function getUserPostVotes(postIds) {
         
         const data = await response.json();
 
-        console.log("User votes data:", data);
         return data;
     } catch (error) {
         console.error('Error getting user votes:', error);
@@ -120,4 +117,26 @@ export async function getUserCommentVotes(commentIds) {
         console.error('Error getting user comment votes:', error);
         return {};
     }
+}
+
+/**
+ * Format user vote data returned from API
+ * @param {Array} userVotes - Array of vote objects from the API
+ * @returns {Object} Object mapping post IDs to vote types
+ */
+export function formatUserVotes(userVotes) {
+    const voteMap = {};
+    
+    if (Array.isArray(userVotes)) {
+        userVotes.forEach(vote => {
+            if (vote.PK && vote.PK.startsWith('POST#')) {
+                // Extract post ID from the PK (format: "POST#<post_id>")
+                const postId = vote.PK.split('#')[1];
+                voteMap[postId] = vote.vote_type;
+            }
+        });
+    }
+    
+    console.log('Formatted user votes:', voteMap);
+    return voteMap;
 }
