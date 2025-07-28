@@ -4,8 +4,8 @@ import re
 
 class TagalogFilter:
     def __init__(self):
-        data_path = os.path.join(os.path.dirname(__file__), "..", "data", 
-                                 "tagalog_badwords.json")
+        data_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", 
+                "tagalog_badwords.json")
         with open(data_path, "r", encoding="utf-8") as f:
             self.badwords = json.load(f)
 
