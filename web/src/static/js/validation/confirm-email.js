@@ -12,10 +12,7 @@ function urlRemoveEmail() {
     // If email was provided, set it in the userEmail input field
     if (email && email.trim() !== '') {
         const userEmail = $('#userEmail');
-        userEmail.replaceWith(`<p class='text-center'>We've sent a confirmation link to
-              <strong>${email}</strong>.<br />
-              Please check your inbox and click the link to verify your
-              account.</p>`);
+        userEmail.text(email.trim());
     }
 }
 
@@ -25,6 +22,7 @@ $(document).ready(function() {
 
     $('#resendLinkBtn').on('click', async function() {
         const userEmail = $('#userEmail').text().trim();
+
         if (!userEmail) {
             alert('No email address found. Please try again later.');
             return;
