@@ -1,4 +1,4 @@
-from .providers.english_filter import EnglishFilter
+from .providers.english_filter import EnglishFilter 
 from .providers.tagalog_filter import TagalogFilter
 
 english_filter = EnglishFilter()

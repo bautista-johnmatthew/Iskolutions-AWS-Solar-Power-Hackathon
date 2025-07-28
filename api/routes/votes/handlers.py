@@ -57,12 +57,12 @@ async def get_post_votes(
         # Check for the specific user vote in the returned votes
         user_votes = []
         for vote in votes:
-            sk = vote.get('sk', '')
+            sk = vote.get('SK', '')
+            
             if sk == f'VOTE#USER#{user_id}':
                 user_votes.append(vote)
         
         return {
-            'all_votes': votes,
             'user_votes': user_votes
         }
     except Exception as e:

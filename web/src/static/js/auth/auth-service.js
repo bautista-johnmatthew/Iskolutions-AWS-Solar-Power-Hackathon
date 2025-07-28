@@ -151,6 +151,7 @@ export class AuthService {
                 
                 // Clean URL by removing hash
                 history.replaceState(null, document.title, window.location.pathname);
+                alert('Account verified successfully! Please log in to continue.');
                 window.location.href = '/';
 
                 return authData;

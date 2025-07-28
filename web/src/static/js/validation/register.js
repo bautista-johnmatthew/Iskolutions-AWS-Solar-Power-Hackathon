@@ -66,30 +66,10 @@ function showEmailConfirmationPrompt(email) {
     // Hide the register form
     $("#registerForm").hide();
     
-    // Create email confirmation UI without code entry
-    const confirmationHTML = `
-    <div id="emailConfirmationSection" class="card">
-        <div class="card-body">
-            <h3 class="card-title text-center mb-4">Check Your Email</h3>
-            <div class="text-center mb-4">
-                <i class="fas fa-envelope fa-3x text-primary"></i>
-            </div>
-            <p class="text-center">
-                We've sent a confirmation link to <strong>${email}</strong>.<br>
-                Please check your inbox and click the link to verify your account.
-            </p>
-            <p class="text-center text-muted">
-                <small>Please don't close this window while completing the verification process.</small>
-            </p>
-            <div class="d-grid gap-2">
-                <button type="button" id="resendLinkBtn" class="btn btn-outline-secondary">Resend Link</button>
-                <button type="button" id="backToSignupBtn" class="btn btn-link">Back to Sign Up</button>
-            </div>
-        </div>
-    </div>`;
+    let currentWindow = window.location.href
+    window.location.href = currentWindow.replace('register.html', 'confirm-email.html?email=' + (email));
 
-    // Add the confirmation section after the registration form
-    $("#registerForm").after(confirmationHTML);
+    // Removed the usage of undefined confirmationHTML to prevent runtime error.
 }
 
 // Function to handle confirm password validation
@@ -128,7 +108,6 @@ $(document).ready(function() {
     console.log("App loaded successfully");
     
     preloadSchemas();
-    authService.processAuthCallback();
     
     // Attach event listeners
     $("#registerForm").on("submit", handleRegisterFormSubmit);
