@@ -69,7 +69,7 @@ function showEmailConfirmationPrompt(email) {
     let currentWindow = window.location.href
     window.location.href = currentWindow.replace('register.html', 'confirm-email.html?email=' + (email));
 
-    $("#registerForm").after(confirmationHTML);
+    // Removed the usage of undefined confirmationHTML to prevent runtime error.
 }
 
 // Function to handle confirm password validation
