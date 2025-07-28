@@ -135,37 +135,39 @@ class VoteHandler {
      */
     async initializeVoteStates(posts) {
         try {
-            console.log('Initializing vote states for posts:', posts);
             // Extract post IDs
             const postIds = posts.map(post => post.id);
+            const isUserLoggedIn = sessionManager.isLoggedIn();
 
             // Get user's current votes for these posts
-            const userVotes = await getUserPostVotes(postIds);
-            const userVoteMap = formatUserVotes(userVotes['user_votes']);
+            let userVoteMap = {};
+            if (isUserLoggedIn) {
+                const userVotes = await getUserPostVotes(postIds);
+                userVoteMap = formatUserVotes(userVotes['user_votes']);
+            }
 
             // Update UI for each post based on user's votes
             posts.forEach(post => {
                 const postElement = document.querySelector(`[data-post-id="${post.id}"]`);
                 if (!postElement) return;
                 
-                // Check if user has voted on this post
-                const userVote = userVoteMap[post.id];
+                if (isUserLoggedIn) {
+                    // Check if user has voted on this post
+                    const userVote = userVoteMap[post.id];
 
-                if (userVote) {
-                    // Find the corresponding vote button and mark it as voted
-                    const voteButton = postElement.querySelector(`[data-vote-type="${userVote}"]`);
-                    if (voteButton) {
-                        this.updateVoteButtonUI(voteButton, true);
-                        this.userVotes.set(`post_${post.id}`, userVote);
+                    if (userVote) {
+                        // Find the corresponding vote button and mark it as voted
+                        const voteButton = postElement.querySelector(`[data-vote-type="${userVote}"]`);
+                        if (voteButton) {
+                            this.updateVoteButtonUI(voteButton, true);
+                            this.userVotes.set(`post_${post.id}`, userVote);
+                        }
                     }
                 }
 
                 // Initialize vote counts from post data
                 const upButton = postElement.querySelector('[data-vote-type="up"]');
                 const downButton = postElement.querySelector('[data-vote-type="down"]');
-
-                console.log('Initializing vote states for post:', post.id);
-                console.log('Post data:', post);
 
                 if (upButton) {
                     const upCountSpan = upButton.querySelector('.vote-count');

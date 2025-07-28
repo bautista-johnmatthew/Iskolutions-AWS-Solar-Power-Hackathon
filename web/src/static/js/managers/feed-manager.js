@@ -2,6 +2,7 @@ import { getPosts } from '../post-api/postUtils.js';
 import { getComments } from '../comments-api/commentUtils.js';
 import { postActionsHandler } from '../post-api/post-actions-handler.js';
 import { voteHandler } from '../vote-api/vote-handler.js';
+import { sessionManager } from '../auth/session-manager-vanilla.js';
 
 /**
  * Enhanced post template loader that connects to your post utilities
@@ -41,6 +42,7 @@ class FeedManager {
 
             // Initialize vote states after all posts are rendered
             await voteHandler.initializeVoteStates(this.posts);
+            
 
         } catch (error) {
             console.error('Failed to load posts:', error);
