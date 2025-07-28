@@ -3,7 +3,7 @@ from typing import Dict, Any, List
 from botocore.exceptions import ClientError
 from services.aws_clients import AWSClients
 from models.forum_models import get_timestamp
-from profanity_checker.checker import check_text
+from services.profanity.checker import check_text
 
 
 class CommentService:
