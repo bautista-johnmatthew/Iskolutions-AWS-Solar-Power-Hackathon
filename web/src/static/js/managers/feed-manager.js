@@ -43,8 +43,6 @@ class FeedManager {
 
             // Initialize vote states after all posts are rendered
             await voteHandler.initializeVoteStates(this.posts);
-            
-
         } catch (error) {
             console.error('Failed to load posts:', error);
             this.showErrorMessage('Failed to load posts. Please try again.');
@@ -89,7 +87,27 @@ class FeedManager {
             .replace(/\{\{title\}\}/g, data.title)
             .replace(/\{\{content\}\}/g, data.content)
             .replace(/\{\{tags\}\}/g, data.tags.join(', '))
-            .replace(/\{\{timeAgo\}\}/g, data.timeAgo);
+            .replace(/\{\{timeAgo\}\}/g, data.createdAt ? this.formatTimeAgo(data.createdAt) : 'Unknown')
+            .replace(/\{\{summary\}\}/g, data.summary || '')
+            .replace(/\{\{attachments\}\}/g, this.generateAttachmentHTML(data.attachments || []));
+    }
+
+    generateAttachmentHTML(attachments) {
+        if (!attachments.length) return '<div></div>';
+
+        let html = `<div class="attachment-list"><strong>📎 Attachments:</strong><ul>`;
+        attachments.forEach(file => {
+            html += `
+            <li class="attachment-item">
+                <span class="filename">${file.name}</span>
+                <a class="download-btn" href="${file.url}" download>
+                <i class="bi bi-download"></i>
+                </a>
+            </li>`;
+        });
+        html += `</ul></div>`;
+
+        return html;
     }
 
     /**
