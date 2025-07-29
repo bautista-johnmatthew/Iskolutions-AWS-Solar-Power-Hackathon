@@ -14,9 +14,10 @@ class FeedManager {
     }
 
     async initialize() {
-        this.feedContainer = document.querySelector('.feed-container');
-        if (!this.feedContainer) {
-            console.error('Feed container not found');
+        try {
+            this.feedContainer = document.querySelector('.feed-container');
+        } catch (error) {
+            console.error('Feed container not found: ', error);
             return;
         }
 
