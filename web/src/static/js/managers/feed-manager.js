@@ -66,22 +66,47 @@ class FeedManager {
             postElement.innerHTML = filledPost;
             postElement.dataset.postId = postData.id;
 
+            // Add AI summary button
+            if (postData.summary) {
+                this.addSummaryButton(postElement, postData);
+            }
+
             // Add to feed
             this.feedContainer.appendChild(postElement.firstElementChild);
 
             // Load comments for this post
             await this.loadCommentsForPost(postData.id, postElement);
-
         } catch (error) {
             console.error('Failed to render post:', error);
         }
+    }
+
+    // Add AI summary button to post element
+    addSummaryButton(postElement, postData) {
+        const summarizeBtn = $(postElement).find(".ai-summary-btn");
+        summarizeBtn.css("display", "inline-block");
+        summarizeBtn.on("click", function () {
+            const postFooter = $(postElement).find(".post-footer");
+
+            // Prevent duplicate summary
+            if ($(postElement).find(".summary-content").length === 0) {
+                postFooter.append(`
+                    <hr>
+                    <div class="summary-content">
+                    <i class="bi bi-robot"></i>
+                    <strong>Summary:</strong>
+                    <p>${postData.summary}</p>
+                    </div>
+                `);
+            }
+        });
     }
 
     /**
      * Fill template with data
      */
     fillTemplate(template, data) {
-        return template
+        let filledTemplate = template
             .replace(/\{\{id\}\}/g, data.id)
             .replace(/\{\{username\}\}/g, data.username)
             .replace(/\{\{title\}\}/g, data.title)
@@ -90,6 +115,8 @@ class FeedManager {
             .replace(/\{\{timeAgo\}\}/g, data.createdAt ? this.formatTimeAgo(data.createdAt) : 'Unknown')
             .replace(/\{\{summary\}\}/g, data.summary || '')
             .replace(/\{\{attachments\}\}/g, this.generateAttachmentHTML(data.attachments || []));
+
+        return filledTemplate;
     }
 
     generateAttachmentHTML(attachments) {
@@ -124,13 +151,25 @@ class FeedManager {
 
                 // Render each comment
                 comments.forEach(comment => {
-                    this.renderComment(comment, commentsContainer);
+                    this.loadCommentTemplate(comment, commentsContainer);
                 });
             }
         } catch (error) {
             console.error('Failed to load comments:', error);
         }
     }
+
+    loadCommentTemplate(commentData, targetContainer) {
+        $.get("comment-template.html", function (template) {
+            const filled = template
+            .replace("{{commenter}}", commentData.username)
+            .replace("{{commentText}}", commentData.text)
+            .replace("{{timeAgo}}", commentData.timeAgo);
+
+            targetContainer.append(filled);
+        });
+    }
+    
 
     /**
      * Format timestamp to "time ago" format
