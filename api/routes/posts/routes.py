@@ -34,10 +34,10 @@ POST_ROUTES: dict = {
         "dependencies": [Depends(get_aws_clients)]
     },
     "PATCH_POST": {
-    "methods": ["PATCH"],
-    "path": "/posts/{post_id}",
-    "endpoint": handlers.patch_post,
-    "dependencies": [Depends(get_aws_clients)]
+        "methods": ["PATCH"],
+        "path": "/posts/{post_id}",
+        "endpoint": handlers.patch_post,
+        "dependencies": [Depends(get_aws_clients)]
     },
 }
 

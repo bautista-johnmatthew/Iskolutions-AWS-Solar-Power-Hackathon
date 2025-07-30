@@ -45,7 +45,7 @@ class PostCreate(PostBase):
     author_id: str
 
 class PostResponse(PostBase, TimestampMixin):
-    post_id: str
+    id: str
     author_id: str
     upvotes: int = 0
     downvotes: int = 0
