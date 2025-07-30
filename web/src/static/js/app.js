@@ -4,11 +4,18 @@ import { feedManager } from './managers/feed-manager.js';
 $(document).ready(function () {
     console.log("User session:", sessionManager.getUser());
     console.log("App loaded successfully");
+
+    // Initalize default template
     postDataArray.forEach(post => loadPostTemplate(post));
 
     if (feedManager) {
-          feedManager.initialize();
-      }
+        feedManager.initialize();
+    }
+
+    $('#logoutBtn').on('click', function () {
+        sessionManager.logout();
+        window.location.href = '/';
+    });
 });
 
 // Toggle password visibility

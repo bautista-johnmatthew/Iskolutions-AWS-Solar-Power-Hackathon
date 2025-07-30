@@ -3,7 +3,6 @@ from services.aws_clients import AWSClients
 from models.forum_models import PostModel, post_pk, get_timestamp
 from services.profanity.checker import check_text
 
-
 class PostService:
     def __init__(self, aws_clients: AWSClients):
         self.table = aws_clients.table

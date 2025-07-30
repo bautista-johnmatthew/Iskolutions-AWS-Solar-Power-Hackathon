@@ -14,6 +14,7 @@ export function formatPost(rawPost) {
 		content: rawPost.content,
 		tags: rawPost.tags || [],
 		attachments: rawPost.attachments || [],
+        summary: rawPost.summary || "",
 		isAnonymous: rawPost.is_anonymous || false,
 		createdAt: rawPost.created_at || null,
 		updatedAt: rawPost.updated_at || null,

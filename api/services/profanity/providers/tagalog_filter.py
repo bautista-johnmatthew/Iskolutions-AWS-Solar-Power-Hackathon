@@ -10,6 +10,7 @@ class TagalogFilter:
             "data",
             "tagalog_bad_words.json"
         )
+  
         with open(data_path, "r", encoding="utf-8") as f:
             self.badwords = json.load(f)
 
