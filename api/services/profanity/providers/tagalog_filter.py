@@ -17,7 +17,7 @@ class TagalogFilter:
         # Sort by length for multi-word priority
         self.badwords.sort(key=len, reverse=True)
         self.pattern = re.compile(
-            r"(" + "|".join(map(re.escape,self.badwords)) + r")",
+            r"(" + "|".join(map(re.escape, self.badwords)) + r")",
             re.IGNORECASE
         )
 
