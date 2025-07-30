@@ -94,8 +94,6 @@ class ProfileUtils {
     async getCurrentUserProfile() {
         const currentUser = this.sessionManager.getUser();
 
-        console.log(currentUser);
-
         if (!currentUser) {
             throw new Error('No authenticated user found');
         }
