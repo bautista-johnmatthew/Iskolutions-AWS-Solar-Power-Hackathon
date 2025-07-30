@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick ProfileUtils Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 14px;
+        }
+        button:hover { background: #0056b3; }
+        button.success { background: #28a745; }
+        button.danger { background: #dc3545; }
+        #output {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status.logged-in { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status.logged-out { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Quick ProfileUtils Test</h1>
+
+        <div id="status" class="status logged-out">
+            Status: Not logged in
+        </div>
+
+        <div class="test-controls">
+            <h3>🔑 Authentication</h3>
+            <button onclick="testRealLogin()">Real Login (Matt)</button>
+            <button onclick="testMockLogin()">Mock Login</button>
+            <button onclick="testLogout()" class="danger">Logout</button>
+        </div>
+
+        <div class="test-controls">
+            <h3>🧪 Profile Testing</h3>
+            <button onclick="testCurrentProfile()">Get Current Profile</button>
+            <button onclick="testUserStats()">Get User Statistics</button>
+            <button onclick="testUserPosts()">Get User Posts</button>
+        </div>
+
+        <div class="test-controls">
+            <h3>🚀 Full Testing</h3>
+            <button onclick="runQuickTest()" class="success">Quick Test Suite</button>
+            <button onclick="runFullTest()" class="success">Full Test Suite</button>
+            <button onclick="clearOutput()">Clear Output</button>
+        </div>
+
+        <div id="output"></div>
+    </div>
+
+    <!-- Import your modules -->
+    <script type="module" src="./test-profileUtils.js"></script>
+
+    <script>
+        let outputDiv;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            outputDiv = document.getElementById('output');
+            updateStatus();
+            log('🎯 Quick ProfileUtils Test Ready!');
+            log('💡 Make sure your backend server is running');
+            log('🔑 Test credentials: Matt / Password123#');
+            log('');
+        });
+
+        function log(message) {
+            if (outputDiv) {
+                outputDiv.textContent += message + '\n';
+                outputDiv.scrollTop = outputDiv.scrollHeight;
+            }
+            console.log(message);
+        }
+
+        function clearOutput() {
+            if (outputDiv) {
+                outputDiv.textContent = '';
+            }
+        }
+
+        function updateStatus() {
+            const statusDiv = document.getElementById('status');
+            try {
+                const status = window.testProfileUtils?.getCurrentStatus() || 'Not logged in';
+                statusDiv.textContent = `Status: ${status}`;
+                statusDiv.className = `status ${status.includes('Logged in') ? 'logged-in' : 'logged-out'}`;
+            } catch (error) {
+                statusDiv.textContent = 'Status: Error checking status';
+                statusDiv.className = 'status logged-out';
+            }
+        }
+
+        // Test functions
+        async function testRealLogin() {
+            log('🔐 Testing real login...');
+            try {
+                await window.testProfileUtils.realLogin('user1');
+                log('✅ Real login successful!');
+                updateStatus();
+            } catch (error) {
+                log(`❌ Real login failed: ${error.message}`);
+            }
+        }
+
+        async function testMockLogin() {
+            log('🎭 Testing mock login...');
+            try {
+                await window.testProfileUtils.mockLogin('user1');
+                log('✅ Mock login successful!');
+                updateStatus();
+            } catch (error) {
+                log(`❌ Mock login failed: ${error.message}`);
+            }
+        }
+
+        async function testLogout() {
+            log('🚪 Testing logout...');
+            try {
+                await window.testProfileUtils.realLogout();
+                log('✅ Logout successful!');
+                updateStatus();
+            } catch (error) {
+                log(`❌ Logout failed: ${error.message}`);
+            }
+        }
+
+        async function testCurrentProfile() {
+            log('👤 Testing getCurrentProfile...');
+            try {
+                const profile = await window.testProfileUtils.profileUtils.getCurrentUserProfile();
+                log(`✅ Profile: ${profile.username} (${profile.email})`);
+                log(`   Posts: ${profile.postsCount}, Comments: ${profile.commentsCount}, Reputation: ${profile.reputationScore}`);
+            } catch (error) {
+                log(`❌ Profile test failed: ${error.message}`);
+            }
+        }
+
+        async function testUserStats() {
+            log('📊 Testing user statistics...');
+            try {
+                const user = window.testProfileUtils.sessionManager.getUser();
+                if (!user) {
+                    log('❌ No user logged in');
+                    return;
+                }
+                const stats = await window.testProfileUtils.profileUtils.getUserStatistics(user.id);
+                log(`✅ Statistics: ${JSON.stringify(stats, null, 2)}`);
+            } catch (error) {
+                log(`❌ Stats test failed: ${error.message}`);
+            }
+        }
+
+        async function testUserPosts() {
+            log('📝 Testing user posts...');
+            try {
+                const user = window.testProfileUtils.sessionManager.getUser();
+                if (!user) {
+                    log('❌ No user logged in');
+                    return;
+                }
+                const posts = await window.testProfileUtils.profileUtils.getUserPosts(user.id);
+                log(`✅ Found ${posts.length} posts`);
+                if (posts.length > 0) {
+                    log(`   Sample: "${posts[0].title}"`);
+                }
+            } catch (error) {
+                log(`❌ Posts test failed: ${error.message}`);
+            }
+        }
+
+        async function runQuickTest() {
+            log('🚀 Running quick test suite...');
+            log('='.repeat(40));
+
+            // Quick login test
+            await testRealLogin();
+
+            // Quick profile test
+            if (window.testProfileUtils.sessionManager.isLoggedIn()) {
+                await testCurrentProfile();
+                await testUserStats();
+            }
+
+            log('='.repeat(40));
+            log('✅ Quick test completed!');
+        }
+
+        async function runFullTest() {
+            log('🚀 Running full test suite...');
+            clearOutput();
+            try {
+                await window.testProfileUtils.runFullTestSuite();
+                updateStatus();
+            } catch (error) {
+                log(`❌ Full test failed: ${error.message}`);
+            }
+        }
+
+        // Auto-update status every 5 seconds
+        setInterval(updateStatus, 5000);
+    </script>
+</body>
+</html>
