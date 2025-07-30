@@ -193,7 +193,7 @@
                     log('❌ No user logged in');
                     return;
                 }
-                const posts = await window.testProfileUtils.profileUtils.getUserPosts(user.id);
+                const posts = await window.testProfileUtils.profileUtils.getUserPosts(user.name);
                 log(`✅ Found ${posts.length} posts`);
                 if (posts.length > 0) {
                     log(`   Sample: "${posts[0].title}"`);
