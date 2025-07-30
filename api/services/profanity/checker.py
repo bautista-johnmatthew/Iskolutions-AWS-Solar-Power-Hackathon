@@ -22,5 +22,3 @@ def check_text(text: str) -> dict:
         # "english_hits": english_hits,
         "tagalog_hits": tagalog_hits
     }
-
-    pass
