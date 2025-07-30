@@ -7,7 +7,7 @@ from typing import Dict, Any, Optional
 # =========================
 # |     AUTH HANDLERS     |
 # =========================
-async def register(user_data: UserCreate, 
+async def register(user_data: UserCreate,
                   aws_clients: AWSClients = Depends(get_aws_clients)):
     service = AuthService(aws_clients)
     try:
@@ -25,7 +25,7 @@ async def register(user_data: UserCreate,
     except Exception as e:
         raise HTTPException(status_code=500, detail="Registration failed")
 
-async def login(data: Dict[str, Any], 
+async def login(data: Dict[str, Any],
                aws_clients: AWSClients = Depends(get_aws_clients)):
     service = AuthService(aws_clients)
     try:
@@ -73,10 +73,10 @@ async def logout(authorization: Optional[str] = Header(None),
         token = None
         if authorization and authorization.startswith("Bearer "):
             token = authorization[7:]  # Remove "Bearer " prefix
-        
+
         if token:
             result = service.logout(token)
-        
+
         return {
             "success": True,
             "message": "Logged out successfully"
@@ -95,10 +95,10 @@ async def verify_token(authorization: Optional[str] = Header(None),
         token = None
         if authorization and authorization.startswith("Bearer "):
             token = authorization[7:]  # Remove "Bearer " prefix
-        
+
         if not token:
             raise HTTPException(status_code=401, detail="No token provided")
-            
+
         result = service.verify_token_and_get_user(token)
         if result:
             return result
