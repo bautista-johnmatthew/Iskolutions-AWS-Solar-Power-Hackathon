@@ -1,7 +1,7 @@
 from botocore.exceptions import ClientError
 from services.aws_clients import AWSClients
 from models.forum_models import PostModel, post_pk, get_timestamp
-from services.profanity_checker.checker import check_text
+from services.profanity.checker import check_text
 
 
 class PostService:
