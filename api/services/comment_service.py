@@ -17,7 +17,7 @@ class CommentService:
         if content_check["has_profanity"]:
             raise ValueError({
                 "error": "Profanity detected in comment",
-                "hits": content_check.get("english_hits", []) 
+                "hits": content_check.get("english_hits", [])
                 + content_check.get("tagalog_hits", [])
             })
 
@@ -56,7 +56,7 @@ class CommentService:
         if content_check["has_profanity"]:
             raise ValueError({
                 "error": "Profanity in updated comment",
-                "hits": content_check.get("english_hits", []) 
+                "hits": content_check.get("english_hits", [])
                 + content_check.get("tagalog_hits", [])
             })
 
@@ -77,7 +77,7 @@ class CommentService:
             if content_check["has_profanity"]:
                 raise ValueError({
                     "error": "Profanity in patched comment",
-                    "hits": content_check.get("english_hits", []) 
+                    "hits": content_check.get("english_hits", [])
                     + content_check.get("tagalog_hits", [])
                 })
 
