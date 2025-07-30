@@ -159,7 +159,6 @@ class ProfileUtils {
             }
 
             const allPosts = await response.json();
-            console.log(allPosts);
 
             // Filter posts by author_id
             const userPosts = allPosts.filter(post => post.author_id === userId);
