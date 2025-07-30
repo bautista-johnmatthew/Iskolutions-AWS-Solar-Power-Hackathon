@@ -17,17 +17,17 @@ class PostService:
         if title_check["has_profanity"] or content_check["has_profanity"]:
             raise ValueError({
                 "error": "Profanity detected in post creation",
-                "title_hits": title_check.get("english_hits", []) + 
+                "title_hits": title_check.get("english_hits", []) +
                 title_check.get("tagalog_hits", []),
-                "content_hits": content_check.get("english_hits", []) + 
+                "content_hits": content_check.get("english_hits", []) +
                 content_check.get("tagalog_hits", [])
             })
 
-        post = PostModel(author_id, title, content, tags, 
+        post = PostModel(author_id, title, content, tags,
                          attachments, is_anonymous)
         try:
             self.table.put_item(Item=post.to_item())
-            return {"message": "Post created successfully", 
+            return {"message": "Post created successfully",
                     "post_id": post.post_id}
         except ClientError as e:
             raise RuntimeError(f"Error creating post: {e}")
@@ -62,9 +62,9 @@ class PostService:
         if title_check["has_profanity"] or content_check["has_profanity"]:
             raise ValueError({
                 "error": "Profanity detected in update",
-                "title_hits": title_check.get("english_hits", []) 
+                "title_hits": title_check.get("english_hits", [])
                 + title_check.get("tagalog_hits", []),
-                "content_hits": content_check.get("english_hits", []) 
+                "content_hits": content_check.get("english_hits", [])
                 + content_check.get("tagalog_hits", [])
             })
 
@@ -98,7 +98,7 @@ class PostService:
             if title_check["has_profanity"]:
                 raise ValueError({
                     "error": "Profanity in title",
-                    "hits": title_check.get("english_hits", []) 
+                    "hits": title_check.get("english_hits", [])
                     + title_check.get("tagalog_hits", [])
                 })
 
@@ -107,7 +107,7 @@ class PostService:
             if content_check["has_profanity"]:
                 raise ValueError({
                     "error": "Profanity in content",
-                    "hits": content_check.get("english_hits", []) 
+                    "hits": content_check.get("english_hits", [])
                     + content_check.get("tagalog_hits", [])
                 })
 
@@ -136,7 +136,7 @@ class PostService:
             return {"error": "Post not found"}
 
         try:
-            self.table.delete_item(Key={"PK": post_pk(post_id), 
+            self.table.delete_item(Key={"PK": post_pk(post_id),
                                         "SK": "METADATA"})
             return {"message": "Post deleted successfully"}
         except ClientError as e:
