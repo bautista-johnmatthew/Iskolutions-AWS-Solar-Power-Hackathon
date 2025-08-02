@@ -1,6 +1,8 @@
 import { getPosts } from '../post-api/postUtils.js';
 import { getComments } from '../comments-api/commentUtils.js';
 import { voteHandler } from '../vote-api/vote-handler.js';
+import { ProfileUtils } from '../profile-api/profileUtils.js';
+import { sessionManager } from './session-manager.js';
 
 /**
  * Enhanced post template loader that connects to your post utilities
@@ -20,13 +22,12 @@ class FeedManager {
         }
 
         await this.loadPosts();
-        // Post actions handler is automatically initialized when imported
     }
 
     /**
      * Load posts from API using your postUtils
      */
-    async loadPosts(isAuthor = false) {
+    async loadPosts() {
         try {
             // Use your getPosts utility function
             this.posts = await getPosts();
@@ -36,7 +37,7 @@ class FeedManager {
 
             // Render all posts (using for loop to handle async properly)
             for (const post of this.posts) {
-                await this.renderPost(post, isAuthor);
+                await this.renderPost(post);
             }
 
             // Initialize vote states after all posts are rendered
@@ -44,6 +45,28 @@ class FeedManager {
         } catch (error) {
             console.error('Failed to load posts:', error);
             this.showErrorMessage('Failed to load posts. Please try again.');
+        }
+    }
+
+    // Load user posts for profile page
+    async loadUserPosts() {
+        try {
+            this.posts = ProfileUtils.getUserPosts(sessionManager.getUserId());
+            this.feedContainer = document.querySelector('.user-feed-container');
+
+            // Clear existing posts and render new ones
+            this.feedContainer.innerHTML = '';
+
+            // Render all posts (using for loop to handle async properly)
+            for (const post of this.posts) {
+                await this.renderPost(post, true);
+            }
+
+            // Initialize vote states after all posts are rendered
+            await voteHandler.initializeVoteStates(this.posts);
+        } catch (error) {
+            console.error('Failed to load user posts:', error);
+            this.showErrorMessage('Failed to load your posts. Please try again.');
         }
     }
 
