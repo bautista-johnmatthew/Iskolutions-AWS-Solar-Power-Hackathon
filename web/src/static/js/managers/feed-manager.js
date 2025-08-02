@@ -51,7 +51,7 @@ class FeedManager {
     // Load user posts for profile page
     async loadUserPosts() {
         try {
-            this.posts = ProfileUtils.getUserPosts(sessionManager.getUserId());
+            this.posts = await ProfileUtils.getUserPosts(sessionManager.getUserId());
             this.feedContainer = document.querySelector('.user-feed-container');
 
             // Clear existing posts and render new ones
