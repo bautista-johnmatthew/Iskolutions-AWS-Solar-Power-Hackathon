@@ -94,27 +94,12 @@ export async function getUserPostVotes(postIds) {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const data = await response.json();
 
         return data;
     } catch (error) {
         console.error('Error getting user votes:', error);
-        return {};
-    }
-}
-
-/**
- * Get user's current votes for comments
- * @param {Array} commentIds - Array of comment IDs to check votes for
- * @returns {Promise<Object>} Object mapping comment IDs to vote types
- */
-export async function getUserCommentVotes(commentIds) {
-    try {
-        // Similar to above - placeholder for actual implementation
-        return {};
-    } catch (error) {
-        console.error('Error getting user comment votes:', error);
         return {};
     }
 }
@@ -126,7 +111,7 @@ export async function getUserCommentVotes(commentIds) {
  */
 export function formatUserVotes(userVotes) {
     const voteMap = {};
-    
+
     if (Array.isArray(userVotes)) {
         userVotes.forEach(vote => {
             if (vote.PK && vote.PK.startsWith('POST#')) {
@@ -136,7 +121,7 @@ export function formatUserVotes(userVotes) {
             }
         });
     }
-    
+
     console.log('Formatted user votes:', voteMap);
     return voteMap;
 }

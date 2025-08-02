@@ -13,7 +13,7 @@ $(document).ready(function () {
     }
 
     $('#logoutBtn').on('click', function () {
-        sessionManager.logout();
+        sessionManager.clearSession();
         window.location.href = '/';
     });
 });
