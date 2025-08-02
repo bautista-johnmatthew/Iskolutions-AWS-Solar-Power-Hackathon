@@ -14,7 +14,7 @@ def extract_text_from_pdf(pdf_path):
     except Exception as e:
         print(f"Error opening PDF file: {e}")
         return None
-    
+
     return text
 
 def iterate_pages(pdf_reader):
@@ -43,20 +43,20 @@ def summarize_pdf(pdf_path):
     pdf_text = extract_text_from_pdf(pdf_path)
     if not pdf_text:
         return "Could not extract text from PDF"
-    
+
     # Truncate text if too long
     if len(pdf_text) > MAX_CHARS:
         pdf_text = pdf_text[:MAX_CHARS] + "..."
-    
+
     message = [
-        {   
+        {
             "role": "user",
-            "content": f"Please summarize the following document" 
+            "content": f"Please summarize the following document"
                     f"in a concise and bulleted manner and "
                     f"a brief description of what it is about:\n\n{pdf_text}"
         },
     ]
-    
+
     try:
         completion = client.chat.completions.create(
             model=API_MODEL,
