@@ -2,7 +2,7 @@ from openai import OpenAI
 from PyPDF2 import PdfReader
 import os
 
-MAX_CHARS = 20000
+MAX_CHARS = 20_000
 API_MODEL = "microsoft/mai-ds-r1:free"
 
 def extract_text_from_pdf(pdf_path):
