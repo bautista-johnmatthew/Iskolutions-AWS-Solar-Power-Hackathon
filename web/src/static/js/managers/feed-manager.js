@@ -2,7 +2,7 @@ import { getPosts } from '../post-api/postUtils.js';
 import { getComments } from '../comments-api/commentUtils.js';
 import { postActionsHandler } from '../post-api/post-actions-handler.js';
 import { voteHandler } from '../vote-api/vote-handler.js';
-import { sessionManager } from '../auth/session-manager-vanilla.js';
+import { sessionManager } from './session-manager.js';
 
 /**
  * Enhanced post template loader that connects to your post utilities

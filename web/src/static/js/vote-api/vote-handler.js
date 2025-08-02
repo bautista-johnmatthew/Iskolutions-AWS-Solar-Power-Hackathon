@@ -1,4 +1,4 @@
-import { sessionManager } from '../auth/session-manager-vanilla.js';
+import { sessionManager } from '../managers/session-manager.js';
 import { togglePostVote, getUserPostVotes, formatUserVotes } from './voteUtils.js';
 
 /**
