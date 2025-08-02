@@ -66,16 +66,16 @@ class FeedManager {
             postElement.innerHTML = filledPost;
             postElement.dataset.postId = postData.id;
 
-            // Add AI summary button
-            if (postData.summary) {
-                this.addSummaryButton(postElement, postData);
+            this.feedContainer.appendChild(postElement.firstElementChild);
+            const actualPostElement = this.feedContainer.lastElementChild;
+
+            // Add AI summary button after element is in DOM
+            if (postData.attachments && postData.attachments.length > 0) {
+                this.addSummaryButton(actualPostElement, postData);
             }
 
-            // Add to feed
-            this.feedContainer.appendChild(postElement.firstElementChild);
-
             // Load comments for this post
-            await this.loadCommentsForPost(postData.id, postElement);
+            await this.loadCommentsForPost(postData.id, actualPostElement);
         } catch (error) {
             console.error('Failed to render post:', error);
         }
@@ -86,16 +86,18 @@ class FeedManager {
         const summarizeBtn = $(postElement).find(".ai-summary-btn");
         summarizeBtn.css("display", "inline-block");
         summarizeBtn.on("click", function () {
-            const postFooter = $(postElement).find(".post-footer");
-
-            // Prevent duplicate summary
-            if ($(postElement).find(".summary-content").length === 0) {
-                postFooter.append(`
+            console.log("Summarizing post:", postData.id);
+            const summaryContainer = $(postElement).find(".ai-summary-container");
+            
+            // Prevent duplicate summary - check if summary content already exists
+            // Check if there's any actual content (not just whitespace/comments)
+            if (summaryContainer.children().length === 0) {
+                summaryContainer.html(`
                     <hr>
                     <div class="summary-content">
-                    <i class="bi bi-robot"></i>
-                    <strong>Summary:</strong>
-                    <p>${postData.summary}</p>
+                        <i class="bi bi-robot"></i>
+                        <strong>Summary: </strong>
+                        <p>${postData.summary || 'No summary available'}</p>
                     </div>
                 `);
             }
@@ -120,14 +122,14 @@ class FeedManager {
     }
 
     generateAttachmentHTML(attachments) {
-        if (!attachments.length) return '<div></div>';
-
+        if (!attachments.length) return '<div></div>';        
         let html = `<div class="attachment-list"><strong>📎 Attachments:</strong><ul>`;
         attachments.forEach(file => {
+            const fileName = file.substring(file.lastIndexOf('/') + 1);
             html += `
             <li class="attachment-item">
-                <span class="filename">${file.name}</span>
-                <a class="download-btn" href="${file.url}" download>
+                <span class="filename">${fileName}</span>
+                <a class="download-btn" href="${file}" download>
                 <i class="bi bi-download"></i>
                 </a>
             </li>`;
