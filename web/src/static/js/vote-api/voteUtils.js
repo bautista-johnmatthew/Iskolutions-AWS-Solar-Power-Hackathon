@@ -105,28 +105,13 @@ export async function getUserPostVotes(postIds) {
 }
 
 /**
- * Get user's current votes for comments
- * @param {Array} commentIds - Array of comment IDs to check votes for
- * @returns {Promise<Object>} Object mapping comment IDs to vote types
- */
-export async function getUserCommentVotes(commentIds) {
-    try {
-        // Similar to above - placeholder for actual implementation
-        return {};
-    } catch (error) {
-        console.error('Error getting user comment votes:', error);
-        return {};
-    }
-}
-
-/**
  * Format user vote data returned from API
  * @param {Array} userVotes - Array of vote objects from the API
  * @returns {Object} Object mapping post IDs to vote types
  */
 export function formatUserVotes(userVotes) {
     const voteMap = {};
-    
+
     if (Array.isArray(userVotes)) {
         userVotes.forEach(vote => {
             if (vote.PK && vote.PK.startsWith('POST#')) {
@@ -136,7 +121,7 @@ export function formatUserVotes(userVotes) {
             }
         });
     }
-    
+
     console.log('Formatted user votes:', voteMap);
     return voteMap;
 }
