@@ -170,7 +170,7 @@ class FeedManager {
             targetContainer.append(filled);
         });
     }
-    
+
 
     /**
      * Format timestamp to "time ago" format
