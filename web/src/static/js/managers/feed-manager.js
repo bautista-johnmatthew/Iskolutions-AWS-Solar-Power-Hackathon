@@ -1,8 +1,6 @@
 import { getPosts } from '../post-api/postUtils.js';
 import { getComments } from '../comments-api/commentUtils.js';
-import { postActionsHandler } from '../post-api/post-actions-handler.js';
 import { voteHandler } from '../vote-api/vote-handler.js';
-import { sessionManager } from './session-manager.js';
 
 /**
  * Enhanced post template loader that connects to your post utilities
@@ -28,7 +26,7 @@ class FeedManager {
     /**
      * Load posts from API using your postUtils
      */
-    async loadPosts() {
+    async loadPosts(isAuthor = false) {
         try {
             // Use your getPosts utility function
             this.posts = await getPosts();
@@ -38,7 +36,7 @@ class FeedManager {
 
             // Render all posts (using for loop to handle async properly)
             for (const post of this.posts) {
-                await this.renderPost(post);
+                await this.renderPost(post, isAuthor);
             }
 
             // Initialize vote states after all posts are rendered
@@ -52,7 +50,7 @@ class FeedManager {
     /**
      * Render a single post using the template
      */
-    async renderPost(postData) {
+    async renderPost(postData, isAuthor = false) {
         try {
             // Load the template
             const response = await fetch('./post-template.html');
@@ -72,6 +70,11 @@ class FeedManager {
             // Add AI summary button after element is in DOM
             if (postData.attachments && postData.attachments.length > 0) {
                 this.addSummaryButton(actualPostElement, postData);
+            }
+
+            // Hide edit and delete buttons for non-authors
+            if (!isAuthor) {
+                $(actualPostElement).find(".post-actions").hide();
             }
 
             // Load comments for this post
