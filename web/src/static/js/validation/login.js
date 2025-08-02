@@ -1,4 +1,4 @@
-import { sessionManager } from '../auth/session-manager-vanilla.js';
+import { sessionManager } from '../managers/session-manager.js';
 import { authService } from '../auth/auth-service.js';
 import { validateField } from './schema.js';
 import { addErrorMessage, clearErrorMessage } from '../utils/error-handling.js';

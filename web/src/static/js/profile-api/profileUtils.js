@@ -1,5 +1,5 @@
 import { BASE_API_URL } from "../utils/base-api-url.js";
-import { sessionManager } from "../auth/session-manager-vanilla.js";
+import { sessionManager } from "../managers/session-manager.js";
 
 /**
  * ProfileUtils - A utility class for retrieving and managing user profile data

@@ -1,5 +1,5 @@
 import { BASE_API_URL } from "../utils/base-api-url.js";
-import { sessionManager } from "../auth/session-manager-vanilla.js";
+import { sessionManager } from "../managers/session-manager.js";
 /**
  * Format a raw post object from the backend into a frontend-friendly structure.
  * Useful for rendering posts in UI components.
