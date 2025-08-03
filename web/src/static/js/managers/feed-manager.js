@@ -1,8 +1,8 @@
 import { getPosts } from '../post-api/postUtils.js';
 import { getComments } from '../comments-api/commentUtils.js';
-import { postActionsHandler } from '../post-api/post-actions-handler.js';
 import { voteHandler } from '../vote-api/vote-handler.js';
-import { sessionManager } from '../auth/session-manager-vanilla.js';
+import { ProfileUtils } from '../profile-api/profileUtils.js';
+import { sessionManager } from './session-manager.js';
 
 /**
  * Enhanced post template loader that connects to your post utilities
@@ -22,7 +22,6 @@ class FeedManager {
         }
 
         await this.loadPosts();
-        // Post actions handler is automatically initialized when imported
     }
 
     /**
@@ -49,10 +48,32 @@ class FeedManager {
         }
     }
 
+    // Load user posts for profile page
+    async loadUserPosts() {
+        try {
+            this.posts = await ProfileUtils.getUserPosts(sessionManager.getUserId());
+            this.feedContainer = document.querySelector('.user-feed-container');
+
+            // Clear existing posts and render new ones
+            this.feedContainer.innerHTML = '';
+
+            // Render all posts (using for loop to handle async properly)
+            for (const post of this.posts) {
+                await this.renderPost(post, true);
+            }
+
+            // Initialize vote states after all posts are rendered
+            await voteHandler.initializeVoteStates(this.posts);
+        } catch (error) {
+            console.error('Failed to load user posts:', error);
+            this.showErrorMessage('Failed to load your posts. Please try again.');
+        }
+    }
+
     /**
      * Render a single post using the template
      */
-    async renderPost(postData) {
+    async renderPost(postData, isAuthor = false) {
         try {
             // Load the template
             const response = await fetch('./post-template.html');
@@ -66,16 +87,21 @@ class FeedManager {
             postElement.innerHTML = filledPost;
             postElement.dataset.postId = postData.id;
 
-            // Add AI summary button
-            if (postData.summary) {
-                this.addSummaryButton(postElement, postData);
+            this.feedContainer.appendChild(postElement.firstElementChild);
+            const actualPostElement = this.feedContainer.lastElementChild;
+
+            // Add AI summary button after element is in DOM
+            if (postData.attachments && postData.attachments.length > 0) {
+                this.addSummaryButton(actualPostElement, postData);
             }
 
-            // Add to feed
-            this.feedContainer.appendChild(postElement.firstElementChild);
+            // Hide edit and delete buttons for non-authors
+            if (!isAuthor) {
+                $(actualPostElement).find(".post-actions").hide();
+            }
 
             // Load comments for this post
-            await this.loadCommentsForPost(postData.id, postElement);
+            await this.loadCommentsForPost(postData.id, actualPostElement);
         } catch (error) {
             console.error('Failed to render post:', error);
         }
@@ -86,16 +112,18 @@ class FeedManager {
         const summarizeBtn = $(postElement).find(".ai-summary-btn");
         summarizeBtn.css("display", "inline-block");
         summarizeBtn.on("click", function () {
-            const postFooter = $(postElement).find(".post-footer");
-
-            // Prevent duplicate summary
-            if ($(postElement).find(".summary-content").length === 0) {
-                postFooter.append(`
+            console.log("Summarizing post:", postData.id);
+            const summaryContainer = $(postElement).find(".ai-summary-container");
+            
+            // Prevent duplicate summary - check if summary content already exists
+            // Check if there's any actual content (not just whitespace/comments)
+            if (summaryContainer.children().length === 0) {
+                summaryContainer.html(`
                     <hr>
                     <div class="summary-content">
-                    <i class="bi bi-robot"></i>
-                    <strong>Summary:</strong>
-                    <p>${postData.summary}</p>
+                        <i class="bi bi-robot"></i>
+                        <strong>Summary: </strong>
+                        <p>${postData.summary || 'No summary available'}</p>
                     </div>
                 `);
             }
@@ -120,8 +148,7 @@ class FeedManager {
     }
 
     generateAttachmentHTML(attachments) {
-        if (!attachments.length) return '<div></div>';
-
+        if (!attachments.length) return '<div></div>';        
         let html = `<div class="attachment-list"><strong>📎 Attachments:</strong><ul>`;
         attachments.forEach(file => {
             const fileName = file.substring(file.lastIndexOf('/') + 1);

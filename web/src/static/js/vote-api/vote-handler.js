@@ -1,5 +1,7 @@
-import { sessionManager } from '../auth/session-manager-vanilla.js';
+
+import { sessionManager } from '../managers/session-manager.js';
 import { togglePostVote, getUserPostVotes, formatUserVotes, removePostVote, votePost } from './voteUtils.js';
+
 
 /**
  * Vote Handler - Manages vote button interactions and UI updates
