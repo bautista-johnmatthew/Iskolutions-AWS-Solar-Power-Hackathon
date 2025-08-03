@@ -2,6 +2,8 @@ from botocore.exceptions import ClientError
 from services.aws_clients import AWSClients
 from models.forum_models import PostModel, post_pk, get_timestamp
 from services.profanity.checker import check_text
+from services.openrouter_api import summarize_pdf
+from asyncio import create_task
 
 class PostService:
     def __init__(self, aws_clients: AWSClients):
@@ -30,7 +32,24 @@ class PostService:
                     "post_id": post.post_id}
         except ClientError as e:
             raise RuntimeError(f"Error creating post: {e}")
+        
+    def add_summary(self, post_id: str, attachments: list):
+        if not attachments:
+            return {"message": "No attachments to summarize"}
+        
+        create_task(self.process_summary(post_id, attachments))
 
+    async def process_summary(self, post_id, attachments):
+        """ Generate summary for the post attachments asynchronously """
+        try:
+            summary = await summarize_pdf(attachments)
+            await self.patch_post(
+                post_id=post_id,
+                fields={"summary": summary}
+            )
+        except Exception as e:
+            print(f"Error generating summary: {str(e)}")
+    
     def get_posts(self):
         try:
             response = self.table.scan(
