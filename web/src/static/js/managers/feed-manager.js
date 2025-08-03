@@ -108,7 +108,7 @@ class FeedManager {
     fillTemplate(template, data) {
         let filledTemplate = template
             .replace(/\{\{id\}\}/g, data.id)
-            .replace(/\{\{username\}\}/g, data.username)
+            .replace(/\{\{username\}\}/g, data.author)
             .replace(/\{\{title\}\}/g, data.title)
             .replace(/\{\{content\}\}/g, data.content)
             .replace(/\{\{tags\}\}/g, data.tags.join(', '))
@@ -124,10 +124,11 @@ class FeedManager {
 
         let html = `<div class="attachment-list"><strong>📎 Attachments:</strong><ul>`;
         attachments.forEach(file => {
+            const fileName = file.substring(file.lastIndexOf('/') + 1);
             html += `
             <li class="attachment-item">
-                <span class="filename">${file.name}</span>
-                <a class="download-btn" href="${file.url}" download>
+                <span class="filename">${fileName}</span>
+                <a class="download-btn" href="${file}" download>
                 <i class="bi bi-download"></i>
                 </a>
             </li>`;
@@ -169,7 +170,7 @@ class FeedManager {
             targetContainer.append(filled);
         });
     }
-    
+
 
     /**
      * Format timestamp to "time ago" format
