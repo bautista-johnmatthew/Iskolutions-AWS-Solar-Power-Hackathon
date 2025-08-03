@@ -1,5 +1,7 @@
+
 import { sessionManager } from '../managers/session-manager.js';
-import { togglePostVote, getUserPostVotes, formatUserVotes } from './voteUtils.js';
+import { togglePostVote, getUserPostVotes, formatUserVotes, removePostVote, votePost } from './voteUtils.js';
+
 
 /**
  * Vote Handler - Manages vote button interactions and UI updates
@@ -43,27 +45,30 @@ class VoteHandler {
         const isCurrentlyVoted = button.classList.contains('voted');
 
         try {
-            const result = await togglePostVote(postId, voteType, isCurrentlyVoted);
-
-            // Update UI based on vote result
-            this.updateVoteButtonUI(button, !isCurrentlyVoted);
-            this.updateVoteCount(button, !isCurrentlyVoted);
-
-            // Track user's vote state
             const voteKey = `post_${postId}`;
+
             if (!isCurrentlyVoted) {
+                // First remove any opposite vote (important: do this before adding new vote)
+                await this.removeOppositeVote(postId, postElement, voteType);
+
+                // Then add the new vote
+                await votePost(postId, voteType, sessionManager.getUserId());
                 this.userVotes.set(voteKey, voteType);
-                // Remove opposite vote if exists
-                this.removeOppositeVote(postElement, voteType);
+
+                // Update UI after successful backend operations
+                this.updateVoteButtonUI(button, true);
+                this.updateVoteCount(button, true);
             } else {
+                // Remove current vote
+                await removePostVote(postId, voteType, sessionManager.getUserId());
                 this.userVotes.delete(voteKey);
+
+                // Update UI after successful backend operation
+                this.updateVoteButtonUI(button, false);
+                this.updateVoteCount(button, false);
             }
-
-            console.log('Post vote updated:', result);
-
         } catch (error) {
-            // Revert UI changes on error
-            this.updateVoteButtonUI(button, isCurrentlyVoted);
+            // Revert UI changes on error - no changes were made to UI yet, so just log
             console.error('Failed to update post vote:', error);
             this.showErrorMessage('Failed to update vote. Please try again.');
         }
@@ -97,13 +102,21 @@ class VoteHandler {
         }
     }
 
-    removeOppositeVote(container, voteType) {
+    async removeOppositeVote(postId, container, voteType) {
         const oppositeType = voteType === 'up' ? 'down' : 'up';
         const oppositeButton = container.querySelector(`[data-vote-type="${oppositeType}"]`);
 
         if (oppositeButton && oppositeButton.classList.contains('voted')) {
+            // Remove from backend first
+            await removePostVote(postId, oppositeType, sessionManager.getUserId());
+
+            // Update UI after successful backend operation
             this.updateVoteButtonUI(oppositeButton, false);
             this.updateVoteCount(oppositeButton, false);
+
+            // Update local tracking
+            const voteKey = `post_${postId}`;
+            this.userVotes.delete(voteKey);
         }
     }
 
@@ -150,7 +163,7 @@ class VoteHandler {
             posts.forEach(post => {
                 const postElement = document.querySelector(`[data-post-id="${post.id}"]`);
                 if (!postElement) return;
-                
+
                 if (isUserLoggedIn) {
                     // Check if user has voted on this post
                     const userVote = userVoteMap[post.id];

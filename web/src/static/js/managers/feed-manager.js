@@ -136,7 +136,7 @@ class FeedManager {
     fillTemplate(template, data) {
         let filledTemplate = template
             .replace(/\{\{id\}\}/g, data.id)
-            .replace(/\{\{username\}\}/g, data.username)
+            .replace(/\{\{username\}\}/g, data.author)
             .replace(/\{\{title\}\}/g, data.title)
             .replace(/\{\{content\}\}/g, data.content)
             .replace(/\{\{tags\}\}/g, data.tags.join(', '))
@@ -197,7 +197,7 @@ class FeedManager {
             targetContainer.append(filled);
         });
     }
-    
+
 
     /**
      * Format timestamp to "time ago" format
