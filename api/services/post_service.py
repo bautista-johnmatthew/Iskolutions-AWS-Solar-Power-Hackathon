@@ -37,7 +37,9 @@ class PostService:
         if not attachments:
             return {"message": "No attachments to summarize"}
         
-        create_task(self.process_summary(post_id, attachments))
+        task = create_task(self.process_summary(post_id, attachments))
+        self._tasks.append(task)
+        task.add_done_callback(lambda t: self._tasks.remove(t))
 
     async def process_summary(self, post_id, attachments):
         """ Generate summary for the post attachments asynchronously """
