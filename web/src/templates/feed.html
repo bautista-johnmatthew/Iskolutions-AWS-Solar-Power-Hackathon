@@ -47,11 +47,37 @@
     </div>
     </div>
 
-    <!-- Feed Container -->
-    <div class="feed-container">
+    <!-- Filter Feed -->
+    <div class="filter-feed d-flex flex-column align-items-end mb-4">
+      <div class="filter-label">
+        <i class="bi bi-funnel-fill me-2 text-white"></i>
+        <span class="text-white fw-semibold">FILTER FEED</span>
+      </div>
+      <div class="filter-buttons d-flex flex-wrap justify-content-end gap-2">
+        <button class="filter-btn active">FRESHMAN</button>
+        <button class="filter-btn">REQUIREMENTS</button>
+        <button class="filter-btn">PROGRAMMING</button>
+        <button class="filter-btn active">REVIEW</button>
+        <button class="filter-btn">RESOURCE</button>
+        <button class="filter-btn">LOST & FOUND</button>
+      </div>
+    </div>
 
     <!-- Post Template goes here -->
     </div>
   </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const buttons = document.querySelectorAll(".filter-btn");
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        btn.classList.toggle("active");
+        console.log(btn.textContent + " toggled");
+      });
+    });
+  });
+</script>
 </body>
 </html>
