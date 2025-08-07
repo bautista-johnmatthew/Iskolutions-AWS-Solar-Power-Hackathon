@@ -384,3 +384,54 @@ body, html {
 .download-btn:hover {
   color: #105cd4;
 }
+
+/* Filter Feed Section */
+.filter-feed {
+  align-self: flex-end;
+  text-align: left;
+  margin-bottom: 20px;
+  width: 360px;
+  padding: 15px;
+  background-color: #1c1833;
+  border-radius: 10px;
+}
+
+.filter-label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  color: white;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+  gap: 6px;
+  width: 100%;
+}
+
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.filter-btn {
+  flex: 0 0 48%;
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+  text-align: center;
+  width: 250px;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+  background-color: #FF00E2;
+  border-color: #FF00E2;
+  color: white;
+}
