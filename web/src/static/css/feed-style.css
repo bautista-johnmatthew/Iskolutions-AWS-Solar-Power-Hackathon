@@ -394,6 +394,7 @@ body, html {
   padding: 15px;
   background-color: #1c1833;
   border-radius: 10px;
+  margin-right: 15px;
 }
 
 .filter-label {
