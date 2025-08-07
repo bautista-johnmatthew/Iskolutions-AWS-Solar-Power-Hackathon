@@ -67,10 +67,42 @@
     </div>
   </div>
 
-  <a href="#" class="add-post-btn" title="Add Post">
+  <a href="#" class="add-post-btn" data-bs-toggle="modal" data-bs-target="#addPostModal" title="Add Post">
     <i class="bi bi-plus-lg"></i>
   </a>
 
+  <!-- Add Post Modal -->
+  <div class="modal fade" id="addPostModal" tabindex="-1" aria-labelledby="addPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content" style="border-radius: 20px;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addPostModalLabel">Create a New Post</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Post form goes here -->
+          <form>
+            <div class="mb-3">
+              <label for="postTitle" class="form-label">Title</label>
+              <input type="text" class="form-control" id="postTitle" placeholder="Enter post title">
+            </div>
+            <div class="mb-3">
+              <label for="postContent" class="form-label">Content</label>
+              <textarea class="form-control" id="postContent" rows="4" placeholder="Write your post..."></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="postFile" class="form-label">Attach File (optional)</label>
+              <input class="form-control" type="file" id="postFile">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary">Post</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
   document.addEventListener("DOMContentLoaded", function () {
