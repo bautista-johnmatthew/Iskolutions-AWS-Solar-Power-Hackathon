@@ -1,9 +1,21 @@
-import { sessionManager } from "./auth/session-manager-vanilla.js";
+import { sessionManager } from "./managers/session-manager.js";
+import { feedManager } from './managers/feed-manager.js';
 
 $(document).ready(function () {
-  console.log("User session:", sessionManager.getUser());
-  console.log("App loaded successfully");
-  postDataArray.forEach(post => loadPostTemplate(post));
+    console.log("User session:", sessionManager.getUser());
+    console.log("App loaded successfully");
+
+    // Initalize default template
+    postDataArray.forEach(post => loadPostTemplate(post));
+
+    if (feedManager) {
+        feedManager.initialize();
+    }
+
+    $('#logoutBtn').on('click', function () {
+        sessionManager.clearSession();
+        window.location.href = '/';
+    });
 });
 
 // Toggle password visibility

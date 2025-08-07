@@ -41,14 +41,6 @@ class SessionManager {
         }
     }
 
-    // NOTE: This is the session object that is needed from the backend as a response
-    // {
-    //     "id": "user-123",
-    //     "email": "user@pup.edu.ph",
-    //     "name": "John Doe",
-    //     "token": "jwt-token-here",
-    // }
-
     /**
      * Get current user data
      */
