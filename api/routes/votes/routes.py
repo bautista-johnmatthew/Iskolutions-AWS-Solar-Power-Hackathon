@@ -18,16 +18,10 @@ VOTE_ROUTES: dict = {
         "dependencies": [Depends(get_aws_clients)],
         "endpoint": handlers.remove_post_vote
     },
-    "VOTE_COMMENT": {
-        "methods": ["POST"],
-        "path": "/comments/{comment_id}/vote",
+    "GET_USER_VOTES": {
+        "methods": ["GET"],
+        "path": "/posts/{post_id}/votes/{user_id}",
         "dependencies": [Depends(get_aws_clients)],
-        "endpoint": handlers.vote_comment
-    },
-    "REMOVE_COMMENT_VOTE": {
-        "methods": ["DELETE"],
-        "path": "/comments/{comment_id}/vote",
-        "dependencies": [Depends(get_aws_clients)],
-        "endpoint": handlers.remove_comment_vote
+        "endpoint": handlers.get_post_votes
     },
 }

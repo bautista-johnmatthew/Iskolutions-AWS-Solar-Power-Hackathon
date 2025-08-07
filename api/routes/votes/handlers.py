@@ -12,6 +12,7 @@ from services.comment_service import CommentService
 async def vote_post(
     post_id: str,
     vote_type: Literal['up', 'down'] = Body(..., embed=True),
+    user_id: str = Body(..., embed=True),
     aws_clients: AWSClients = Depends(get_aws_clients)
 ):
     vote_service = VoteService(aws_clients)
@@ -21,14 +22,14 @@ async def vote_post(
         raise HTTPException(status_code=404, detail="Post not found")
 
     try:
-        return vote_service.vote_post(post_id, vote_type)
+        return vote_service.vote_post(post_id, vote_type, user_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
 
 async def remove_post_vote(
     post_id: str,
     vote_type: Literal['up', 'down'] = Body(..., embed=True),
+    user_id: str = Body(..., embed=True),
     aws_clients: AWSClients = Depends(get_aws_clients)
 ):
     vote_service = VoteService(aws_clients)
@@ -38,40 +39,32 @@ async def remove_post_vote(
         raise HTTPException(status_code=404, detail="Post not found")
 
     try:
-        return vote_service.remove_post_vote(post_id, vote_type)
+        return vote_service.remove_post_vote(post_id, user_id, vote_type)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-
-async def vote_comment(
-    comment_id: str,
-    vote_type: Literal['up', 'down'] = Body(..., embed=True),
+    
+async def get_post_votes(
+    post_id: str,
+    user_id: str,
     aws_clients: AWSClients = Depends(get_aws_clients)
 ):
     vote_service = VoteService(aws_clients)
-    comment_service = CommentService(aws_clients)
-
-    if not comment_service.get_comment(comment_id):
-        raise HTTPException(status_code=404, detail="Comment not found")
 
     try:
-        return vote_service.vote_comment(comment_id, vote_type)
+        # Get all votes for the post
+        votes = vote_service.get_post_votes(post_id)
+        
+        # Check for the specific user vote in the returned votes
+        user_votes = []
+        for vote in votes:
+            sk = vote.get('SK', '')
+            
+            if sk == f'VOTE#USER#{user_id}':
+                user_votes.append(vote)
+        
+        return {
+            'user_votes': user_votes
+        }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-async def remove_comment_vote(
-    comment_id: str,
-    vote_type: Literal['up', 'down'] = Body(..., embed=True),
-    aws_clients: AWSClients = Depends(get_aws_clients)
-):
-    vote_service = VoteService(aws_clients)
-    comment_service = CommentService(aws_clients)
-
-    if not comment_service.get_comment(comment_id):
-        raise HTTPException(status_code=404, detail="Comment not found")
-
-    try:
-        return vote_service.remove_comment_vote(comment_id, vote_type)
-    except Exception as e:
+        print("Error fetching post votes:", e)
         raise HTTPException(status_code=500, detail=str(e))

@@ -1,4 +1,4 @@
-<div class="post-wrapper">
+<div class="post-wrapper" data-post-id={{id}}>
   <div class="post-left">
     <div class="post-header">
       <i class="bi bi-person user-icon"></i>
@@ -6,7 +6,14 @@
       <div class="tag-container">
         <div class="tag">{{tags}}</div>
       </div>
+<<<<<<< HEAD
 
+=======
+      <div class="post-actions">
+        <i class="bi bi-pencil-square edit-post-btn" title="Edit Post"></i>
+        <i class="bi bi-trash delete-post-btn" title="Delete Post"></i>
+      </div>
+>>>>>>> 43949c148c120172f80d9dd9988f3c2d7836c7cd
     </div>
     <div class="post-body">
       <div class="post-title">{{title}}</div>
@@ -17,11 +24,19 @@
     </div>
     <div class="post-footer">
       <span class="post-time">{{timeAgo}}</span>
-      <div class="ai-summary-container">
-        <!-- Summary content will be injected here -->
+      <div class="post-meta-actions">
+        <button class="btn btn-sm btn-outline-primary vote-btn" data-vote-type="up">
+          <i class="bi bi-arrow-up"></i> <span class="vote-count">{{upvotes}}</span>
+        </button>
+        <button class="btn btn-sm btn-outline-danger vote-btn" data-vote-type="down">
+          <i class="bi bi-arrow-down"></i> <span class="vote-count">{{downvotes}}</span>
+        </button>
       </div>
     </div>
-    <div class="ai-summary-btn" data-summary="{{summary}}">SUMMARIZE</div>
+    <div class="ai-summary-container">
+        <!-- Summary content will be injected here -->
+    </div>
+    <div class="ai-summary-btn" data-summary="{{summary}}" style="display: none;">SUMMARIZE</div>
   </div>
 
   <div class="post-right">
