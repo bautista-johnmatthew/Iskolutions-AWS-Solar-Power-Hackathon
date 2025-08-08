@@ -10,13 +10,15 @@ $(document).ready(function () {
         feedManager.initialize();
     }
 
+    // Event listener for filtering buttons
     $('.filter-btn').on('click', function () {
         const tag = $(this).text();
-        filteredPosts = filterPostsByTag(feedManager.posts, tag);
+        const filteredPosts = filterPostsByTag(feedManager.posts, tag);
         console.log("Filtering posts by tag:", tag);
-        feedManager.loadPosts(filteredPosts);
+        feedManager.reloadPosts(filteredPosts, true);
     });
 
+    // Event listener for logout button
     $('#logoutBtn').on('click', function () {
         sessionManager.clearSession();
         window.location.href = '/';
