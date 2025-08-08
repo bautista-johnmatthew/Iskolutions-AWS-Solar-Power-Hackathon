@@ -155,6 +155,11 @@
     });
   });
 
+  document.querySelectorAll('.tag-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      button.classList.toggle('active');
+    });
+  });
 </script>
 </body>
 </html>
