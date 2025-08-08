@@ -463,3 +463,221 @@ body, html {
   color: white;
   background-color: #105cd4;
 }
+
+/* CREATE POST Modal */
+.create-post-modal {
+  background-color: #17153B;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.modal-divider {
+  border: none;
+  background-color: #ffffff;
+  height: 2px; 
+  margin: 10px 0;
+  border-radius: 2px;
+}
+
+.modal-title {
+  font-size: 2rem;
+  color: white;
+  text-align: center;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+}
+
+.pill-input,
+.pill-textarea {
+  background-color: #ff00e2;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding-left: 40px;
+  font-weight: 500;
+}
+
+.pill-textarea {
+  border-radius: 20px;
+  padding-top: 12px;
+}
+
+.pill-input::placeholder,
+.pill-textarea::placeholder {
+  color: white;
+  opacity: 0.8;
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-with-icon i {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+}
+
+.small-text {
+  font-size: 0.75rem;
+  color: white;
+  opacity: 0.9;
+}
+
+.tag-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-btn {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 5px 12px;
+}
+
+.tag-btn.active,
+.tag-btn:hover {
+  background-color: #ff00e2;
+  border-color: #ff00e2;
+}
+
+.toggle-btn-group {
+  display: flex;
+  gap: 10px;
+}
+
+.toggle-btn {
+  border: 2px solid white;
+  background: transparent;
+  color: white;
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-weight: 600;
+}
+
+.toggle-btn.active,
+.toggle-btn:hover {
+  background-color: #ff00e2;
+  border-color: #ff00e2;
+}
+
+.footer-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 6px 30px;
+  font-weight: 550;
+  color: white;
+  height: 30px;
+  line-height: 15px;
+  width: 150px;
+  align-self: flex-end;
+}
+
+.post-btn {
+  background-color: #ff00e2;
+}
+
+.post-btn:hover {
+  background-color: #105cd4;
+}
+
+.cancel-btn {
+  background-color: #555;
+}
+
+.cancel-btn:hover {
+  background-color: #333;
+}
+
+.form-label {
+  color: white;
+  font-weight: 550;
+  margin-bottom: 8px;
+}
+
+.input-with-icon.file-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  padding-left: 40px;
+  background-color: #ff00e2;
+  border-radius: 50px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  width: fit-content; /* grows to fit content */
+  max-width: 100%; /* prevents overflow out of container */
+}
+
+.input-with-icon.file-pill i {
+  font-size: 1.2rem;
+}
+
+.input-with-icon.file-pill .file-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Switch container */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+/* Hide default checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider background */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.3s;
+  border-radius: 26px;
+}
+
+/* Circle */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+/* Checked state */
+input:checked + .slider {
+  background-color: #ff00e2; /* pink when active */
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+/* Rounded style */
+.slider.round {
+  border-radius: 26px;
+}
