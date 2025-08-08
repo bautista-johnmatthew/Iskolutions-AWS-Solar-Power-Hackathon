@@ -67,6 +67,82 @@
     </div>
   </div>
 
+  <a href="#" class="add-post-btn" data-bs-toggle="modal" data-bs-target="#addPostModal" title="Add Post">
+    <i class="bi bi-plus-lg"></i>
+  </a>
+
+  <!-- Add Post Modal -->
+  <div class="modal fade" id="addPostModal" tabindex="-1" aria-labelledby="addPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content create-post-modal">
+        <div class="modal-header border-0">
+          <h2 class="modal-title w-100 text-center fw-bold" id="addPostModalLabel">CREATE POST</h2>
+        </div>
+        <hr class="modal-divider" />
+        <div class="modal-body">
+          <div class="row g-4">
+            <!-- Left column -->
+            <div class="col-md-7">
+              <div class="mb-3">
+                <label class="form-label">TITLE (REQUIRED)</label>
+                <div class="input-with-icon">
+                  <i class="bi bi-file-post"></i>
+                  <input type="text" class="form-control pill-input" placeholder="INPUT POST TITLE">
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">DESCRIPTION</label>
+                <textarea class="form-control pill-textarea" rows="4" placeholder="INPUT DESCRIPTION"></textarea>
+              </div>
+
+              <div class="mb-2 small-text">
+                DO YOU WANT TO ATTACH FILES? MAKE SURE IT’S IN PDF FORMAT AND LESS THAN 500KB.
+              </div>
+              <div class="input-with-icon file-pill">
+                <i class="bi bi-paperclip"></i>
+                <span class="file-name">Sample.pdf</span>
+              </div>
+            </div>
+
+            <!-- Right column -->
+            <div class="col-md-5">
+              <div class="mb-3">
+                <label class="form-label">
+                  <i class="bi bi-tags"></i> CHOOSE TAGS
+                </label>
+                <div class="tag-buttons">
+                  <button type="button" class="tag-btn active">FRESHMAN</button>
+                  <button type="button" class="tag-btn">REQUIREMENTS</button>
+                  <button type="button" class="tag-btn">PROGRAMMING</button>
+                  <button type="button" class="tag-btn active">REVIEW</button>
+                  <button type="button" class="tag-btn">RESOURCE</button>
+                  <button type="button" class="tag-btn">LOST & FOUND</button>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">DO YOU WANT TO POST IT ANONYMOUSLY?</label>
+                <br />
+                <label class="switch">
+                  <input type="checkbox" id="anonymousToggle">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer border-0">
+          <button type="button" class="footer-btn post-btn">POST</button>
+          <button type="button" class="footer-btn cancel-btn" data-bs-dismiss="modal">CANCEL</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
   document.addEventListener("DOMContentLoaded", function () {
     const buttons = document.querySelectorAll(".filter-btn");
@@ -76,6 +152,12 @@
         btn.classList.toggle("active");
         console.log(btn.textContent + " toggled");
       });
+    });
+  });
+
+  document.querySelectorAll('.tag-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      button.classList.toggle('active');
     });
   });
 </script>
