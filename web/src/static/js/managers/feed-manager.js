@@ -48,6 +48,30 @@ class FeedManager {
         }
     }
 
+    /** 
+    * Refresh the post feed
+    * refresh = false, true if the container will be cleared
+    */
+    async reloadPosts(newPosts = this.posts, refresh = false) {
+        try {
+            // Clear existing posts and render new ones
+            if (refresh) {
+                this.feedContainer.innerHTML = '';
+            }
+
+            // Render all posts (using for loop to handle async properly)
+            for (const post of newPosts) {
+                await this.renderPost(post);
+            }
+
+            // Initialize vote states after all posts are rendered
+            await voteHandler.initializeVoteStates(newPosts);
+        } catch (error) {
+            console.error('Failed to load posts:', error);
+            this.showErrorMessage('Failed to load posts. Please try again.');
+        }
+    }
+
     // Load user posts for profile page
     async loadUserPosts() {
         try {
