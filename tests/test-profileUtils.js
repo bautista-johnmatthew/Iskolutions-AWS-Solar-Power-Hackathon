@@ -1,6 +1,6 @@
 // Test file for ProfileUtils functionality
 import profileUtils from '../web/src/static/js/profile-api/profileUtils.js';
-import { sessionManager } from '../web/src/static/js/auth/session-manager-vanilla.js';
+import { sessionManager } from '../web/src/static/js/managers/session-manager-vanilla.js';
 import { AuthService } from '../web/src/static/js/auth/auth-service.js';
 
 /**

@@ -2,12 +2,13 @@ import {validateForumPost, validateField, preloadSchemas} from './schema.js';
 import { addErrorMessage, clearErrorMessage } from '../utils/error-handling.js';
 import { createPost } from '../post-api/postUtils.js';
 import { sessionManager } from '../managers/session-manager.js';
+import { feedManager } from '../managers/feed-manager.js';
 
 const selectedTags = [];
 
 // Form validation and submission handlers
 function handlePostFormSubmit(event) {
-    clearErrorMessage('#postAttachment');
+    clearErrorMessage('#postOverallError');
     event.preventDefault();
     
     // Get author ID from session
@@ -31,16 +32,26 @@ function handlePostFormSubmit(event) {
     if (validationResult.isValid) {
         console.log("Form is valid:", validationResult.data);
 
-        // Add author_id from session
-        validationResult.data.author_id = authorId; 
+        // Add other data 
+        validationResult.data.author_id = sessionManager.getUserId();
 
         createPost(validationResult.data)
             .then(response => {
                 console.log("Post created successfully:", response);
+
+                // Close the modal after successful post creation
+                $("#addPostModal").modal("hide");
+                $("#postForm")[0].reset();
+                selectedTags.length = 0;
+                feedManager.loadPosts();
             });
     } else {
         console.error("Validation errors:", validationResult.error);
-        addErrorMessage('#postAttachment', 'Please fix the errors before submitting');
+        let errorMsgList = ''
+        validationResult.error.forEach(error => {
+            errorMsgList += `<p>${error.message}</p>`;
+        });
+        addErrorMessage('#postOverall', errorMsgList);
     }
 }
 
@@ -71,11 +82,10 @@ function handleContentBlur() {
 
 // Function to handle tag change event
 function handleTagChange() {
-    if ($(this).is(":checked")) {   
-        selectedTags.push($(this).val());
-        console.log(selectedTags.length);
+    if ($(this).hasClass('active')) {   
+        selectedTags.push($(this).attr('id'));
     } else {
-        const tagValue = $(this).val();
+        const tagValue = $(this).attr('id');
         selectedTags.splice(selectedTags.indexOf(tagValue), 1);
     }
 
@@ -116,10 +126,7 @@ function handleAttachmentChange() {
 // Attach event listeners
 $(document).ready(function() {    
     preloadSchemas();
-    
-    // Initialize session
-    sessionManager.initialize();
-    
+
     // Check if user is logged in
     const isLoggedIn = sessionManager.isLoggedIn();
     if (!isLoggedIn) {
@@ -134,7 +141,11 @@ $(document).ready(function() {
     $("#postAttachment").on("change", handleAttachmentChange);
     
     // Handle tag checkboxes
-    $(".tag-checkbox").each(function() {
-        $(this).on("change", handleTagChange);
+    $(".tag-btn").each(function() {
+        $(this).on("click", handleTagChange);
+    });
+    
+    $("#submitPost").on("click", function() {
+        $("#postForm").submit();
     });
 });

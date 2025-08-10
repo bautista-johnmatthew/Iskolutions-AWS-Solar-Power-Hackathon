@@ -16,6 +16,7 @@
   <!-- Custom CSS & JS -->
   <link rel="stylesheet" href="../static/css/feed-style.css" />
   <script type="module" src="../static/js/app.js"></script>
+  <script type="module" src="../static/js/validation/addpost.js"></script>
 
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
@@ -63,6 +64,9 @@
       </div>
     </div>
 
+    <div class="feed-container">
+
+    </div>
     <!-- Post Template goes here -->
     <div class="feed-container">
 
@@ -82,6 +86,7 @@
           <h2 class="modal-title w-100 text-center fw-bold" id="addPostModalLabel">CREATE POST</h2>
         </div>
         <hr class="modal-divider" />
+        <form id="postForm">
         <div class="modal-body">
           <div class="row g-4">
             <!-- Left column -->
@@ -90,13 +95,15 @@
                 <label class="form-label">TITLE (REQUIRED)</label>
                 <div class="input-with-icon">
                   <i class="bi bi-file-post"></i>
-                  <input type="text" class="form-control pill-input" placeholder="INPUT POST TITLE">
+                  <input id="postTitle" type="text" class="form-control pill-input" placeholder="INPUT POST TITLE">
                 </div>
+                <div class="invalid-feedback" id="postTitleError"></div>
               </div>
 
               <div class="mb-3">
                 <label class="form-label">DESCRIPTION</label>
-                <textarea class="form-control pill-textarea" rows="4" placeholder="INPUT DESCRIPTION"></textarea>
+                <textarea id="postContent" class="form-control pill-textarea" rows="4" placeholder="INPUT DESCRIPTION"></textarea>
+                <div class="invalid-feedback" id="postContentError"></div>
               </div>
 
               <div class="mb-2 small-text">
@@ -104,7 +111,8 @@
               </div>
               <div class="input-with-icon file-pill">
                 <i class="bi bi-paperclip"></i>
-                <span class="file-name">Sample.pdf</span>
+                <input id="postAttachment" type="file" class="form-control pill-input file-input" accept=".pdf" />
+                <div class="invalid-feedback" id="postAttachmentError"></div>
               </div>
             </div>
 
@@ -115,12 +123,12 @@
                   <i class="bi bi-tags"></i> CHOOSE TAGS
                 </label>
                 <div class="tag-buttons">
-                  <button type="button" class="tag-btn active">FRESHMAN</button>
-                  <button type="button" class="tag-btn">REQUIREMENTS</button>
-                  <button type="button" class="tag-btn">PROGRAMMING</button>
-                  <button type="button" class="tag-btn active">REVIEW</button>
-                  <button type="button" class="tag-btn">RESOURCE</button>
-                  <button type="button" class="tag-btn">LOST & FOUND</button>
+                  <button type="button" id="freshman" class="tag-btn">FRESHMAN</button>
+                  <button type="button" id="requirements" class="tag-btn">REQUIREMENTS</button>
+                  <button type="button" id="programming" class="tag-btn">PROGRAMMING</button>
+                  <button type="button" id="review" class="tag-btn">REVIEW</button>
+                  <button type="button" id="resource" class="tag-btn">RESOURCE</button>
+                  <button type="button" id="lost-and-found" class="tag-btn">LOST & FOUND</button>
                 </div>
               </div>
 
@@ -128,9 +136,10 @@
                 <label class="form-label">DO YOU WANT TO POST IT ANONYMOUSLY?</label>
                 <br />
                 <label class="switch">
-                  <input type="checkbox" id="anonymousToggle">
+                  <input id="postAnonymous" type="checkbox" id="anonymousToggle">
                   <span class="slider round"></span>
                 </label>
+                <div class="invalid-feedback" id="postAnonymousError"></div>
               </div>
 
             </div>
@@ -139,9 +148,11 @@
 
         <!-- Footer -->
         <div class="modal-footer border-0">
-          <button type="button" class="footer-btn post-btn">POST</button>
+          <div class="invalid-feedback" id="postOverallError"></div>
+          <button id="submitPost" type="button" class="footer-btn post-btn">POST</button>
           <button type="button" class="footer-btn cancel-btn" data-bs-dismiss="modal">CANCEL</button>
         </div>
+        </form>
       </div>
     </div>
   </div>
