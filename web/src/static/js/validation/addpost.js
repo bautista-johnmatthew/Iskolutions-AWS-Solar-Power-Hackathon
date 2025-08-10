@@ -2,12 +2,13 @@ import {validateForumPost, validateField, preloadSchemas} from './schema.js';
 import { addErrorMessage, clearErrorMessage } from '../utils/error-handling.js';
 import { createPost } from '../post-api/postUtils.js';
 import { sessionManager } from '../managers/session-manager.js';
+import { feedManager } from '../managers/feed-manager.js';
 
 const selectedTags = [];
 
 // Form validation and submission handlers
 function handlePostFormSubmit(event) {
-    clearErrorMessage('#postAttachment');
+    clearErrorMessage('#postError');
     event.preventDefault();
     
     // Get author ID from session
@@ -31,16 +32,22 @@ function handlePostFormSubmit(event) {
     if (validationResult.isValid) {
         console.log("Form is valid:", validationResult.data);
 
-        // Add author_id from session
-        validationResult.data.author_id = authorId; 
+        // Add other data 
+        validationResult.data.author_id = sessionManager.getUser().name;
 
         createPost(validationResult.data)
             .then(response => {
                 console.log("Post created successfully:", response);
+
+                // Close the modal after successful post creation
+                $("#addPostModal").modal("hide");
+                $("#postForm")[0].reset();
+                selectedTags.length = 0;
+                feedManager.loadPosts();
             });
     } else {
         console.error("Validation errors:", validationResult.error);
-        addErrorMessage('#postAttachment', 'Please fix the errors before submitting');
+        addErrorMessage('#postError', 'Please fix the errors before submitting');
     }
 }
 
@@ -135,4 +142,7 @@ $(document).ready(function() {
         $(this).on("change", handleTagChange);
     });
     
+    $("#submitPost").on("click", function() {
+        $("#postForm").submit();
+    });
 });
