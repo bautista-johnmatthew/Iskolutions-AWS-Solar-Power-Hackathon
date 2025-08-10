@@ -116,9 +116,6 @@ function handleAttachmentChange() {
 // Attach event listeners
 $(document).ready(function() {    
     preloadSchemas();
-    
-    // Initialize session
-    sessionManager.initialize();
 
     // Check if user is logged in
     const isLoggedIn = sessionManager.isLoggedIn();
