@@ -8,7 +8,7 @@ const selectedTags = [];
 
 // Form validation and submission handlers
 function handlePostFormSubmit(event) {
-    clearErrorMessage('#postError');
+    clearErrorMessage('#postOverallError');
     event.preventDefault();
     
     // Get author ID from session
@@ -47,7 +47,11 @@ function handlePostFormSubmit(event) {
             });
     } else {
         console.error("Validation errors:", validationResult.error);
-        addErrorMessage('#postError', 'Please fix the errors before submitting');
+        let errorMsgList = ''
+        validationResult.error.forEach(error => {
+            errorMsgList += `<p>${error.message}</p>`;
+        });
+        addErrorMessage('#postOverall', errorMsgList);
     }
 }
 
