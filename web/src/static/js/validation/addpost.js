@@ -119,7 +119,7 @@ $(document).ready(function() {
     
     // Initialize session
     sessionManager.initialize();
-    
+
     // Check if user is logged in
     const isLoggedIn = sessionManager.isLoggedIn();
     if (!isLoggedIn) {
@@ -134,7 +134,8 @@ $(document).ready(function() {
     $("#postAttachment").on("change", handleAttachmentChange);
     
     // Handle tag checkboxes
-    $(".tag-checkbox").each(function() {
+    $(".tag-buttons").each(function() {
         $(this).on("change", handleTagChange);
     });
+    
 });

@@ -16,6 +16,7 @@
   <!-- Custom CSS & JS -->
   <link rel="stylesheet" href="../static/css/feed-style.css" />
   <script type="module" src="../static/js/app.js"></script>
+  <script type="module" src="../static/js/validation/addpost.js"></script>
 
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
@@ -63,6 +64,9 @@
       </div>
     </div>
 
+    <div class="feed-container">
+
+    </div>
     <!-- Post Template goes here -->
     </div>
   </div>
@@ -79,6 +83,7 @@
           <h2 class="modal-title w-100 text-center fw-bold" id="addPostModalLabel">CREATE POST</h2>
         </div>
         <hr class="modal-divider" />
+        <form id="postForm">
         <div class="modal-body">
           <div class="row g-4">
             <!-- Left column -->
@@ -87,13 +92,13 @@
                 <label class="form-label">TITLE (REQUIRED)</label>
                 <div class="input-with-icon">
                   <i class="bi bi-file-post"></i>
-                  <input type="text" class="form-control pill-input" placeholder="INPUT POST TITLE">
+                  <input id="postTitle" type="text" class="form-control pill-input" placeholder="INPUT POST TITLE">
                 </div>
               </div>
 
               <div class="mb-3">
                 <label class="form-label">DESCRIPTION</label>
-                <textarea class="form-control pill-textarea" rows="4" placeholder="INPUT DESCRIPTION"></textarea>
+                <textarea id="postContent" class="form-control pill-textarea" rows="4" placeholder="INPUT DESCRIPTION"></textarea>
               </div>
 
               <div class="mb-2 small-text">
@@ -125,7 +130,7 @@
                 <label class="form-label">DO YOU WANT TO POST IT ANONYMOUSLY?</label>
                 <br />
                 <label class="switch">
-                  <input type="checkbox" id="anonymousToggle">
+                  <input id="postAnonymous" type="checkbox" id="anonymousToggle">
                   <span class="slider round"></span>
                 </label>
               </div>
@@ -136,9 +141,10 @@
 
         <!-- Footer -->
         <div class="modal-footer border-0">
-          <button type="button" class="footer-btn post-btn">POST</button>
+          <button id="submitPost" type="button" class="footer-btn post-btn">POST</button>
           <button type="button" class="footer-btn cancel-btn" data-bs-dismiss="modal">CANCEL</button>
         </div>
+        </form>
       </div>
     </div>
   </div>
