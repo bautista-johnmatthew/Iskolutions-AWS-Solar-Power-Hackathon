@@ -62,7 +62,7 @@ const allowedTags = [
     "programming", 
     "review", 
     "resource", 
-    "lost and found"
+    "lost-and-found"
 ];
 
 // Update tags schema with allowed values

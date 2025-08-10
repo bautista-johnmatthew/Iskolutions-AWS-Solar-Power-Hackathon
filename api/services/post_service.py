@@ -8,6 +8,7 @@ from asyncio import create_task
 class PostService:
     def __init__(self, aws_clients: AWSClients):
         self.table = aws_clients.table
+        self._tasks = []
 
     def create_post(self, author_id: str, title: str, content: str,
                     tags=None, attachments=None, is_anonymous=False):

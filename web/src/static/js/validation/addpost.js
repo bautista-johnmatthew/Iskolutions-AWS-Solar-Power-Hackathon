@@ -33,7 +33,7 @@ function handlePostFormSubmit(event) {
         console.log("Form is valid:", validationResult.data);
 
         // Add other data 
-        validationResult.data.author_id = sessionManager.getUser().name;
+        validationResult.data.author_id = sessionManager.getUserId();
 
         createPost(validationResult.data)
             .then(response => {
@@ -82,11 +82,10 @@ function handleContentBlur() {
 
 // Function to handle tag change event
 function handleTagChange() {
-    if ($(this).is(":checked")) {   
-        selectedTags.push($(this).val());
-        console.log(selectedTags.length);
+    if ($(this).hasClass('active')) {   
+        selectedTags.push($(this).attr('id'));
     } else {
-        const tagValue = $(this).val();
+        const tagValue = $(this).attr('id');
         selectedTags.splice(selectedTags.indexOf(tagValue), 1);
     }
 
@@ -142,8 +141,8 @@ $(document).ready(function() {
     $("#postAttachment").on("change", handleAttachmentChange);
     
     // Handle tag checkboxes
-    $(".tag-buttons").each(function() {
-        $(this).on("change", handleTagChange);
+    $(".tag-btn").each(function() {
+        $(this).on("click", handleTagChange);
     });
     
     $("#submitPost").on("click", function() {
