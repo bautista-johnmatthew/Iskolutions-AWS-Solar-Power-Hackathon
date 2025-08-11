@@ -67,6 +67,7 @@
     </div>
     </div>
 
+    <script src="../static/js/managers/feed-manager.js"></script>
     <script>
         // Sample profile data array for testing
         const testProfiles = [
@@ -90,6 +91,11 @@
         document.getElementById("post-count").textContent = profile.postCount;
         document.getElementById("comment-count").textContent = profile.commentCount;
         document.getElementById("reputation").textContent = profile.reputation;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            feedManager.loadUserPosts();
+        });
+
 
     </script>
 
