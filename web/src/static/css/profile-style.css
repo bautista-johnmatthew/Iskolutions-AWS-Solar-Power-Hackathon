@@ -17,6 +17,7 @@ body, html {
   padding-top: 80px;
 }
 
+/* Navigation Bar */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -82,4 +83,74 @@ body, html {
   color: #FF00E2;
   font-size: 30px;
   text-decoration: none;
+}
+
+/* Profile Section */
+.profile-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0b0720;
+  color: white;
+  padding: 20px;
+  padding-left: 30px;
+  padding-right: 30px;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  width: 90%;
+}
+
+/* Profile Information */
+.profile-left {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+  position: relative;
+  width: 50%;
+  border-right: 1px solid white;
+}
+
+.profile-details p {
+  margin: 3px 0;
+  font-size: 14px;
+}
+
+.profile-details span {
+  font-weight: 500;
+}
+
+.edit-icon {
+  font-size: 16px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  margin-right: 5px;
+  cursor: pointer;
+  align-items: flex-end;
+}
+
+.edit-icon:hover {
+  color: #FF00E2;
+}
+
+/* Profile Statistics */
+.profile-right {
+  display: flex;
+  gap: 40px;
+  text-align: center;
+  align-items: center;
+  width: 40%;
+}
+
+.stat h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 550;
+}
+
+.stat p {
+  margin: 0;
+  margin-top: 5px;
+  font-size: 18px;
+  letter-spacing: 1px;
 }
