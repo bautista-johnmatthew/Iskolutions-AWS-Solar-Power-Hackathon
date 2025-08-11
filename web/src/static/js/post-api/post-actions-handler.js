@@ -1,5 +1,4 @@
 import { updatePost, deletePost, patchPost } from './postUtils.js';
-import { createComment } from '../comments-api/commentUtils.js';
 import { feedManager } from '../managers/feed-manager.js';
 import { voteHandler } from '../vote-api/vote-handler.js';
 
@@ -25,8 +24,6 @@ export class PostActionsHandler {
                 this.handleEditPost(postId, postWrapper);
             } else if (e.target.classList.contains('delete-post-btn')) {
                 this.handleDeletePost(postId);
-            } else if (e.target.classList.contains('add-comment-btn')) {
-                this.handleAddComment(postId, postWrapper);
             } else if (e.target.closest('.vote-btn')) {
                 const voteBtn = e.target.closest('.vote-btn');
                 const voteType = voteBtn.dataset.voteType;
@@ -71,7 +68,7 @@ export class PostActionsHandler {
     async handleVote(postId, voteType, button) {
         try {
             voteHandler.handlePostVote(postId, button, voteType);
-        } catch (error) {   
+        } catch (error) {
             console.error('Failed to handle post vote:', error);
             this.showErrorMessage('Failed to update vote. Please try again.');
         }
@@ -94,32 +91,6 @@ export class PostActionsHandler {
             } catch (error) {
                 console.error('Failed to delete post:', error);
                 this.showErrorMessage('Failed to delete post. Please try again.');
-            }
-        }
-    }
-
-    /**
-     * Handle adding a new comment
-     */
-    async handleAddComment(postId, postWrapper) {
-        const commentText = await this.showCommentModal();
-
-        if (commentText) {
-            try {
-                const commentData = {
-                    content: commentText,
-                    is_anonymous: false // You can add checkbox for this
-                };
-
-                await createComment(postId, commentData);
-
-                // Reload comments for this specific post
-                await feedManager.loadCommentsForPost(postId, postWrapper);
-
-                this.showSuccessMessage('Comment added successfully!');
-            } catch (error) {
-                console.error('Failed to add comment:', error);
-                this.showErrorMessage('Failed to add comment. Please try again.');
             }
         }
     }
@@ -171,16 +142,6 @@ export class PostActionsHandler {
                 document.body.removeChild(modal);
                 resolve(null);
             };
-        });
-    }
-
-    /**
-     * Show comment input modal
-     */
-    async showCommentModal() {
-        return new Promise((resolve) => {
-            const commentText = prompt('Enter your comment:');
-            resolve(commentText);
         });
     }
 
