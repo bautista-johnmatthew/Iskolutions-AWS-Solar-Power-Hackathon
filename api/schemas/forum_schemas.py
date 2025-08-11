@@ -59,7 +59,7 @@ class CommentCreate(CommentBase):
     author_id: str
 
 class CommentResponse(CommentBase, TimestampMixin):
-    comment_id: str
+    id: str
     author_id: str
 
 # ============ VOTE SCHEMAS ============
