@@ -51,8 +51,14 @@ async def get_post_votes(
     vote_service = VoteService(aws_clients)
 
     try:
-        # Get all votes for the post
-        votes = vote_service.get_post_votes(post_id)
+        post_ids = post_id.split(',')
+        
+        # Get all votes for the posts
+        votes = []
+        for pid in post_ids:
+            if pid: 
+                post_votes = vote_service.get_post_votes(pid)
+                votes.extend(post_votes)
         
         # Check for the specific user vote in the returned votes
         user_votes = []

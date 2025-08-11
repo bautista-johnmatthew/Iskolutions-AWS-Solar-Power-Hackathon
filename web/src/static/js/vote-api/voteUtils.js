@@ -113,7 +113,7 @@ export function formatUserVotes(userVotes) {
     const voteMap = {};
 
     if (Array.isArray(userVotes)) {
-        userVotes.forEach(vote => {
+        userVotes.forEach(vote => {            
             if (vote.PK && vote.PK.startsWith('POST#')) {
                 // Extract post ID from the PK (format: "POST#<post_id>")
                 const postId = vote.PK.split('#')[1];
