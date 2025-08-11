@@ -2,6 +2,7 @@ import { getPosts } from '../post-api/postUtils.js';
 import { getComments } from '../comments-api/commentUtils.js';
 import { voteHandler } from '../vote-api/vote-handler.js';
 import { ProfileUtils } from '../profile-api/profileUtils.js';
+import { CommentModalHandler } from '../comments-api/comment-modal-handler.js';
 import { sessionManager } from '../managers/session-manager.js';
 
 /**
@@ -48,7 +49,7 @@ class FeedManager {
         }
     }
 
-    /** 
+    /**
     * Refresh the post feed
     * refresh = false, true if the container will be cleared
     */
@@ -138,7 +139,7 @@ class FeedManager {
         summarizeBtn.on("click", function () {
             console.log("Summarizing post:", postData.id);
             const summaryContainer = $(postElement).find(".ai-summary-container");
-            
+
             // Prevent duplicate summary - check if summary content already exists
             // Check if there's any actual content (not just whitespace/comments)
             if (summaryContainer.children().length === 0) {
@@ -172,7 +173,7 @@ class FeedManager {
     }
 
     generateAttachmentHTML(attachments) {
-        if (!attachments.length) return '<div></div>';        
+        if (!attachments.length) return '<div></div>';
         let html = `<div class="attachment-list"><strong>📎 Attachments:</strong><ul>`;
         attachments.forEach(file => {
             const fileName = file.substring(file.lastIndexOf('/') + 1);
@@ -195,6 +196,7 @@ class FeedManager {
     async loadCommentsForPost(postId, postElement) {
         try {
             const comments = await getComments(postId);
+            comments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Sort by newest first
             const commentsContainer = postElement.querySelector('.comments-container');
 
             if (commentsContainer && comments.length > 0) {
@@ -205,6 +207,8 @@ class FeedManager {
                 comments.forEach(comment => {
                     this.loadCommentTemplate(comment, commentsContainer);
                 });
+            } else {
+                console.log('No comments container found or no comments to display');
             }
         } catch (error) {
             console.error('Failed to load comments:', error);
@@ -212,16 +216,29 @@ class FeedManager {
     }
 
     loadCommentTemplate(commentData, targetContainer) {
-        $.get("comment-template.html", function (template) {
-            const filled = template
-            .replace("{{commenter}}", commentData.username)
-            .replace("{{commentText}}", commentData.text)
-            .replace("{{timeAgo}}", commentData.timeAgo);
+        console.log('Loading comment template with data:', commentData);
+        $.get("./comment-template.html")
+            .done(function (template) {
+                console.log('Comment template loaded successfully');
+                // For comments, if the author is the current user, use their name from session
+                // Otherwise, use the author field (which might be user ID for now)
+                let displayName = commentData.author;
+                if (sessionManager && sessionManager.getUserName() === commentData.author) {
+                    displayName = "Me";
+                }
 
-            targetContainer.append(filled);
-        });
+                const filled = template
+                .replace("{{commenter}}", displayName)
+                .replace("{{commentText}}", commentData.content)
+                .replace("{{timeAgo}}", this.formatTimeAgo(commentData.updatedAt || commentData.createdAt));
+
+                console.log('Comment template filled:', filled);
+                $(targetContainer).append(filled);
+            }.bind(this))
+            .fail(function(error) {
+                console.error('Failed to load comment template:', error);
+            });
     }
-
 
     /**
      * Format timestamp to "time ago" format
