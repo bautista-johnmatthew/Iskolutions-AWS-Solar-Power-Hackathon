@@ -84,7 +84,7 @@ export class CommentModalHandler {
                     <form id="commentForm">
                         <div class="comment-modal-body">
                             <div style="margin-bottom: 20px;">
-                                <label class="form-label">COMMENT<span class="color: red">*</span></label>
+                                <label class="form-label">COMMENT<span style="color: red">*</span></label>
                                 <textarea id="commentContent" class="comment-textarea" rows="6" placeholder="WRITE YOUR COMMENT HERE..." required maxlength="2000"></textarea>
                                 <div class="comment-error-message" id="commentContentError"></div>
                             </div>
