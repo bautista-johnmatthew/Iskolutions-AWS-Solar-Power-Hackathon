@@ -43,9 +43,9 @@
     <div class="profile-left">
         <i class="bi bi-person" style="font-size: 80px; color: #ff00cc;"></i>
         <div class="profile-details">
-            <p>USERNAME: <span>{{username}}</span></p>
-            <p>EMAIL ADDRESS: <span>{{email}}</span></p>
-            <p>STUDENT NUMBER: <span>{{student_number}}</span></p>
+            <p>USERNAME: <span id="username">{{username}}</span></p>
+            <p>EMAIL ADDRESS: <span id="email">{{email}}</span></p>
+            <p>STUDENT NUMBER: <span id="student-number">{{student-number}}</span></p>
         </div>
         <i class="bi bi-pencil edit-icon"></i>
     </div>
@@ -53,19 +53,45 @@
     <!-- Right Panel -->
     <div class="profile-right">
         <div class="stat">
-        <h2>1</h2>
+        <h2 id="post-count">{{post-count}}</h2>
         <p>POSTS</p>
         </div>
         <div class="stat">
-        <h2>1</h2>
+        <h2 id="comment-count">{{comment-count}}</h2>
         <p>COMMENTS</p>
         </div>
         <div class="stat">
-        <h2>10</h2>
+        <h2 id="reputation">{{reputation}}</h2>
         <p>REPUTATION</p>
         </div>
     </div>
     </div>
+
+    <script>
+        // Sample profile data array for testing
+        const testProfiles = [
+        {
+            username: "perlita",
+            email: "fernettepearl.franco55@gmail.com",
+            studentNumber: "2023-00107-TG-0",
+            postCount: 1,
+            commentCount: 1,
+            reputation: 10
+        }
+        ];
+
+        // Pick the first profile for display
+        const profile = testProfiles[0];
+
+        // Replace the placeholders
+        document.getElementById("username").textContent = profile.username;
+        document.getElementById("email").textContent = profile.email;
+        document.getElementById("student-number").textContent = profile.studentNumber;
+        document.getElementById("post-count").textContent = profile.postCount;
+        document.getElementById("comment-count").textContent = profile.commentCount;
+        document.getElementById("reputation").textContent = profile.reputation;
+
+    </script>
 
 </body>
 </html>
