@@ -182,7 +182,6 @@ export class CommentModalHandler {
 
             // Get form data
             const content = document.getElementById('commentContent').value.trim();
-            const isAnonymous = document.getElementById('commentAnonymous').checked;
             const author = sessionManager.getUserName();
 
             if (!author) {
@@ -200,7 +199,6 @@ export class CommentModalHandler {
             const commentData = {
                 content: content,
                 author_id: author,
-                is_anonymous: isAnonymous
             };
 
             // Submit to backend
