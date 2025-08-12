@@ -16,9 +16,13 @@ $(document).ready(function () {
 
     // Event listener for filtering buttons
     $('.filter-btn').on('click', function () {
-        const tag = $(this).text();
-        const filteredPosts = filterPostsByTag(feedManager.posts, tag);
-        console.log("Filtering posts by tag:", tag);
+        let tags = [];
+        $('.filter-btn.active').each(function () {
+            tags.push($(this).text().toLowerCase());
+        });
+
+        const filteredPosts = filterPostsByTag(feedManager.posts, tags);
+        console.log("Filtering posts by tags:", tags);
         feedManager.reloadPosts(filteredPosts, true);
     });
 

@@ -156,6 +156,7 @@ class VoteHandler {
             let userVoteMap = {};
             if (isUserLoggedIn) {
                 const userVotes = await getUserPostVotes(postIds);
+                console.log('User votes:', userVotes);
                 userVoteMap = formatUserVotes(userVotes['user_votes']);
             }
 
