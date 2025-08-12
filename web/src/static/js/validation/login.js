@@ -36,7 +36,7 @@ async function handleLogin(username, password) {
         clearLoginForm();
 
         // Redirect to feed page after successful login
-        window.location.href += 'feed.html';
+        window.location.href += 'templates/feed.html';
 
         return user;
     } catch (error) {
