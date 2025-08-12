@@ -60,6 +60,14 @@ class SessionManager {
     }
 
     /**
+     * Get user name
+     */
+    getUserName() {
+        const user = this.getUser();
+        return user?.name || null;
+    }
+
+    /**
      * Get user email
      */
     getUserEmail() {
