@@ -32,4 +32,8 @@ $(document).ready(function () {
         sessionManager.clearSession();
         window.location.href = '/';
     });
+
+    if (!sessionManager.isLoggedIn()) {
+        $('#logoutBtn').text('Login');
+    }
 });
