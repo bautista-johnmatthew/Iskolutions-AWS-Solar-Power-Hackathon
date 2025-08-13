@@ -1,5 +1,5 @@
 import { sessionManager } from '../managers/session-manager.js';
-import { createComment } from '../comments-api/commentUtils.js';
+import { createComment } from './commentUtils.js';
 import { feedManager } from '../managers/feed-manager.js';
 import { validateField } from '../validation/schema.js';
 
