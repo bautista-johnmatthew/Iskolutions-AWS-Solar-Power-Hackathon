@@ -141,7 +141,7 @@ class ProfileUtils {
      */
     async getUserPosts(userName) {
         if (!userName) {
-            throw new Error('User ID is required');
+            throw new Error('User name is required');
         }
 
         try {
