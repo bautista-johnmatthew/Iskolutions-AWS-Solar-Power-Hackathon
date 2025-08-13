@@ -161,10 +161,11 @@ class ProfileUtils {
             const allPosts = await response.json();
 
             // Filter posts by author_id
-            const userPosts = allPosts.filter(post => post.author_id === userId);
+            const userPosts = allPosts.filter(post => post.author_id === userName);
 
             return userPosts.map(post => ({
                 id: post.post_id || post.id,
+                author: post.author_id,
                 title: post.title,
                 content: post.content,
                 tags: post.tags || [],
@@ -186,9 +187,9 @@ class ProfileUtils {
      * @param {string} userId - User ID to count comments for
      * @returns {Promise<number>} Number of comments made by user
      */
-    async getUserCommentsCount(userId) {
-        if (!userId) {
-            throw new Error('User ID is required');
+    async getUserCommentsCount(userName) {
+        if (!userName) {
+            throw new Error('User name is required');
         }
 
         try {
@@ -207,10 +208,11 @@ class ProfileUtils {
             }
 
             const allPosts = await response.json();
+            const userPosts = allPosts.filter(post => post.author_id === userName);
             let totalComments = 0;
 
             // For each post, get comments and count those by the user
-            for (const post of allPosts) {
+            for (const post of userPosts) {
                 try {
                     const commentsResponse = await fetch(`${this.baseUrl}/posts/${post.post_id || post.id}/comments`, {
                         method: 'GET',
@@ -221,8 +223,7 @@ class ProfileUtils {
 
                     if (commentsResponse.ok) {
                         const comments = await commentsResponse.json();
-                        const userComments = comments.filter(comment => comment.author_id === userId);
-                        totalComments += userComments.length;
+                        totalComments += comments.filter(comment => comment.author_id === userName).length;
                     }
                 } catch (error) {
                     console.warn(`Failed to fetch comments for post ${post.post_id || post.id}:`, error);
