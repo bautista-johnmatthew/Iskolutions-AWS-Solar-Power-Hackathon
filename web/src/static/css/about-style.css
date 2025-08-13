@@ -117,3 +117,47 @@ body, html {
 .about-text {                  
   flex: 1;
 }
+
+/* Team Section */
+.team-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.team-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.team-logo {
+  max-width: 200px;
+  height: auto;
+}
+
+.team-members {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 50px;
+}
+
+.member {
+  text-align: center;
+  flex: 1;
+  min-width: 120px;
+}
+
+.member img {
+  width: 120px;
+  height: auto;
+  border-radius: 5px;
+}
+
+.member p {
+  font-size: 12px;
+  margin-top: 5px;
+  font-weight: 550;
+}
