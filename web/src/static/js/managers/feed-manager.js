@@ -2,7 +2,7 @@ import { getPosts } from '../post-api/postUtils.js';
 import { getComments } from '../comments-api/commentUtils.js';
 import { voteHandler } from '../vote-api/vote-handler.js';
 import { ProfileUtils } from '../profile-api/profileUtils.js';
-import { CommentModalHandler } from '../comments-api/comment-modal-handler.js';
+import { CommentModalHandler } from '../comments-api/comment-handler.js';
 import { sessionManager } from '../managers/session-manager.js';
 
 /**
@@ -14,15 +14,13 @@ class FeedManager {
         this.feedContainer = null;
     }
 
-    async initialize() {
+    async initialize(containerId) {
         try {
-            this.feedContainer = document.querySelector('.feed-container');
+            this.feedContainer = document.querySelector(`.${containerId}`);
         } catch (error) {
             console.error('Feed container not found: ', error);
             return;
         }
-
-        await this.loadPosts();
     }
 
     /**
@@ -74,10 +72,10 @@ class FeedManager {
     }
 
     // Load user posts for profile page
-    async loadUserPosts() {
+    async loadUserPosts(posts) {
         try {
-            this.posts = await ProfileUtils.getUserPosts(sessionManager.getUserId());
-            this.feedContainer = document.querySelector('.user-feed-container');
+            this.posts = posts;
+            this.feedContainer = document.querySelector('.user-posts-container');
 
             // Clear existing posts and render new ones
             this.feedContainer.innerHTML = '';
@@ -161,7 +159,7 @@ class FeedManager {
     fillTemplate(template, data) {
         let filledTemplate = template
             .replace(/\{\{id\}\}/g, data.id)
-            .replace(/\{\{username\}\}/g, data.author)
+            .replace(/\{\{username\}\}/g, data.author === sessionManager.getUserName() ? "Me" : data.author)
             .replace(/\{\{title\}\}/g, data.title)
             .replace(/\{\{content\}\}/g, data.content)
             .replace(/\{\{tags\}\}/g, data.tags.join(', '))

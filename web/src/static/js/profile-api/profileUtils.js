@@ -124,7 +124,7 @@ class ProfileUtils {
             // Calculate aggregated statistics
             profile.posts = posts;
             profile.postsCount = posts.length;
-            profile.commentsCount = await this.getUserCommentsCount(currentUser.id);
+            profile.commentsCount = await this.getUserCommentsCount(currentUser.name);
             profile.reputationScore = reputation;
 
             return profile;
@@ -139,9 +139,9 @@ class ProfileUtils {
      * @param {string} userId - User ID to fetch posts for
      * @returns {Promise<Array>} Array of user's posts
      */
-    async getUserPosts(userId) {
-        if (!userId) {
-            throw new Error('User ID is required');
+    async getUserPosts(userName) {
+        if (!userName) {
+            throw new Error('User name is required');
         }
 
         try {
@@ -161,10 +161,11 @@ class ProfileUtils {
             const allPosts = await response.json();
 
             // Filter posts by author_id
-            const userPosts = allPosts.filter(post => post.author_id === userId);
+            const userPosts = allPosts.filter(post => post.author_id === userName);
 
             return userPosts.map(post => ({
                 id: post.post_id || post.id,
+                author: post.author_id,
                 title: post.title,
                 content: post.content,
                 tags: post.tags || [],
@@ -186,9 +187,9 @@ class ProfileUtils {
      * @param {string} userId - User ID to count comments for
      * @returns {Promise<number>} Number of comments made by user
      */
-    async getUserCommentsCount(userId) {
-        if (!userId) {
-            throw new Error('User ID is required');
+    async getUserCommentsCount(userName) {
+        if (!userName) {
+            throw new Error('User name is required');
         }
 
         try {
@@ -207,10 +208,11 @@ class ProfileUtils {
             }
 
             const allPosts = await response.json();
+            const userPosts = allPosts.filter(post => post.author_id === userName);
             let totalComments = 0;
 
             // For each post, get comments and count those by the user
-            for (const post of allPosts) {
+            for (const post of userPosts) {
                 try {
                     const commentsResponse = await fetch(`${this.baseUrl}/posts/${post.post_id || post.id}/comments`, {
                         method: 'GET',
@@ -221,8 +223,7 @@ class ProfileUtils {
 
                     if (commentsResponse.ok) {
                         const comments = await commentsResponse.json();
-                        const userComments = comments.filter(comment => comment.author_id === userId);
-                        totalComments += userComments.length;
+                        totalComments += comments.filter(comment => comment.author_id === userName).length;
                     }
                 } catch (error) {
                     console.warn(`Failed to fetch comments for post ${post.post_id || post.id}:`, error);
@@ -379,6 +380,51 @@ class ProfileUtils {
         // Since there's no /users/search endpoint, we cannot implement user search
         // This would require a dedicated backend endpoint
         throw new Error('User search not supported: No /users/ endpoint available in backend');
+    }
+
+    /**
+     * Get comments for a specific post
+     * @param {string} postId - Post ID to fetch comments for
+     * @returns {Promise<Array>} Array of comments for the post
+     */
+    async getPostComments(postId) {
+        if (!postId) {
+            throw new Error('Post ID is required');
+        }
+
+        try {
+            const response = await fetch(`${this.baseUrl}/posts/${postId}/comments`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    // Post not found or no comments
+                    return [];
+                }
+                throw new Error(`Failed to fetch comments: ${response.statusText}`);
+            }
+
+            const comments = await response.json();
+
+            // Format comments for consistency
+            return comments.map(comment => ({
+                id: comment.comment_id || comment.id,
+                content: comment.content || comment.text,
+                author_id: comment.author_id,
+                author_name: comment.author_name || comment.username,
+                created_at: comment.created_at || comment.createdAt,
+                updated_at: comment.updated_at || comment.updatedAt,
+                post_id: comment.post_id || postId
+            }));
+
+        } catch (error) {
+            console.error('Error fetching post comments:', error);
+            throw error;
+        }
     }
 }
 
