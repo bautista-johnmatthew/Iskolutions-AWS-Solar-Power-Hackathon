@@ -246,10 +246,15 @@ function levenshtein(a, b) {
  * @param {number} threshold - Minimum similarity (0–1). Default is 0.7.
  * @returns {Array} Matched posts, sorted by score descending.
  */
-export function fuzzySearchPosts(posts, keyword, threshold = 0.3) {
+export function fuzzySearchPosts(posts, keyword, threshold = 0.2) {
     if (!Array.isArray(posts)) {
         console.warn('Expected an array of posts. Got:', typeof posts);
         return [];
+    }
+
+    if (keyword === '' || keyword === null) {
+        console.warn('Keyword is undefined or null. Returning empty array.');
+        return posts;
     }
 
     const lowerKeyword = keyword.trim().toLowerCase();

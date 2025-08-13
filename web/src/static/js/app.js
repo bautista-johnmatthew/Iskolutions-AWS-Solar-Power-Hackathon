@@ -1,6 +1,7 @@
 import { sessionManager } from "./managers/session-manager.js";
 import { feedManager } from './managers/feed-manager.js';
 import { filterPostsByTag } from "./utils/filter.js";
+import { fuzzySearchPosts } from "./post-api/postUtils.js"
 
 $(document).ready(function () {
     // Comment out this section to prevent feed initialization
@@ -8,6 +9,12 @@ $(document).ready(function () {
         feedManager.initialize("feed-container");
         feedManager.loadPosts();
     }
+
+    $('.search-btn').on('click', function () {
+        const query = $('#search').val().toLowerCase();
+        const filteredPosts = fuzzySearchPosts(feedManager.posts, query);
+        feedManager.reloadPosts(filteredPosts, true);
+    });
 
     // Event listener for filtering buttons
     $('.filter-btn').on('click', function () {
@@ -26,4 +33,8 @@ $(document).ready(function () {
         sessionManager.clearSession();
         window.location.href = '/';
     });
+
+    if (!sessionManager.isLoggedIn()) {
+        $('#logoutBtn').text('Login');
+    }
 });
