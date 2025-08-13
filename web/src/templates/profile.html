@@ -66,38 +66,10 @@
         </div>
     </div>
     </div>
+    <div class="user-posts-container" style="margin-top: 50px;" id="user-posts">
 
-    <script src="../static/js/managers/feed-manager.js"></script>
-    <script>
-        // Sample profile data array for testing
-        const testProfiles = [
-        {
-            username: "perlita",
-            email: "fernettepearl.franco55@gmail.com",
-            studentNumber: "2023-00107-TG-0",
-            postCount: 1,
-            commentCount: 1,
-            reputation: 10
-        }
-        ];
-
-        // Pick the first profile for display
-        const profile = testProfiles[0];
-
-        // Replace the placeholders
-        document.getElementById("username").textContent = profile.username;
-        document.getElementById("email").textContent = profile.email;
-        document.getElementById("student-number").textContent = profile.studentNumber;
-        document.getElementById("post-count").textContent = profile.postCount;
-        document.getElementById("comment-count").textContent = profile.commentCount;
-        document.getElementById("reputation").textContent = profile.reputation;
-
-        document.addEventListener("DOMContentLoaded", function() {
-            feedManager.loadUserPosts();
-        });
-
-
-    </script>
-
+    </div>
+    <!-- Profile initialization script -->
+    <script type="module" src="../static/js/profile-api/profile-handler.js"></script>
 </body>
 </html>
