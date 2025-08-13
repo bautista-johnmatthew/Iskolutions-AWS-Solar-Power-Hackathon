@@ -14,15 +14,13 @@ class FeedManager {
         this.feedContainer = null;
     }
 
-    async initialize() {
+    async initialize(containerId) {
         try {
-            this.feedContainer = document.querySelector('.feed-container');
+            this.feedContainer = document.querySelector(`.${containerId}`);
         } catch (error) {
             console.error('Feed container not found: ', error);
             return;
         }
-
-        await this.loadPosts();
     }
 
     /**

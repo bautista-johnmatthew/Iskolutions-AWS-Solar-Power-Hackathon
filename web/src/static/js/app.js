@@ -5,7 +5,8 @@ import { filterPostsByTag } from "./utils/filter.js";
 $(document).ready(function () {
     // Comment out this section to prevent feed initialization
     if (feedManager) {
-        feedManager.initialize();
+        feedManager.initialize("feed-container");
+        feedManager.loadPosts();
     }
 
     // Event listener for filtering buttons
