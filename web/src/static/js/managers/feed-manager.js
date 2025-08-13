@@ -2,7 +2,7 @@ import { getPosts } from '../post-api/postUtils.js';
 import { getComments } from '../comments-api/commentUtils.js';
 import { voteHandler } from '../vote-api/vote-handler.js';
 import { ProfileUtils } from '../profile-api/profileUtils.js';
-import { CommentModalHandler } from '../comments-api/comment-modal-handler.js';
+import { CommentModalHandler } from '../comments-api/comment-handler.js';
 import { sessionManager } from '../managers/session-manager.js';
 
 /**
