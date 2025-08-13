@@ -23,7 +23,7 @@ export function handleEditFormSubmit(event, postId) {
     const formData = {
         title: $('#edit-title').val(),
         content: $('#edit-content').val(),
-        tags: editSelectedTags.length ? editSelectedTags : ($('#edit-tags').val() ? $('#edit-tags').val().split(',').map(t => t.trim()) : []),
+        tags: editSelectedTags,
         attachment: $('#editAttachment')[0]?.files?.[0]
     };
 
@@ -52,17 +52,17 @@ export function handleEditFormSubmit(event, postId) {
 
 export function handleEditTitleBlur() {
     const res = validateField('title', $(this).val());
-    if (!res.isValid) addErrorMessage('#editTitleError', res.error); else clearErrorMessage('#editTitleError');
+    if (!res.isValid) addErrorMessage('#editTitle', res.error); else clearErrorMessage('#editTitle');
 }
 
 export function handleEditContentBlur() {
     const res = validateField('content', $(this).val());
-    if (!res.isValid) addErrorMessage('#editContentError', res.error); else clearErrorMessage('#editContentError');
+    if (!res.isValid) addErrorMessage('#editContent', res.error); else clearErrorMessage('#editContent');
 }
 
 export function handleEditAttachmentChange() {
     const res = validateField('attachment', $(this)[0].files[0]);
-    if (!res.isValid) addErrorMessage('#editAttachmentError', res.error); else clearErrorMessage('#editAttachmentError');
+    if (!res.isValid) addErrorMessage('#editAttachment', res.error); else clearErrorMessage('#editAttachment');
 }
 
 export function handleEditTagClick() {
@@ -96,4 +96,4 @@ export function resetEditState() {
     editSelectedTags.length = 0;
 }
 
-export { editSelectedTags };
+export { editSelectedTags as editSelectedTags };
