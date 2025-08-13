@@ -124,7 +124,7 @@ class ProfileUtils {
             // Calculate aggregated statistics
             profile.posts = posts;
             profile.postsCount = posts.length;
-            profile.commentsCount = await this.getUserCommentsCount(currentUser.id);
+            profile.commentsCount = await this.getUserCommentsCount(currentUser.name);
             profile.reputationScore = reputation;
 
             return profile;
@@ -139,8 +139,8 @@ class ProfileUtils {
      * @param {string} userId - User ID to fetch posts for
      * @returns {Promise<Array>} Array of user's posts
      */
-    async getUserPosts(userId) {
-        if (!userId) {
+    async getUserPosts(userName) {
+        if (!userName) {
             throw new Error('User ID is required');
         }
 
