@@ -84,3 +84,36 @@ body, html {
   font-size: 30px;
   text-decoration: none;
 }
+
+/* Layout for About Section */
+.about-section {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  width: 100%;
+  max-width: 1300px;
+  margin-top: 10px;
+}
+
+.about-card {
+  flex: 1;
+  background: rgba(26, 23, 46, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  display: flex;              
+  align-items: center;        
+  gap: 20px;                  
+  font-size: 14px;
+  font-weight: 450;
+}
+
+.about-logo {
+  width: 250px;
+  flex-shrink: 0;              
+  margin-bottom: 0;            
+}
+
+.about-text {                  
+  flex: 1;
+}
