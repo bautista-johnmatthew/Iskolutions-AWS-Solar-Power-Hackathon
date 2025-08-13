@@ -33,7 +33,7 @@ function handlePostFormSubmit(event) {
         console.log("Form is valid:", validationResult.data);
 
         // Add other data 
-        validationResult.data.author_id = sessionManager.getUser().name;
+        validationResult.data.author_id = sessionManager.getUserName();
 
         createPost(validationResult.data)
             .then(response => {

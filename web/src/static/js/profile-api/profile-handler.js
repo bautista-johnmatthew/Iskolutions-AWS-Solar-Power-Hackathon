@@ -100,7 +100,8 @@ export class ProfileHandler {
             this.updateElement('comment-count', profile.commentsCount || 0);
             this.updateElement('reputation', profile.reputationScore || 0);
 
-            this.feedManager.loadUserPosts(await this.profileUtils.getUserPosts(this.sessionManager.getUserName()));
+            const username = this.sessionManager.getUserName();
+            this.feedManager.loadUserPosts(await this.profileUtils.getUserPosts(username));
 
             console.log('Profile UI updated successfully:', profile);
         } catch (error) {
