@@ -380,6 +380,51 @@ class ProfileUtils {
         // This would require a dedicated backend endpoint
         throw new Error('User search not supported: No /users/ endpoint available in backend');
     }
+
+    /**
+     * Get comments for a specific post
+     * @param {string} postId - Post ID to fetch comments for
+     * @returns {Promise<Array>} Array of comments for the post
+     */
+    async getPostComments(postId) {
+        if (!postId) {
+            throw new Error('Post ID is required');
+        }
+
+        try {
+            const response = await fetch(`${this.baseUrl}/posts/${postId}/comments`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    // Post not found or no comments
+                    return [];
+                }
+                throw new Error(`Failed to fetch comments: ${response.statusText}`);
+            }
+
+            const comments = await response.json();
+
+            // Format comments for consistency
+            return comments.map(comment => ({
+                id: comment.comment_id || comment.id,
+                content: comment.content || comment.text,
+                author_id: comment.author_id,
+                author_name: comment.author_name || comment.username,
+                created_at: comment.created_at || comment.createdAt,
+                updated_at: comment.updated_at || comment.updatedAt,
+                post_id: comment.post_id || postId
+            }));
+
+        } catch (error) {
+            console.error('Error fetching post comments:', error);
+            throw error;
+        }
+    }
 }
 
 // Create and export a singleton instance of the ProfileUtils class
