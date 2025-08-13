@@ -4,6 +4,8 @@ import { createPost } from '../post-api/postUtils.js';
 import { sessionManager } from '../managers/session-manager.js';
 import { feedManager } from '../managers/feed-manager.js';
 
+let selectedTags = [];
+
 // Form validation and submission handlers
 function handlePostFormSubmit(event) {
     clearErrorMessage('#postOverallError');
@@ -91,9 +93,9 @@ export function handleTagChange() {
 
     if (!validationResult.isValid) {
         console.error(`Validation errors for tags:`, validationResult.error);
-        addErrorMessage("#tagsContainer", validationResult.error);
+        addErrorMessage("#postTags", validationResult.error);
     } else {
-        clearErrorMessage("#tagsContainer");
+        clearErrorMessage("#postTags");
     }
 }
 

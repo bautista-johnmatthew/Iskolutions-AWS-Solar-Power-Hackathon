@@ -1,7 +1,7 @@
 import { updatePost, deletePost, patchPost } from './postUtils.js';
 import { feedManager } from '../managers/feed-manager.js';
 import { voteHandler } from '../vote-api/vote-handler.js';
-import { wireEditModalEvents } from '../validation/editpost.js';
+import { wireEditModalEvents,  } from '../validation/editpost.js';
 
 const selectedTags = [];
 
@@ -157,7 +157,9 @@ export class PostActionsHandler {
                                                 <button type="button" id="resource" class="tag-btn">RESOURCE</button>
                                                 <button type="button" id="lost-and-found" class="tag-btn">LOST & FOUND</button>
                                             </div>
-                                            <input type="hidden" id="edit-tags" value="${postData.tags.join(', ')}">
+                                            <div class="invalid-feedback" id="postTags"></div>
+                                            <div> 
+                                            <input class="d-none" id="edit-tags" value="${postData.tags.join(', ')}">
                                         </div>
                                     </div>
                                 </div>
@@ -173,7 +175,6 @@ export class PostActionsHandler {
                     </div>
                 </div>`;
 
-            console.log("adding modal to body")
             document.body.appendChild(modal);
             const modalElement = new bootstrap.Modal(modal, { backdrop: 'static' });
             modalElement.show();
@@ -187,6 +188,7 @@ export class PostActionsHandler {
                     content: modal.querySelector('#edit-content').value,
                     tags: modal.querySelector('#edit-tags').value.split(',').map(tag => tag.trim())
                 };
+                return;
                 modalElement.hide();
                 // Wait for transition end before removing
                 modal.addEventListener('hidden.bs.modal', () => {
