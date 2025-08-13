@@ -4,8 +4,6 @@ import { createPost } from '../post-api/postUtils.js';
 import { sessionManager } from '../managers/session-manager.js';
 import { feedManager } from '../managers/feed-manager.js';
 
-const selectedTags = [];
-
 // Form validation and submission handlers
 function handlePostFormSubmit(event) {
     clearErrorMessage('#postOverallError');
@@ -81,7 +79,7 @@ function handleContentBlur() {
 }
 
 // Function to handle tag change event
-function handleTagChange() {
+export function handleTagChange() {
     if ($(this).hasClass('active')) {   
         selectedTags.push($(this).attr('id'));
     } else {

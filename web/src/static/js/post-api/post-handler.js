@@ -1,6 +1,9 @@
 import { updatePost, deletePost, patchPost } from './postUtils.js';
 import { feedManager } from '../managers/feed-manager.js';
 import { voteHandler } from '../vote-api/vote-handler.js';
+import { wireEditModalEvents } from '../validation/editpost.js';
+
+const selectedTags = [];
 
 /**
  * Handles all post-related actions (edit, delete, vote, etc.)
@@ -147,12 +150,12 @@ export class PostActionsHandler {
                                                 <i class="bi bi-tags"></i> CHOOSE TAGS
                                             </label>
                                             <div class="tag-buttons">
-                                                <button type="button" id="edit-freshman" class="tag-btn">FRESHMAN</button>
-                                                <button type="button" id="edit-requirements" class="tag-btn">REQUIREMENTS</button>
-                                                <button type="button" id="edit-programming" class="tag-btn">PROGRAMMING</button>
-                                                <button type="button" id="edit-review" class="tag-btn">REVIEW</button>
-                                                <button type="button" id="edit-resource" class="tag-btn">RESOURCE</button>
-                                                <button type="button" id="edit-lost-and-found" class="tag-btn">LOST & FOUND</button>
+                                                <button type="button" id="freshman" class="tag-btn">FRESHMAN</button>
+                                                <button type="button" id="requirements" class="tag-btn">REQUIREMENTS</button>
+                                                <button type="button" id="programming" class="tag-btn">PROGRAMMING</button>
+                                                <button type="button" id="review" class="tag-btn">REVIEW</button>
+                                                <button type="button" id="resource" class="tag-btn">RESOURCE</button>
+                                                <button type="button" id="lost-and-found" class="tag-btn">LOST & FOUND</button>
                                             </div>
                                             <input type="hidden" id="edit-tags" value="${postData.tags.join(', ')}">
                                         </div>
@@ -175,7 +178,9 @@ export class PostActionsHandler {
             const modalElement = new bootstrap.Modal(modal, { backdrop: 'static' });
             modalElement.show();
 
-            // Handle modal actions
+            // Wire validation & tag events
+            wireEditModalEvents(postData.id);
+
             modal.querySelector('#save-edit').onclick = () => {
                 const editedData = {
                     title: modal.querySelector('#edit-title').value,
@@ -203,7 +208,51 @@ export class PostActionsHandler {
      * Show confirmation dialog
      */
     async showConfirmDialog(title, message) {
-        return confirm(`${title}\n\n${message}`);
+        return new Promise((resolve) => {
+            const modal = document.createElement('div');
+            modal.className = 'modal fade confirm-delete-modal';
+            modal.tabIndex = -1;
+            modal.setAttribute('aria-hidden', 'true');
+            modal.innerHTML = `
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content create-post-modal">
+                        <div class="modal-header border-0">
+                            <h5 class="modal-title w-100 text-center fw-bold">${title}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <hr class="modal-divider" />
+                        <div class="modal-body">
+                            <p class="text-center mb-0 small-text">${message}</p>
+                        </div>
+                        <div class="modal-footer border-0 d-flex justify-content-center gap-3">
+                            <button type="button" class="footer-btn cancel-btn" data-bs-dismiss="modal" id="confirm-cancel-btn">CANCEL</button>
+                            <button type="button" class="footer-btn post-btn" id="confirm-delete-btn">DELETE</button>
+                        </div>
+                    </div>
+                </div>`;
+
+            document.body.appendChild(modal);
+            const modalElement = new bootstrap.Modal(modal, { backdrop: 'static' });
+            modalElement.show();
+
+            const cleanup = (result) => {
+                modalElement.hide();
+                modal.addEventListener('hidden.bs.modal', () => {
+                    modal.remove();
+                    resolve(result);
+                }, { once: true });
+            };
+
+            modal.querySelector('#confirm-delete-btn').addEventListener('click', () => cleanup(true));
+            modal.querySelector('#confirm-cancel-btn').addEventListener('click', () => cleanup(false));
+            // Also resolve false if user closes via X or backdrop
+            modal.addEventListener('hidden.bs.modal', () => {
+                if (document.body.contains(modal)) { // if not already cleaned up
+                    modal.remove();
+                    resolve(false);
+                }
+            }, { once: true });
+        });
     }
 
     /**
