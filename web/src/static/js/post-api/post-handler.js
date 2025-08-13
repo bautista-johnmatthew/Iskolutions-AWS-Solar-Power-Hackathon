@@ -7,18 +7,15 @@ import { voteHandler } from '../vote-api/vote-handler.js';
  */
 export class PostActionsHandler {
     constructor() {
-        this.setupGlobalEventListeners();
+        this.setupEventListeners();
     }
 
     /**
      * Setup event listeners using event delegation for dynamically added posts
      */
-    setupGlobalEventListeners() {
-        document.addEventListener('click', (e) => {
-            const postWrapper = e.target.closest('.post-wrapper');
+    setupEventListeners(postId, postWrapper) {
+        $(postWrapper).on('click', (e) => {
             if (!postWrapper) return;
-
-            const postId = postWrapper.dataset.postId;
 
             if (e.target.classList.contains('edit-post-btn')) {
                 this.handleEditPost(postId, postWrapper);
@@ -96,36 +93,87 @@ export class PostActionsHandler {
     }
 
     /**
-     * Show edit modal - This should be replaced with actual modal implementation
+     * Show edit modal
      */
     async showEditModal(postData) {
         return new Promise((resolve) => {
-            // Create a simple modal - you can enhance this with Bootstrap modals
+            // Create proper Bootstrap modal wrapper so it centers & overlays content
             const modal = document.createElement('div');
-            modal.className = 'edit-post-modal';
+            modal.className = 'modal fade edit-post-modal';
+            modal.tabIndex = -1;
+            modal.setAttribute('aria-hidden', 'true');
             modal.innerHTML = `
-                <div class="modal-content">
-                    <h3>Edit Post</h3>
-                    <div class="form-group">
-                        <label>Title:</label>
-                        <input type="text" id="edit-title" value="${postData.title}" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Content:</label>
-                        <textarea id="edit-content" class="form-control">${postData.content}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Tags (comma-separated):</label>
-                        <input type="text" id="edit-tags" value="${postData.tags.join(', ')}" class="form-control">
-                    </div>
-                    <div class="modal-actions">
-                        <button id="save-edit" class="btn btn-primary">Save</button>
-                        <button id="cancel-edit" class="btn btn-secondary">Cancel</button>
-                    </div>
-                </div>
-            `;
+                <div class="modal-dialog modal-dialog-centered modal-xl">
+                    <div class="modal-content create-post-modal">
+                        <div class="modal-header border-0">
+                            <h2 class="modal-title w-100 text-center fw-bold">EDIT POST</h2>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <hr class="modal-divider" />
+                        <form id="editPostForm">
+                            <div class="modal-body">
+                                <div class="row g-4">
+                                    <!-- Left column -->
+                                    <div class="col-md-7">
+                                        <div class="mb-3">
+                                            <label class="form-label">TITLE (REQUIRED)</label>
+                                            <div class="input-with-icon">
+                                                <i class="bi bi-file-post"></i>
+                                                <input id="edit-title" type="text" class="form-control pill-input" placeholder="INPUT POST TITLE" value="${postData.title}">
+                                            </div>
+                                            <div class="invalid-feedback" id="editTitleError"></div>
+                                        </div>
 
+                                        <div class="mb-3">
+                                            <label class="form-label">DESCRIPTION</label>
+                                            <textarea id="edit-content" class="form-control pill-textarea" rows="4" placeholder="INPUT DESCRIPTION">${postData.content}</textarea>
+                                            <div class="invalid-feedback" id="editContentError"></div>
+                                        </div>
+
+                                        <div class="mb-2 small-text">
+                                            DO YOU WANT TO ATTACH FILES? MAKE SURE IT'S IN PDF FORMAT AND LESS THAN 500KB.
+                                        </div>
+                                        <div class="input-with-icon file-pill">
+                                            <i class="bi bi-paperclip"></i>
+                                            <input id="editAttachment" type="file" class="form-control pill-input file-input" accept=".pdf" />
+                                            <div class="invalid-feedback" id="editAttachmentError"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Right column -->
+                                    <div class="col-md-5">
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                                <i class="bi bi-tags"></i> CHOOSE TAGS
+                                            </label>
+                                            <div class="tag-buttons">
+                                                <button type="button" id="edit-freshman" class="tag-btn">FRESHMAN</button>
+                                                <button type="button" id="edit-requirements" class="tag-btn">REQUIREMENTS</button>
+                                                <button type="button" id="edit-programming" class="tag-btn">PROGRAMMING</button>
+                                                <button type="button" id="edit-review" class="tag-btn">REVIEW</button>
+                                                <button type="button" id="edit-resource" class="tag-btn">RESOURCE</button>
+                                                <button type="button" id="edit-lost-and-found" class="tag-btn">LOST & FOUND</button>
+                                            </div>
+                                            <input type="hidden" id="edit-tags" value="${postData.tags.join(', ')}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="modal-footer border-0">
+                                <div class="invalid-feedback" id="editOverallError"></div>
+                                <button id="save-edit" type="button" class="footer-btn post-btn">SAVE</button>
+                                <button id="cancel-edit" type="button" class="footer-btn cancel-btn" data-bs-dismiss="modal">CANCEL</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>`;
+
+            console.log("adding modal to body")
             document.body.appendChild(modal);
+            const modalElement = new bootstrap.Modal(modal, { backdrop: 'static' });
+            modalElement.show();
 
             // Handle modal actions
             modal.querySelector('#save-edit').onclick = () => {
@@ -134,13 +182,19 @@ export class PostActionsHandler {
                     content: modal.querySelector('#edit-content').value,
                     tags: modal.querySelector('#edit-tags').value.split(',').map(tag => tag.trim())
                 };
-                document.body.removeChild(modal);
-                resolve(editedData);
+                modalElement.hide();
+                // Wait for transition end before removing
+                modal.addEventListener('hidden.bs.modal', () => {
+                    modal.remove();
+                    resolve(editedData);
+                }, { once: true });
             };
-
             modal.querySelector('#cancel-edit').onclick = () => {
-                document.body.removeChild(modal);
-                resolve(null);
+                modalElement.hide();
+                modal.addEventListener('hidden.bs.modal', () => {
+                    modal.remove();
+                    resolve(null);
+                }, { once: true });
             };
         });
     }
