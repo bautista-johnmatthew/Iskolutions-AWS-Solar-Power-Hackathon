@@ -169,6 +169,17 @@ body, html {
   border-radius: 10px;
   color: white;
   width: 100%;
-  max-width: 1300px;
+  max-width: 1265px;
   margin: 20px auto;
+}
+
+.features-section ul {
+  columns: 2;         
+  column-gap: 40px;   
+  list-style: disc;
+  padding-left: 20px;
+}
+
+.features-section li {
+  margin-bottom: 5px;
 }
