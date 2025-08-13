@@ -159,7 +159,7 @@ class FeedManager {
     fillTemplate(template, data) {
         let filledTemplate = template
             .replace(/\{\{id\}\}/g, data.id)
-            .replace(/\{\{username\}\}/g, data.author)
+            .replace(/\{\{username\}\}/g, data.author === sessionManager.getUserName() ? "Me" : data.author)
             .replace(/\{\{title\}\}/g, data.title)
             .replace(/\{\{content\}\}/g, data.content)
             .replace(/\{\{tags\}\}/g, data.tags.join(', '))
