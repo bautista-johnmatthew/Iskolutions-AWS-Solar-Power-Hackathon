@@ -34,6 +34,7 @@ export function handleEditFormSubmit(event, postId) {
             .then(() => {
                 feedManager.refresh();
                 const modalEl = document.querySelector('.edit-post-modal.show');
+                
                 if (modalEl) {
                     const bsModal = bootstrap.Modal.getInstance(modalEl);
                     bsModal?.hide();
@@ -44,9 +45,7 @@ export function handleEditFormSubmit(event, postId) {
                 addErrorMessage('#editOverallError', [{ message: 'Failed to update post.' }]);
             });
     } else {
-        let errorMsgList = '';
-        validationResult.error.forEach(e => errorMsgList += `<p>${e.message}</p>`);
-        addErrorMessage('#editOverallError', errorMsgList);
+        addErrorMessage('#editOverallError', validationResult.error);
     }
 }
 
@@ -68,18 +67,21 @@ export function handleEditAttachmentChange() {
 export function handleEditTagClick() {
     handleTagChange.call(this);
     const id = $(this).attr('id');
+
     if ($(this).hasClass('active')) {
         if (!editSelectedTags.includes(id)) editSelectedTags.push(id);
     } else {
         const idx = editSelectedTags.indexOf(id);
         if (idx !== -1) editSelectedTags.splice(idx, 1);
     }
+
     $('#edit-tags').val(editSelectedTags.join(', '));
 }
 
 export function wireEditModalEvents(postId) {
     const $modal = $('.edit-post-modal');
     if (!$modal.length) return;
+    
     $modal.find('#edit-title').on('blur', handleEditTitleBlur);
     $modal.find('#edit-content').on('blur', handleEditContentBlur);
     $modal.find('#editAttachment').on('change', handleEditAttachmentChange);

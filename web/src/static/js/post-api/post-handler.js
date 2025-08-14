@@ -1,7 +1,7 @@
 import { updatePost, deletePost, patchPost } from './postUtils.js';
 import { feedManager } from '../managers/feed-manager.js';
 import { voteHandler } from '../vote-api/vote-handler.js';
-import { wireEditModalEvents,  } from '../validation/editpost.js';
+import { wireEditModalEvents } from '../validation/editpost.js';
 
 const selectedTags = [];
 
@@ -188,7 +188,7 @@ export class PostActionsHandler {
                     content: modal.querySelector('#edit-content').value,
                     tags: modal.querySelector('#edit-tags').value.split(',').map(tag => tag.trim())
                 };
-                return;
+
                 modalElement.hide();
                 // Wait for transition end before removing
                 modal.addEventListener('hidden.bs.modal', () => {
@@ -249,7 +249,7 @@ export class PostActionsHandler {
             modal.querySelector('#confirm-cancel-btn').addEventListener('click', () => cleanup(false));
             // Also resolve false if user closes via X or backdrop
             modal.addEventListener('hidden.bs.modal', () => {
-                if (document.body.contains(modal)) { // if not already cleaned up
+                if (document.body.contains(modal)) {
                     modal.remove();
                     resolve(false);
                 }
@@ -261,9 +261,30 @@ export class PostActionsHandler {
      * Show success message
      */
     showSuccessMessage(message) {
-        // You can implement toast notifications or use your existing notification system
-        console.log('Success:', message);
-        alert(message); // Simple implementation
+        // Create temporary success notification
+        const notification = document.createElement('div');
+        notification.className = 'alert alert-success position-fixed';
+        notification.style.cssText = `
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #28a745;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        `;
+        notification.textContent = message;
+
+        document.body.appendChild(notification);
+
+        // Auto-remove after 3 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 3000);
     }
 
     /**
@@ -271,7 +292,7 @@ export class PostActionsHandler {
      */
     showErrorMessage(message) {
         console.error('Error:', message);
-        alert(message); // Simple implementation
+        alert(message);
     }
 }
 
