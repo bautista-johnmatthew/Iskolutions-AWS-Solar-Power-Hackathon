@@ -5,6 +5,7 @@ load_dotenv()
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from mangum import Mangum
 from services.aws_clients import AWSClients
 from routes import router
 
@@ -24,7 +25,7 @@ class App(FastAPI):
         )
 
         # Uncomment only if you have the necessary environment variables set
-        # self._init_clients()
+        self._init_clients()
 
         self._init_middleware()
 
@@ -57,6 +58,8 @@ def main() -> None:
     )
 
 app = main()
+handler = Mangum(app)
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
