@@ -9,10 +9,6 @@ export function filterPostsByTag(posts, tags) {
     
     // If tags is a string, convert it to an array
     const tagArray = Array.isArray(tags) ? tags : [tags];
-
-    if (tagArray.includes("lost & found")) {
-        tagArray.push("lost-and-found");
-    }
     
     return posts.filter(post => {
         if (!post.tags) return false;

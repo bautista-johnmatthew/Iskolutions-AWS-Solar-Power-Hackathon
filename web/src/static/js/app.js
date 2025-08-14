@@ -20,7 +20,7 @@ $(document).ready(function () {
     $('.filter-btn').on('click', function () {
         let tags = [];
         $('.filter-btn.active').each(function () {
-            tags.push($(this).text().toLowerCase());
+            tags.push($(this).attr('id').toLowerCase());
         });
 
         const filteredPosts = filterPostsByTag(feedManager.posts, tags);
