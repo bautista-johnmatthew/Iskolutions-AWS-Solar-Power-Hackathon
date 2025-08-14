@@ -131,7 +131,6 @@ $(document).ready(function() {
     const isLoggedIn = sessionManager.isLoggedIn();
     if (!isLoggedIn) {
         console.warn('User not logged in');
-        // You might want to redirect to login or disable the form
     }
 
     $("#postForm").on("submit", handlePostFormSubmit);
