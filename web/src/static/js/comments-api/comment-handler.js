@@ -12,30 +12,30 @@ export class CommentModalHandler {
         this.isModalOpen = false;
         this.currentPostId = null;
         this.currentPostWrapper = null;
-        this.setupGlobalEventListeners();
+        this._eventsBound = false;
     }
 
     /**
      * Setup event listeners for comment buttons
      */
     setupGlobalEventListeners() {
-        document.addEventListener('click', (e) => {
-            console.log("Global click event:", e.target);
-            // Check if it's an add comment button
-            if (e.target.classList.contains('add-comment-btn')) {
-                e.preventDefault();
+        if (this._eventsBound) return;
+        this._eventsBound = true;
 
-                // Check if user is logged in
-                if (!sessionManager.isLoggedIn()) {
-                    this.showLoginRequiredMessage();
-                    return;
-                }
+        // Delegate click handling for dynamically added buttons
+        $(document).on('click', '.add-comment-btn', (e) => {
+            e.preventDefault();
 
-                const postWrapper = e.target.closest('.post-wrapper');
-                if (postWrapper) {
-                    const postId = postWrapper.dataset.postId;
-                    this.openCommentModal(postId, postWrapper);
-                }
+            if (!sessionManager.isLoggedIn()) {
+                this.showLoginRequiredMessage();
+                return;
+            }
+
+            const sourceEl = e.currentTarget || e.target;
+            const postWrapper = sourceEl.closest('.post-wrapper') || e.target.closest('.post-wrapper');
+            if (postWrapper) {
+                const postId = postWrapper.dataset.postId;
+                this.openCommentModal(postId, postWrapper);
             }
         });
 
