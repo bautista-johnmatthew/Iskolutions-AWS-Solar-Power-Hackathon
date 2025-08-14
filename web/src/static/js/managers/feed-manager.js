@@ -1,8 +1,7 @@
 import { getPosts } from '../post-api/postUtils.js';
 import { getComments } from '../comments-api/commentUtils.js';
 import { voteHandler } from '../vote-api/vote-handler.js';
-import { ProfileUtils } from '../profile-api/profileUtils.js';
-import { CommentModalHandler } from '../comments-api/comment-handler.js';
+import { postActionsHandler } from '../post-api/post-handler.js';
 import { sessionManager } from '../managers/session-manager.js';
 
 /**
@@ -119,7 +118,9 @@ class FeedManager {
             }
 
             // Hide edit and delete buttons for non-authors
-            if (!isAuthor) {
+            if (isAuthor) {
+                postActionsHandler.setupEventListeners(postData.id, actualPostElement);
+            } else {
                 $(actualPostElement).find(".post-actions").hide();
             }
 
@@ -213,11 +214,9 @@ class FeedManager {
         }
     }
 
-    loadCommentTemplate(commentData, targetContainer) {
-        console.log('Loading comment template with data:', commentData);
+    loadCommentTemplate(commentData, targetContainer) {        
         $.get("./comment-template.html")
             .done(function (template) {
-                console.log('Comment template loaded successfully');
                 // For comments, if the author is the current user, use their name from session
                 // Otherwise, use the author field (which might be user ID for now)
                 let displayName = commentData.author;
@@ -230,7 +229,6 @@ class FeedManager {
                 .replace("{{commentText}}", commentData.content)
                 .replace("{{timeAgo}}", this.formatTimeAgo(commentData.updatedAt || commentData.createdAt));
 
-                console.log('Comment template filled:', filled);
                 $(targetContainer).append(filled);
             }.bind(this))
             .fail(function(error) {

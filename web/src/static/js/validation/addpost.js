@@ -4,7 +4,7 @@ import { createPost } from '../post-api/postUtils.js';
 import { sessionManager } from '../managers/session-manager.js';
 import { feedManager } from '../managers/feed-manager.js';
 
-const selectedTags = [];
+let selectedTags = [];
 
 // Form validation and submission handlers
 function handlePostFormSubmit(event) {
@@ -33,7 +33,7 @@ function handlePostFormSubmit(event) {
         console.log("Form is valid:", validationResult.data);
 
         // Add other data 
-        validationResult.data.author_id = sessionManager.getUser().name;
+        validationResult.data.author_id = sessionManager.getUserName();
 
         createPost(validationResult.data)
             .then(response => {
@@ -81,7 +81,7 @@ function handleContentBlur() {
 }
 
 // Function to handle tag change event
-function handleTagChange() {
+export function handleTagChange() {
     if ($(this).hasClass('active')) {   
         selectedTags.push($(this).attr('id'));
     } else {
@@ -93,9 +93,9 @@ function handleTagChange() {
 
     if (!validationResult.isValid) {
         console.error(`Validation errors for tags:`, validationResult.error);
-        addErrorMessage("#tagsContainer", validationResult.error);
+        addErrorMessage("#postTags", validationResult.error);
     } else {
-        clearErrorMessage("#tagsContainer");
+        clearErrorMessage("#postTags");
     }
 }
 
