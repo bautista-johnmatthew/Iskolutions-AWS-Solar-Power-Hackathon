@@ -24,9 +24,9 @@ function handlePostFormSubmit(event) {
         content: $("#postContent").val(),
         tags: selectedTags,
         anonymous: $("#postAnonymous").is(":checked"),
-        attachment: $("#postAttachment")[0].files[0]
+        attachments: $("#postAttachment")[0].files[0]
     };
-    
+
     const validationResult = validateForumPost(formData);
     
     if (validationResult.isValid) {
@@ -102,7 +102,8 @@ export function handleTagChange() {
 // Function to handle anonymous checkbox change
 function handleAnonymousChange() {
     const validationResult = validateField('anonymous', $(this).is(":checked"));
-    
+    console.log("Anonymous:", validationResult.value);
+
     if (!validationResult.isValid) {
         console.error(`Validation errors for anonymous:`, validationResult.error);
         addErrorMessage("#postAnonymous", validationResult.error);
@@ -114,7 +115,7 @@ function handleAnonymousChange() {
 // Function to handle attachment change
 function handleAttachmentChange() {
     const validationResult = validateField('attachment', $(this)[0].files[0]);
-    
+
     if (!validationResult.isValid) {
         console.error(`Validation errors for attachment:`, validationResult.error);
         addErrorMessage("#postAttachment", validationResult.error);

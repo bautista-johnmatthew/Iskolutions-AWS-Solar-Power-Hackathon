@@ -94,7 +94,7 @@ const forumPostSchema = z.object({
     content: contentSchema,
     tags: tagsSchema,
     anonymous: anonymousSchema,
-    attachment: attachmentSchema,
+    attachments: attachmentSchema,
     created_at: z.date().default(() => new Date())
 });
 
