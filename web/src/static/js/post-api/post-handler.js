@@ -82,11 +82,13 @@ export class PostActionsHandler {
             'Delete Post',
             'Are you sure you want to delete this post? This action cannot be undone.'
         );
+        console.log("Confirmation dialog closed: ", confirmed);
 
         if (confirmed) {
             try {
                 await deletePost(postId);
-                feedManager.refresh();
+                const username = document.querySelector('.profile-username').textContent;
+                feedManager.loadUserPosts(await profileUtils.getUserPosts(username));
                 this.showSuccessMessage('Post deleted successfully!');
             } catch (error) {
                 console.error('Failed to delete post:', error);
@@ -236,23 +238,26 @@ export class PostActionsHandler {
             document.body.appendChild(modal);
             const modalElement = new bootstrap.Modal(modal, { backdrop: 'static' });
             modalElement.show();
-
+            
+            let resolved = false;
+            
             const cleanup = (result) => {
-                modalElement.hide();
-                modal.addEventListener('hidden.bs.modal', () => {
-                    modal.remove();
-                    resolve(result);
-                }, { once: true });
+                if (!resolved) {
+                    resolved = true;
+                    modalElement.hide();
+                    modal.addEventListener('hidden.bs.modal', () => {
+                        modal.remove();
+                        resolve(result);
+                    }, { once: true });
+                }
             };
-
+            
             modal.querySelector('#confirm-delete-btn').addEventListener('click', () => cleanup(true));
             modal.querySelector('#confirm-cancel-btn').addEventListener('click', () => cleanup(false));
-            // Also resolve false if user closes via X or backdrop
+            
+            // Handle X button or backdrop click
             modal.addEventListener('hidden.bs.modal', () => {
-                if (document.body.contains(modal)) {
-                    modal.remove();
-                    resolve(false);
-                }
+                cleanup(false);
             }, { once: true });
         });
     }

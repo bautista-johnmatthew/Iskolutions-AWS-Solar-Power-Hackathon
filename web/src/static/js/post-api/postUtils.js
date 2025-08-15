@@ -46,8 +46,15 @@ export function validatePostData(data) {
 		errors.push('Tags must be an array.');
 	}
 
-	if (data.attachments && !Array.isArray(data.attachments)) {
-		errors.push('Attachments must be an array.');
+    if (data.attachments) {
+        if (!Array.isArray(data.attachments) && 
+            !(data.attachments instanceof File || 
+            (data.attachments && typeof data.attachments === 'object' && 
+            'name' in data.attachments && 
+            'size' in data.attachments && 
+            'type' in data.attachments))) {
+		        errors.push('Attachments must be an array.');
+            }
 	}
 
 	return errors;
@@ -80,23 +87,23 @@ export async function getPosts() {
  * Filters out undefined or null fields.
  */
 export function buildPostPayload(data) {
-	const payload = {
-		author_id: data.author_id,
-		title: data.title,
-		content: data.content,
-		tags: data.tags || [],
-		attachments: data.attachments || [],
-		is_anonymous: !!data.is_anonymous,
-	};
+    const payload = {
+        author_id: data.author_id,
+        title: data.title,
+        content: data.content,
+        tags: data.tags || [],
+        attachments: [data.attachments],
+        is_anonymous: !data.is_anonymous,
+    };
+    
+    // Remove empty fields
+    Object.keys(payload).forEach(key => {
+        if (payload[key] === undefined || payload[key] === null) {
+            delete payload[key];
+        }
+    });
 
-	// Remove empty fields
-	Object.keys(payload).forEach(key => {
-		if (payload[key] === undefined || payload[key] === null) {
-			delete payload[key];
-		}
-	});
-
-	return payload;
+    return payload;    
 }
 
 export async function createPost(data) {
@@ -105,8 +112,6 @@ export async function createPost(data) {
     if (!isLoggedIn) {
         throw new Error('User must be authenticated to create a post');
     }
-
-// Removed redundant author_id assignment as it is already set in addpost.js
 
     const validationErrors = validatePostData(data);
     if (validationErrors.length > 0) {
@@ -117,15 +122,17 @@ export async function createPost(data) {
 
     // Get token for authentication if available
     const token = sessionManager.getToken();
-    const headers = {
+
+    let headers = {
         'Content-Type': 'application/json',
     };
 
     // Add authorization header if token exists
     if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
+        headers['Authorization'] = `${token}`;
     }
 
+    console.log("Post request: ", { url: `${BASE_API_URL}/posts`, contentType: headers['Content-Type'], method: 'POST', headers, body: JSON.stringify(payload) });
     const response = await fetch(`${BASE_API_URL}/posts`, {
         method: 'POST',
         headers: headers,
