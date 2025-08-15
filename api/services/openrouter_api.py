@@ -5,12 +5,11 @@ import os
 MAX_CHARS = 20_000
 API_MODEL = "microsoft/mai-ds-r1:free"
 
-def extract_text_from_pdf(pdf_path):
+def extract_text_from_pdf(pdf):
     """Extract text from PDF file"""
     try:
-        with open(pdf_path, 'rb') as file:
-            pdf_reader = PdfReader(file)
-            text = iterate_pages(pdf_reader)
+        pdf_reader = PdfReader(pdf)
+        text = iterate_pages(pdf_reader)
     except Exception as e:
         print(f"Error opening PDF file: {e}")
         return None
