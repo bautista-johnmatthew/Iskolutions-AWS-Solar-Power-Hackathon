@@ -36,7 +36,9 @@ async function handleLogin(username, password) {
         clearLoginForm();
 
         // Redirect to feed page after successful login
-        window.location.href += 'templates/feed.html';
+        window.location.href = window.location.origin 
+            + window.location.pathname.replace(/\/[^\/]*$/, '/') 
+            + 'templates/feed.html';
 
         return user;
     } catch (error) {
