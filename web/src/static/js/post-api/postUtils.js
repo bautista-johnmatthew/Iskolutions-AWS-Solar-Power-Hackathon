@@ -95,7 +95,7 @@ export function buildPostPayload(data) {
             content: data.content,
             tags: data.tags || [],
             attachments: data.attachments || [],
-            is_anonymous: !!data.is_anonymous,
+            is_anonymous: !data.is_anonymous,
         };
         
         // Remove empty fields
@@ -107,7 +107,7 @@ export function buildPostPayload(data) {
         
         return { type: 'json', data: payload };
     }
-    
+
     // For FormData (used when attachments are present)
     const formData = new FormData();
     formData.append('author_id', data.author_id);
@@ -120,7 +120,6 @@ export function buildPostPayload(data) {
     if (data.tags && data.tags.length > 0) {
         formData.append('tags', JSON.stringify(data.tags));
     }
-    
     
     return { type: 'formData', data: formData };
 }
@@ -145,7 +144,9 @@ export async function createPost(data) {
     let body, headers;
     if (payload.type === 'formData') {
         body = payload.data;
-        headers = {};
+        headers = {
+            'Content-Type': 'multipart/form-data'
+        };
     } else {
         body = JSON.stringify(payload.data);
         headers = {
@@ -155,9 +156,9 @@ export async function createPost(data) {
 
     // Add authorization header if token exists
     if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
+        headers['Authorization'] = `${token}`;
     }
-
+    console.log("Post request: ", { url: `${BASE_API_URL}/posts`, contentType: headers['Content-Type'], method: 'POST', headers, body });
     const response = await fetch(`${BASE_API_URL}/posts`, {
         method: 'POST',
         headers: headers,

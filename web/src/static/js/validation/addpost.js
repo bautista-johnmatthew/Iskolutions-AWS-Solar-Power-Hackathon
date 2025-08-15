@@ -102,7 +102,6 @@ export function handleTagChange() {
 // Function to handle anonymous checkbox change
 function handleAnonymousChange() {
     const validationResult = validateField('anonymous', $(this).is(":checked"));
-    console.log("Anonymous:", validationResult.value);
 
     if (!validationResult.isValid) {
         console.error(`Validation errors for anonymous:`, validationResult.error);

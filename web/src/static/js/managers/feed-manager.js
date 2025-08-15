@@ -158,9 +158,25 @@ class FeedManager {
      * Fill template with data
      */
     fillTemplate(template, data) {
+        let username = "";
+        if (data.author === sessionManager.getUserName()) {
+            username = "Me";
+        } else {
+            username = data.author;
+        }
+
+        if (data.isAnonymous) {
+            if (data.author === sessionManager.getUserName()) {
+                username += " (Anonymous)";
+            } else {
+                username = "Anonymous";
+            }
+        } 
+        
+
         let filledTemplate = template
             .replace(/\{\{id\}\}/g, data.id)
-            .replace(/\{\{username\}\}/g, data.author === sessionManager.getUserName() ? "Me" : data.author)
+            .replace(/\{\{username\}\}/g, username)
             .replace(/\{\{title\}\}/g, data.title)
             .replace(/\{\{content\}\}/g, data.content)
             .replace(/\{\{tags\}\}/g, data.tags.join(', '))
