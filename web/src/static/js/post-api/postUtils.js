@@ -47,11 +47,11 @@ export function validatePostData(data) {
 	}
 
     if (data.attachments) {
-        if (!Array.isArray(data.attachments) && 
-            !(data.attachments instanceof File || 
-            (data.attachments && typeof data.attachments === 'object' && 
-            'name' in data.attachments && 
-            'size' in data.attachments && 
+        if (!Array.isArray(data.attachments) &&
+            !(data.attachments instanceof File ||
+            (data.attachments && typeof data.attachments === 'object' &&
+            'name' in data.attachments &&
+            'size' in data.attachments &&
             'type' in data.attachments))) {
 		        errors.push('Attachments must be an array.');
             }
@@ -71,6 +71,24 @@ export async function getPosts() {
     }
 
 	const rawPosts = await response.json();
+
+    await Promise.all(
+        rawPosts.map(async post => {
+            try {
+                const r = await fetch(`${BASE_API_URL}/posts/${post.id}/files`);
+                if (!r.ok) {
+                    console.warn(`Failed to fetch files for post ${post.id}`);
+                    post.attachments = [];
+                    return;
+                }
+                const files = await r.json();
+                post.attachments = files;
+            } catch (err) {
+                console.warn(`Error fetching files for post ${post.id}:`, err);
+                post.attachments = [];
+            }
+        })
+    );
 
 	// Ensure we return an array
 	if (!Array.isArray(rawPosts)) {
@@ -92,10 +110,9 @@ export function buildPostPayload(data) {
         title: data.title,
         content: data.content,
         tags: data.tags || [],
-        attachments: [data.attachments],
-        is_anonymous: !data.is_anonymous,
+        is_anonymous: data.anonymous,
     };
-    
+
     // Remove empty fields
     Object.keys(payload).forEach(key => {
         if (payload[key] === undefined || payload[key] === null) {
@@ -103,7 +120,7 @@ export function buildPostPayload(data) {
         }
     });
 
-    return payload;    
+    return payload;
 }
 
 export async function createPost(data) {
@@ -132,8 +149,7 @@ export async function createPost(data) {
         headers['Authorization'] = `${token}`;
     }
 
-    console.log("Post request: ", { url: `${BASE_API_URL}/posts`, contentType: headers['Content-Type'], method: 'POST', headers, body: JSON.stringify(payload) });
-    const response = await fetch(`${BASE_API_URL}/posts`, {
+    let response = await fetch(`${BASE_API_URL}/posts`, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(payload),
@@ -141,7 +157,39 @@ export async function createPost(data) {
 
     if (!response.ok) throw new Error('Failed to create post');
 
-    return await response.json();
+    const createdPost = await response.json();
+    let attachments = data.attachments;
+
+    // Normalize attachments to an array
+    if (attachments && !(attachments instanceof Array)) {
+        attachments = [attachments];
+    }
+
+    if (attachments && attachments.length > 0) {
+        for (const file of attachments) {
+            if (!(file instanceof File)) continue;
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('user_id', sessionManager.getUserId());
+
+            let attachmentResponse = await fetch(`${BASE_API_URL}/posts/${createdPost.post.post_id}/files`, {
+                method: 'POST',
+                body: formData,
+                headers: token ? { Authorization: token } : {}
+            });
+
+            if (!attachmentResponse.ok) throw new Error('Failed to upload attachment');
+
+            const uploadedAttachment = await attachmentResponse.json();
+            if (createdPost.post.attachments) {
+                createdPost.post.attachments.push(uploadedAttachment);
+            } else {
+                createdPost.post.attachments = [uploadedAttachment];
+            }
+        }
+    }
+
+    return createdPost;
 }
 
 export async function updatePost(postId, data) {
@@ -155,27 +203,46 @@ export async function updatePost(postId, data) {
     }
 
     const payload = buildPostPayload(data);
-    const response = await fetch(`${BASE_API_URL}/posts/${postId}`, {
+
+    // Get token for authentication if available
+    const token = sessionManager.getToken();
+
+    let headers = {
+        'Content-Type': 'application/json',
+    };
+    if (token) {
+        headers['Authorization'] = `${token}`;
+    }
+
+    let response = await fetch(`${BASE_API_URL}/posts/${postId}`, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: headers,
         body: JSON.stringify(payload),
     });
 
     if (!response.ok) throw new Error('Failed to update post');
 
-    return await response.json();
+    const updatedPost = await response.json();
+
+    return updatedPost;
 }
 
 export async function deletePost(postId) {
+    // Get token for authentication if available
+    const token = sessionManager.getToken();
+    let headers = {};
+    if (token) {
+        headers['Authorization'] = `${token}`;
+    }
+
     const response = await fetch(`${BASE_API_URL}/posts/${postId}`, {
         method: 'DELETE',
+        headers
     });
 
     if (!response.ok) throw new Error('Failed to delete post');
 
-    return await response.json(); // Usually returns a success message
+    return await response.json();
 }
 
 /**

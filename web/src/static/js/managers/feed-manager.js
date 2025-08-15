@@ -4,6 +4,7 @@ import { voteHandler } from '../vote-api/vote-handler.js';
 import { postActionsHandler } from '../post-api/post-handler.js';
 import { sessionManager } from '../managers/session-manager.js';
 import { commentModalHandler } from '../comments-api/comment-handler.js';
+import { BASE_API_URL } from '../utils/base-api-url.js';
 
 /**
  * Enhanced post template loader that connects to your post utilities
@@ -30,6 +31,7 @@ class FeedManager {
         try {
             // Use your getPosts utility function
             this.posts = await getPosts();
+            console.log(this.posts);
 
             // Clear existing posts and render new ones
             this.feedContainer.innerHTML = '';
@@ -72,7 +74,7 @@ class FeedManager {
     }
 
     // Load user posts for profile page
-    async loadUserPosts(posts = this.posts) {
+    async loadUserPosts(posts = []) {
         try {
             this.feedContainer = document.querySelector('.user-posts-container');
 
@@ -80,7 +82,7 @@ class FeedManager {
             this.feedContainer.innerHTML = '';
 
             // Render all posts (using for loop to handle async properly)
-            for (const post of this.posts) {
+            for (const post of posts) {
                 await this.renderPost(post, true);
             }
 
@@ -171,8 +173,7 @@ class FeedManager {
             } else {
                 username = "Anonymous";
             }
-        } 
-        
+        }
 
         let filledTemplate = template
             .replace(/\{\{id\}\}/g, data.id)
@@ -182,27 +183,41 @@ class FeedManager {
             .replace(/\{\{tags\}\}/g, data.tags.join(', '))
             .replace(/\{\{timeAgo\}\}/g, data.createdAt ? this.formatTimeAgo(data.createdAt) : 'Unknown')
             .replace(/\{\{summary\}\}/g, data.summary || '')
-            .replace(/\{\{attachments\}\}/g, this.generateAttachmentHTML(data.attachments || []));
+            .replace(/\{\{attachments\}\}/g, this.generateAttachmentHTML(data.id, data.attachments || []));
 
         return filledTemplate;
     }
 
-    generateAttachmentHTML(attachments) {
+    generateAttachmentHTML(postId, attachments) {
+        console.log(attachments);
         if (!attachments.length) return '<div></div>';
         let html = `<div class="attachment-list"><strong>📎 Attachments:</strong><ul>`;
         attachments.forEach(file => {
-            const fileName = file.substring(file.lastIndexOf('/') + 1);
+            const fileName = file.filename;
+            const downloadUrl = `https://iskolution-pup-forum-attachments.s3.ap-northeast-1.amazonaws.com/attachments/${postId}/${file.file_id}-${fileName}`;
+
             html += `
-            <li class="attachment-item">
-                <span class="filename">${fileName}</span>
-                <a class="download-btn" href="${file}" download>
-                <i class="bi bi-download"></i>
-                </a>
-            </li>`;
+                <li class="attachment-item">
+                    <span class="filename">${fileName}</span>
+                    <a class="download-btn" href="${downloadUrl}" target="_blank">
+                        <i class="bi bi-download"></i>
+                    </a>
+                </li>`;
         });
         html += `</ul></div>`;
 
         return html;
+    }
+
+    async downloadAttachment(apiUrl, filename) {
+        const res = await fetch(apiUrl);
+        const data = await res.json();
+        const a = document.createElement('a');
+        a.href = data.download_url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
     }
 
     /**
@@ -231,7 +246,7 @@ class FeedManager {
         }
     }
 
-    loadCommentTemplate(commentData, targetContainer) {        
+    loadCommentTemplate(commentData, targetContainer) {
         $.get("./comment-template.html")
             .done(function (template) {
                 // For comments, if the author is the current user, use their name from session

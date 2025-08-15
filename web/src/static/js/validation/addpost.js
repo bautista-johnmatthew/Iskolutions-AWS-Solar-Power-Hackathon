@@ -10,15 +10,15 @@ let selectedTags = [];
 function handlePostFormSubmit(event) {
     clearErrorMessage('#postOverallError');
     event.preventDefault();
-    
+
     // Get author ID from session
     const authorId = sessionManager.getUserId();
-    
+
     if (!authorId) {
         alert('You must be logged in to create a post');
         return;
     }
-    
+
     const formData = {
         title: $("#postTitle").val(),
         content: $("#postContent").val(),
@@ -26,13 +26,12 @@ function handlePostFormSubmit(event) {
         anonymous: $("#postAnonymous").is(":checked"),
         attachments: $("#postAttachment")[0].files[0]
     };
-
     const validationResult = validateForumPost(formData);
-    
+
     if (validationResult.isValid) {
         console.log("Form is valid:", validationResult.data);
 
-        // Add other data 
+        // Add other data
         validationResult.data.author_id = sessionManager.getUserName();
 
         createPost(validationResult.data)
@@ -59,7 +58,7 @@ function handlePostFormSubmit(event) {
 // Function to handle title blur event
 function handleTitleBlur() {
     const validationResult = validateField('title', $(this).val());
-    
+
     if (!validationResult.isValid) {
         console.error(`Validation errors for title:`, validationResult.error);
         addErrorMessage("#postTitle", validationResult.error);
@@ -71,7 +70,7 @@ function handleTitleBlur() {
 // Function to handle content blur event
 function handleContentBlur() {
     const validationResult = validateField('content', $(this).val());
-    
+
     if (!validationResult.isValid) {
         console.error(`Validation errors for content:`, validationResult.error);
         addErrorMessage("#postContent", validationResult.error);
@@ -82,7 +81,7 @@ function handleContentBlur() {
 
 // Function to handle tag change event
 export function handleTagChange() {
-    if ($(this).hasClass('active')) {   
+    if ($(this).hasClass('active')) {
         selectedTags.push($(this).attr('id'));
     } else {
         const tagValue = $(this).attr('id');
@@ -124,7 +123,7 @@ function handleAttachmentChange() {
 }
 
 // Attach event listeners
-$(document).ready(function() {    
+$(document).ready(function() {
     preloadSchemas();
 
     // Check if user is logged in
@@ -138,12 +137,12 @@ $(document).ready(function() {
     $("#postContent").on("blur", handleContentBlur);
     $("#postAnonymous").on("change", handleAnonymousChange);
     $("#postAttachment").on("change", handleAttachmentChange);
-    
+
     // Handle tag checkboxes
     $(".tag-btn").each(function() {
         $(this).on("click", handleTagChange);
     });
-    
+
     $("#submitPost").on("click", function() {
         $("#postForm").submit();
     });

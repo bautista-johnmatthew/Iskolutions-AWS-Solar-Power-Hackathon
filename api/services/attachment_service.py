@@ -1,3 +1,4 @@
+from urllib import response
 import uuid
 import re
 import mimetypes
@@ -5,6 +6,7 @@ from botocore.exceptions import ClientError
 from fastapi import HTTPException, UploadFile
 from models.forum_models import get_timestamp, post_pk
 from services.aws_clients import AWSClients
+from services.post_service import PostService
 
 MAX_FILE_SIZE = 15 * 1024 * 1024  # 10 MB
 
@@ -16,23 +18,14 @@ class AttachmentService:
         self.s3 = aws_clients.s3
         self.bucket = aws_clients.s3_bucket
 
+
     def upload_file(self, post_id: str, file: UploadFile, user_id: str):
         """Upload file to S3 and store metadata in DynamoDB with validations."""
-        try:
-            response = self.table.get_item(Key={"PK": post_pk(post_id), 
-                                                "SK": "POST"})
-            if "Item" not in response:
-                raise HTTPException(status_code=404, 
-                                    detail="Post not found")
-        except ClientError as e:
-            raise HTTPException(status_code=500, 
-                                detail=f"Error validating post: {e}")
-
         file.file.seek(0, 2)  # Move cursor to end
         size = file.file.tell()
         file.file.seek(0)  # Reset cursor
         if size > MAX_FILE_SIZE:
-            raise HTTPException(status_code=413, 
+            raise HTTPException(status_code=413,
                                 detail="File too large (max 10 MB)")
 
         sanitized_filename = re.sub(r"[^\w\-.]", "_", file.filename)
@@ -40,6 +33,8 @@ class AttachmentService:
         key = f"attachments/{post_id}/{file_id}-{sanitized_filename}"
 
         content_type, _ = mimetypes.guess_type(sanitized_filename)
+        if not content_type:
+            content_type = "application/octet-stream"
 
         try:
             self.s3.upload_fileobj(file.file, self.bucket, key,
@@ -57,20 +52,25 @@ class AttachmentService:
 
             return {"message": "File uploaded", "file_id": file_id}
         except ClientError as e:
-            raise HTTPException(status_code=500, 
-                                detail=f"S3 upload failed: {e}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"S3 upload failed: {e}"
+            )
+        except Exception as e:
+            raise e
 
     def get_post_files(self, post_id: str):
         """Retrieve all files attached to a post."""
         try:
+            from boto3.dynamodb.conditions import Key
+
             response = self.table.query(
-                KeyConditionExpression="PK = :pk AND begins_with(SK, :file)",
-                ExpressionAttributeValues={":pk": post_pk(post_id), 
-                                           ":file": "FILE#"},
+                KeyConditionExpression=Key("PK").eq(post_pk(post_id)) & Key("SK").begins_with("FILE#")
             )
+
             return response.get("Items", [])
         except ClientError as e:
-            raise HTTPException(status_code=500, 
+            raise HTTPException(status_code=500,
                                 detail=f"Error fetching files: {e}")
 
     def delete_file(self, post_id: str, file_id: str):
@@ -78,18 +78,18 @@ class AttachmentService:
         key = f"attachments/{post_id}/{file_id}"
         try:
             # Fetch file metadata to get S3 key
-            response = self.table.get_item(Key={"PK": post_pk(post_id), 
+            response = self.table.get_item(Key={"PK": post_pk(post_id),
                                                 "SK": f"FILE#{file_id}"})
             if "Item" not in response:
                 raise HTTPException(status_code=404, detail="File not found")
 
             s3_key = response["Item"]["s3_key"]
             self.s3.delete_object(Bucket=self.bucket, Key=s3_key)
-            self.table.delete_item(Key={"PK": post_pk(post_id), 
+            self.table.delete_item(Key={"PK": post_pk(post_id),
                                         "SK": f"FILE#{file_id}"})
             return {"message": "File deleted"}
         except ClientError as e:
-            raise HTTPException(status_code=500, 
+            raise HTTPException(status_code=500,
                                 detail=f"Error deleting file: {e}")
 
     def get_file_meta(self, file_id: str):
@@ -99,11 +99,14 @@ class AttachmentService:
                 FilterExpression="SK = :sk",
                 ExpressionAttributeValues={":sk": f"FILE#{file_id}"},
             )
+
+            print(f"Response from DynamoDB: {response}")
+
             items = response.get("Items", [])
             if not items:
-                raise HTTPException(status_code=404, 
+                raise HTTPException(status_code=404,
                                     detail="File metadata not found")
             return items[0]
         except ClientError as e:
-            raise HTTPException(status_code=500, 
+            raise HTTPException(status_code=500,
                                 detail=f"Error fetching metadata: {e}")
