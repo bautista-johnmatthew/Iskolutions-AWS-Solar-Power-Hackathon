@@ -435,4 +435,4 @@ const profileUtils = new ProfileUtils();
 export default profileUtils;
 
 // Also export the class itself for direct instantiation if needed
-export { ProfileUtils };
+export { ProfileUtils, profileUtils };

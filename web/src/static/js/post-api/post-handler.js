@@ -2,6 +2,8 @@ import { updatePost, deletePost, patchPost } from './postUtils.js';
 import { feedManager } from '../managers/feed-manager.js';
 import { voteHandler } from '../vote-api/vote-handler.js';
 import { wireEditModalEvents } from '../validation/editpost.js';
+import { sessionManager } from '../managers/session-manager.js';
+import { profileUtils } from '../profile-api/profileUtils.js';
 
 const selectedTags = [];
 
@@ -87,8 +89,7 @@ export class PostActionsHandler {
         if (confirmed) {
             try {
                 await deletePost(postId);
-                const username = document.querySelector('.profile-username').textContent;
-                feedManager.loadUserPosts(await profileUtils.getUserPosts(username));
+                await feedManager.loadUserPosts(await profileUtils.getUserProfile(sessionManager.getUserId()));
                 this.showSuccessMessage('Post deleted successfully!');
             } catch (error) {
                 console.error('Failed to delete post:', error);
@@ -160,7 +161,7 @@ export class PostActionsHandler {
                                                 <button type="button" id="lost-and-found" class="tag-btn">LOST & FOUND</button>
                                             </div>
                                             <div class="invalid-feedback" id="postTags"></div>
-                                            <div> 
+                                            <div>
                                             <input class="d-none" id="edit-tags" value="${postData.tags.join(', ')}">
                                         </div>
                                     </div>
@@ -238,9 +239,9 @@ export class PostActionsHandler {
             document.body.appendChild(modal);
             const modalElement = new bootstrap.Modal(modal, { backdrop: 'static' });
             modalElement.show();
-            
+
             let resolved = false;
-            
+
             const cleanup = (result) => {
                 if (!resolved) {
                     resolved = true;
@@ -251,10 +252,10 @@ export class PostActionsHandler {
                     }, { once: true });
                 }
             };
-            
+
             modal.querySelector('#confirm-delete-btn').addEventListener('click', () => cleanup(true));
             modal.querySelector('#confirm-cancel-btn').addEventListener('click', () => cleanup(false));
-            
+
             // Handle X button or backdrop click
             modal.addEventListener('hidden.bs.modal', () => {
                 cleanup(false);
