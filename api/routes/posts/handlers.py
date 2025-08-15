@@ -24,12 +24,12 @@ async def create_post(
             attachments=post_data.attachments,
             is_anonymous=post_data.is_anonymous
         )
-        
+
         service.add_summary(
             post_id=new_post['post_id'],
             attachments=post_data.attachments
         )
-        
+
         return {"message": "Post created successfully", "post": new_post}
     except ValueError as e:
         # ✅ Handle profanity detection
