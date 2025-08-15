@@ -87,41 +87,23 @@ export async function getPosts() {
  * Filters out undefined or null fields.
  */
 export function buildPostPayload(data) {
-    // For regular JSON payload (used for requests without files)
-    if (!data.attachments || data.attachments.length === 0) {
-        const payload = {
-            author_id: data.author_id,
-            title: data.title,
-            content: data.content,
-            tags: data.tags || [],
-            attachments: data.attachments || [],
-            is_anonymous: !data.is_anonymous,
-        };
-        
-        // Remove empty fields
-        Object.keys(payload).forEach(key => {
-            if (payload[key] === undefined || payload[key] === null) {
-                delete payload[key];
-            }
-        });
-        
-        return { type: 'json', data: payload };
-    }
+    const payload = {
+        author_id: data.author_id,
+        title: data.title,
+        content: data.content,
+        tags: data.tags || [],
+        attachments: [data.attachments],
+        is_anonymous: !data.is_anonymous,
+    };
+    
+    // Remove empty fields
+    Object.keys(payload).forEach(key => {
+        if (payload[key] === undefined || payload[key] === null) {
+            delete payload[key];
+        }
+    });
 
-    // For FormData (used when attachments are present)
-    const formData = new FormData();
-    formData.append('author_id', data.author_id);
-    formData.append('title', data.title);
-    formData.append('content', data.content);
-    formData.append('is_anonymous', !!data.is_anonymous);
-    formData.append(`attachments`, data.attachments);
-    
-    // Handle tags as JSON string
-    if (data.tags && data.tags.length > 0) {
-        formData.append('tags', JSON.stringify(data.tags));
-    }
-    
-    return { type: 'formData', data: formData };
+    return payload;    
 }
 
 export async function createPost(data) {
@@ -141,28 +123,20 @@ export async function createPost(data) {
     // Get token for authentication if available
     const token = sessionManager.getToken();
 
-    let body, headers;
-    if (payload.type === 'formData') {
-        body = payload.data;
-        headers = {
-            'Content-Type': 'multipart/form-data'
-        };
-    } else {
-        body = JSON.stringify(payload.data);
-        headers = {
-            'Content-Type': 'application/json',
-        };
-    }
+    let headers = {
+        'Content-Type': 'application/json',
+    };
 
     // Add authorization header if token exists
     if (token) {
         headers['Authorization'] = `${token}`;
     }
-    console.log("Post request: ", { url: `${BASE_API_URL}/posts`, contentType: headers['Content-Type'], method: 'POST', headers, body });
+
+    console.log("Post request: ", { url: `${BASE_API_URL}/posts`, contentType: headers['Content-Type'], method: 'POST', headers, body: JSON.stringify(payload) });
     const response = await fetch(`${BASE_API_URL}/posts`, {
         method: 'POST',
         headers: headers,
-        body: body,
+        body: JSON.stringify(payload),
     });
 
     if (!response.ok) throw new Error('Failed to create post');
