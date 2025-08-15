@@ -3,6 +3,7 @@ import { getComments } from '../comments-api/commentUtils.js';
 import { voteHandler } from '../vote-api/vote-handler.js';
 import { postActionsHandler } from '../post-api/post-handler.js';
 import { sessionManager } from '../managers/session-manager.js';
+import { commentModalHandler } from '../comments-api/comment-handler.js';
 
 /**
  * Enhanced post template loader that connects to your post utilities
@@ -206,6 +207,7 @@ class FeedManager {
                 comments.forEach(comment => {
                     this.loadCommentTemplate(comment, commentsContainer);
                 });
+                commentModalHandler.setupGlobalEventListeners();
             } else {
                 console.log('No comments container found or no comments to display');
             }

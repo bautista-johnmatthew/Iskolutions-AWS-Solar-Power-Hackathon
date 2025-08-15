@@ -10,7 +10,6 @@ This guide covers deployment options for the Iskolutions Forum application.
 - **Database**: AWS DynamoDB
 - **Containerization**: Docker
 - **Container Registry**: Amazon ECR
-- **CI/CD**: GitHub Actions
 
 ## Prerequisites
 
@@ -52,29 +51,6 @@ bun install
 bun run dev
 ```
 
-## Serverless Deployment (Automated - Recommended)
-
-### Quick Serverless Deployment
-
-For automated serverless deployment using existing ECR images:
-
-```bash
-# Deploy everything at once
-bun scripts/deploy-complete.js
-
-# Or deploy individually:
-bun scripts/deploy-lambda-api.js    # Deploy API to Lambda
-bun scripts/deploy-s3-frontend.js   # Deploy Frontend to S3
-```
-
-This will automatically:
-- ✅ Create IAM roles and policies
-- ✅ Deploy API to AWS Lambda using ECR image
-- ✅ Set up API Gateway for HTTP endpoints
-- ✅ Extract frontend from ECR and deploy to S3
-- ✅ Configure S3 for static website hosting
-- ✅ Set up public access policies
-
 ### Manual Serverless Steps
 
 If you prefer manual deployment:
@@ -90,26 +66,6 @@ If you prefer manual deployment:
    - Create S3 bucket with static website hosting
    - Upload files and configure public access
    - Update API endpoints in frontend configuration
-
-## Container Deployment (ECR + ECS/EKS)
-
-1. **Configure environment variables:**
-   ```bash
-   # Make sure web/.env file has:
-   # AWS_ACCOUNT_ID=your-account-id
-   # AWS_REGION=your-region
-   ```
-
-2. **Deploy to ECR:**
-   ```bash
-   bun scripts/deploy-ecr.js
-   ```
-
-   This script will:
-   - Build Docker images for both API and web
-   - Create ECR repositories if they don't exist
-   - Push images to ECR
-   - Output the image URIs for use in ECS/EKS
 
 ## Build
 
@@ -136,14 +92,6 @@ bun run build
 - Docker installed and running
 - ECR repository created (script will create if not exists)
 
-#### Using Bun Scripts
-```bash
-
-# Deploy frontend
-cd web
-bun run ecr:deploy
-```
-
 ### Environment Variables
 Create a `.env` file with:
 ```env
@@ -151,4 +99,21 @@ SUPABASE_URL=your_supabase_url
 SUPABASE_ANON_KEY=your_supabase_anon_key
 AWS_DEFAULT_REGION=us-east-1
 # Add other required environment variables
+```
+
+### Commands
+For building one image only
+```bash
+DOCKER_BUILDKIT=0 docker build \
+  --platform=linux/amd64 \
+  -t {ACCOUNT_ID}.dkr.ecr.{REGION}.amazonaws.com/{ECR_NAME}:latest .
+
+docker push {ACCOUNT_ID}.dkr.ecr.{REGION}.amazonaws.com/{ECR_NAME}:latest
+```
+
+## S3 Deployment
+```bash
+cd web
+bun run build
+aws s3 sync ./dist s3://my-bucket-name
 ```

@@ -4,5 +4,5 @@ ENV PORT=8000
 WORKDIR /var/task
 COPY requirements.txt ./
 RUN python -m pip install -r requirements.txt
-COPY *.py ./
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+COPY . .
+CMD ["main.handler"]

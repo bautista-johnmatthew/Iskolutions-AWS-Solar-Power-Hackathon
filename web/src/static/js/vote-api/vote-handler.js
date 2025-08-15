@@ -121,7 +121,6 @@ class VoteHandler {
     }
 
     showErrorMessage(message) {
-        // Simple error display - you can enhance this with a toast or modal
         const errorDiv = document.createElement('div');
         errorDiv.className = 'alert alert-danger alert-dismissible fade show position-fixed';
         errorDiv.style.top = '20px';
