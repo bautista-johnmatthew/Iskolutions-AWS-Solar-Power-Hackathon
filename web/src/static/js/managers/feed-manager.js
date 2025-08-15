@@ -72,9 +72,8 @@ class FeedManager {
     }
 
     // Load user posts for profile page
-    async loadUserPosts(posts) {
+    async loadUserPosts(posts = this.posts) {
         try {
-            this.posts = posts;
             this.feedContainer = document.querySelector('.user-posts-container');
 
             // Clear existing posts and render new ones
